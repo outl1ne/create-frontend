@@ -1,0 +1,25 @@
+/**
+ * img-url
+ * Use this function to import images without having to worry about their path.
+ * For example, if you have a `/client/images/logo.svg` file, you can use `background-image: img-url('logo.svg');`
+ */
+@function img-url($name) {
+  @return url('../images/' + $name);
+}
+
+/**
+ * font-url
+ * Use this function to import fonts without having to worry about their path.
+ * For example, if you have a `/client/fonts/Montserrat/Montserrat-normal.woff` file, you can use this font-face declaration:
+ ```
+@font-face {
+  font-family: 'Montserrat';
+  src: font-url('Montserrat/Montserrat-normal.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+ ```
+ */
+@function font-url($font) {
+  @return url('../fonts/' + $font);
+}

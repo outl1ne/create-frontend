@@ -1,0 +1,18 @@
+{
+  "name": "od-frontend",
+  "version": "1.0.0",
+  "description": "Creates an encapsulated frontend build solution for js-based projects",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "od-create-frontend": "bin/od-create-frontend.js",
+    "od-frontend": "bin/od-frontend.js"
+  },
+  "author": "",
+  "private": true,
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "readline-sync": "^1.4.7"
+  }
+}

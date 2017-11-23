@@ -1,4 +1,5 @@
 #! /usr/bin/env node
+'use strict';
 const fs = require('fs-extra');
 const path = require('path');
 const readline = require('readline-sync');
@@ -6,6 +7,7 @@ const chalk = require('chalk');
 const getPackageJson = require('../scripts/getPackageJson');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const args = require('minimist')(process.argv.slice(2));
 
 const CURRENT_DIR = process.cwd();
 const TEMPLATE_PATH = path.resolve(__dirname, '..', 'template');
@@ -62,6 +64,7 @@ Please remove the following files and retry:`
   // Generate package.json
   const packageJson = getPackageJson({
     name: getProjectNameFromCwd(),
+    isDev: !!args.dev,
   });
   // Write package.json into cwd
   fs.writeFileSync(path.resolve(CURRENT_DIR, 'package.json'), packageJson);
@@ -69,13 +72,17 @@ Please remove the following files and retry:`
   fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
   // Install npm dependencies
   success('OD frontend boilerplate generated. Installing modules...\n');
-  exec(`npm install`).then(res => {
-    log(res.stderr);
-    success('Done!');
-    success('For development, type `npm run dev`.');
-    success('For production, type `npm run build`.');
-    success('Documentation: https://github.com/optimistdigital/frontend');
-  });
+  exec(`npm install`)
+    .then(res => {
+      log(res.stderr);
+      success('Done!');
+      success('For development, type `npm run dev`.');
+      success('For production, type `npm run build`.');
+      success('Documentation: https://github.com/optimistdigital/frontend');
+    })
+    .catch(err => {
+      error('Installing node modules failed:', err.message);
+    });
 }
 
 init();

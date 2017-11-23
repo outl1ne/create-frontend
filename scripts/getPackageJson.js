@@ -1,11 +1,17 @@
-module.exports = ({ name }) => `{
+'use strict';
+const path = require('path');
+
+module.exports = ({ name, isDev }) => `{
   "name": "${name}",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm run dev",
-    "build": "npm run build"
+    "dev": "od-frontend dev",
+    "build": "od-frontend build"
   },
-  "dependencies": {}
+  "dependencies": {
+    "normalize.css": "7.x.x",
+    "od-frontend": "${isDev ? path.resolve(__dirname, '..') : '1.x.x'}"
+  }
 }
 `;

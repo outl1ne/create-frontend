@@ -4,12 +4,15 @@ const path = require('path');
 const readline = require('readline-sync');
 const chalk = require('chalk');
 const getPackageJson = require('../scripts/getPackageJson');
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
 
 const CURRENT_DIR = process.cwd();
 const TEMPLATE_PATH = path.resolve(__dirname, '..', 'template');
 
 const error = (err, ...rest) => console.error(chalk.red.bold(err), ...rest);
 const info = (msg, ...rest) => console.info(chalk.blue(msg), ...rest);
+const success = (msg, ...rest) => console.info(chalk.green(msg), ...rest);
 const log = (...args) => console.log(...args);
 
 function getProjectNameFromCwd() {
@@ -38,11 +41,13 @@ function findExistingFrontendFiles() {
 }
 
 function init() {
+  // Get confirmation from user
   if (getConfirmation().toLowerCase() !== 'y') {
     log('Aborting.');
     return;
   }
 
+  // Check if cwd has conflicting ciles
   const existingFrontendFiles = findExistingFrontendFiles();
   if (existingFrontendFiles.length > 0) {
     error(
@@ -54,12 +59,23 @@ Please remove the following files and retry:`
     return;
   }
 
+  // Generate package.json
   const packageJson = getPackageJson({
     name: getProjectNameFromCwd(),
   });
-
+  // Write package.json into cwd
   fs.writeFileSync(path.resolve(CURRENT_DIR, 'package.json'), packageJson);
+  // Copy contents of template folder into cwd
   fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
+  // Install npm dependencies
+  success('OD frontend boilerplate generated. Installing modules...\n');
+  exec(`npm install`).then(res => {
+    log(res.stderr);
+    success('Done!');
+    success('For development, type `npm run dev`.');
+    success('For production, type `npm run build`.');
+    success('Documentation: https://github.com/optimistdigital/frontend');
+  });
 }
 
 init();

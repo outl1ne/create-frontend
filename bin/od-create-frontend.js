@@ -1,8 +1,9 @@
 #! /usr/bin/env node
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const readline = require('readline-sync');
 const chalk = require('chalk');
+const getPackageJson = require('../scripts/getPackageJson');
 
 const CURRENT_DIR = process.cwd();
 const TEMPLATE_PATH = path.resolve(__dirname, '..', 'template');
@@ -52,6 +53,13 @@ Please remove the following files and retry:`
 
     return;
   }
+
+  const packageJson = getPackageJson({
+    name: getProjectNameFromCwd(),
+  });
+
+  fs.writeFileSync(path.resolve(CURRENT_DIR, 'package.json'), packageJson);
+  fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
 }
 
 init();

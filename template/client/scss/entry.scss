@@ -1,1 +1,6 @@
 @import 'node_modules/normalize.css/normalize';
+
+body {
+  // 320px is the smallest mobile device, so we don't have to support smaller screens than that.
+  min-width: 320px;
+}

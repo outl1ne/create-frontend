@@ -11,10 +11,12 @@ const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
 switch (script) {
   case 'dev':
-    require('../scripts/dev').init(nodeArgs);
+    require('../scripts/dev')(nodeArgs);
+    return;
   case 'build':
-    require('../scripts/build').init(nodeArgs);
+    require('../scripts/build')(nodeArgs);
+    return;
   default:
-    console.log(`Script not found: ${script}`);
+    console.error(`Script not found: ${script}`);
     break;
 }

@@ -71,7 +71,8 @@ Please remove the following files and retry:`
   // Copy contents of template folder into cwd
   fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
   // Install npm dependencies
-  success('OD frontend boilerplate generated. Installing modules...\n');
+  success('OD frontend boilerplate generated.');
+  info('Installing modules (this may take some time)...\n');
   exec(`npm install`)
     .then(res => {
       log(res.stderr);

@@ -7,7 +7,8 @@ module.exports = ({ name, isDev }) => `{
   "private": true,
   "scripts": {
     "dev": "od-frontend dev",
-    "build": "od-frontend build"
+    "build": "od-frontend build",
+    "build:debug": "od-frontend build --debug"
   },
   "dependencies": {
     "normalize.css": "7.x.x",

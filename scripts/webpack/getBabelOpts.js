@@ -1,8 +1,8 @@
 module.exports = () => ({
   presets: [
-    'react',
+    require.resolve('babel-preset-react'),
     [
-      'env',
+      require.resolve('babel-preset-env'),
       {
         modules: false,
         targets: {
@@ -14,13 +14,15 @@ module.exports = () => ({
     ],
   ],
   plugins: [
-    'transform-object-rest-spread',
-    'transform-class-properties',
-    'transform-react-display-name',
+    require.resolve('babel-plugin-transform-object-rest-spread'),
+    require.resolve('babel-plugin-transform-class-properties'),
+    require.resolve('babel-plugin-transform-react-display-name'),
   ],
   env: {
     test: {
-      plugins: ['transform-es2015-modules-commonjs'],
+      plugins: [
+        require.resolve('babel-plugin-transform-es2015-modules-commonjs'),
+      ],
     },
     development: {
       plugins: [

@@ -85,7 +85,7 @@ const sharedRules = [
   // Fonts
   {
     test: /\.(eot|ttf|woff|woff2)$/,
-    use: [{ loader: 'file-loader' }],
+    use: [{ loader: require.resolve('file-loader') }],
   },
 ];
 
@@ -96,25 +96,31 @@ const developmentRules = [
     exclude: /node_modules/,
     use: [
       {
-        loader: 'babel-loader',
+        loader: require.resolve('babel-loader'),
         options: getBabelOpts(),
       },
-      { loader: 'eslint-loader' },
+      { loader: require.resolve('eslint-loader') },
     ],
   },
   // SCSS
   {
     test: /\.(sass|scss)$/,
     use: [
-      { loader: 'style-loader', options: { sourceMap: true } },
-      { loader: 'css-loader', options: { importLoaders: 1, sourceMap: true } },
-      { loader: 'resolve-url-loader', options: { sourceMap: true } },
+      { loader: require.resolve('style-loader'), options: { sourceMap: true } },
       {
-        loader: 'postcss-loader',
+        loader: require.resolve('css-loader'),
+        options: { importLoaders: 1, sourceMap: true },
+      },
+      {
+        loader: require.resolve('resolve-url-loader'),
+        options: { sourceMap: true },
+      },
+      {
+        loader: require.resolve('postcss-loader'),
         options: getPostCssOpts(),
       },
       {
-        loader: 'sass-loader',
+        loader: require.resolve('sass-loader'),
         options: { outputStyle: 'expanded', sourceMap: true },
       },
     ],
@@ -130,7 +136,10 @@ const developmentRules = [
       /\.(eot|ttf|woff|woff2)$/,
     ],
     use: [
-      { loader: 'url-loader', options: { limit: 10240, name: '[name].[ext]' } },
+      {
+        loader: require.resolve('url-loader'),
+        options: { limit: 10240, name: '[name].[ext]' },
+      },
     ],
   },
 ];
@@ -142,7 +151,7 @@ const productionRules = [
     exclude: /node_modules/,
     use: [
       {
-        loader: 'babel-loader',
+        loader: require.resolve('babel-loader'),
         options: getBabelOpts(),
       },
     ],
@@ -151,19 +160,22 @@ const productionRules = [
   {
     test: /\.(sass|scss)$/,
     use: ExtractTextPlugin.extract({
-      fallback: 'style-loader',
+      fallback: require.resolve('style-loader'),
       use: [
         {
-          loader: 'css-loader',
+          loader: require.resolve('css-loader'),
           options: { importLoaders: 1, sourceMap: false, minimize: true },
         },
         {
-          loader: 'postcss-loader',
+          loader: require.resolve('postcss-loader'),
           options: getPostCssOpts(),
         },
-        { loader: 'resolve-url-loader', options: { sourceMap: false } }, // Resolves relative paths in url() statements based on the original source file.
         {
-          loader: 'sass-loader',
+          loader: require.resolve('resolve-url-loader'),
+          options: { sourceMap: false },
+        }, // Resolves relative paths in url() statements based on the original source file.
+        {
+          loader: require.resolve('sass-loader'),
           options: { outputStyle: 'compressed', sourceMap: false },
         },
       ],
@@ -181,7 +193,7 @@ const productionRules = [
     ],
     use: [
       {
-        loader: 'url-loader',
+        loader: require.resolve('url-loader'),
         options: { limit: 10240, name: '[name].[hash:8].[ext]' },
       },
     ],

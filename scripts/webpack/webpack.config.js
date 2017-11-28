@@ -5,8 +5,8 @@ const ManifestPlugin = require('webpack-plugin-manifest');
 const path = require('path');
 const webpack = require('webpack');
 const args = require('minimist')(process.argv.slice(2));
-const paths = require('./paths');
-const config = require('./config');
+const paths = require('../paths');
+const config = require('../config');
 const getBabelOpts = require('./getBabelOpts');
 const getPostCssOpts = require('./getPostCssOpts');
 
@@ -70,32 +70,6 @@ module.exports.resolve = {
   modules: ['.', 'node_modules'],
   extensions: ['.json', '.js'],
 };
-
-/**
- * Dev server
- */
-
-if (!IS_PRODUCTION) {
-  module.exports.devServer = {
-    clientLogLevel: 'none',
-    stats: 'minimal',
-    port: config.WEBPACK_PORT,
-    inline: false,
-    host: config.WEBPACK_DOMAIN,
-    publicPath: `${config.WEBPACK_SERVER}/`,
-    hot: true,
-    watchOptions: {
-      ignored: /node_modules/,
-    },
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-      'Access-Control-Allow-Headers':
-        'X-Requested-With, content-type, Authorization',
-    },
-    https: config.APP_PROTOCOL === 'https',
-  };
-}
 
 /**
  * Stats: In non-debug mode, we don't want to pollute the terminal with stats in case some errors would be missed
@@ -275,7 +249,7 @@ module.exports.plugins = [
         new (require('progress-bar-webpack-plugin'))({
           format: `Client progress [:bar] ${chalk.green.bold(':percent')}`,
         }),
-        new (require('./webpack/plugins/BuildDonePlugin'))(
+        new (require('./plugins/BuildDonePlugin'))(
           chalk.green.bold('\n=== Client build done === \n')
         ),
       ]),

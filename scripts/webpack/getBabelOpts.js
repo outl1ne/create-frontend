@@ -25,8 +25,7 @@ module.exports = () => ({
     development: {
       plugins: [
         [
-          'sitrep',
-          'react-transform',
+          require.resolve('babel-plugin-react-transform'),
           {
             transforms: [
               {

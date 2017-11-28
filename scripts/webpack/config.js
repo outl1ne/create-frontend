@@ -6,7 +6,7 @@ const WEBPACK_PORT = args.webpackPort || 8000;
 const WEBPACK_DOMAIN = args.webpackDomain || 'localhost';
 const WEBPACK_SERVER = `${APP_PROTOCOL}://${WEBPACK_DOMAIN}:${WEBPACK_PORT}`;
 const ENTRY_POINTS = {
-  app: 'src/scripts/entry.js',
+  app: 'client/js/entry.js',
 };
 
 module.exports = {

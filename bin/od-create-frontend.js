@@ -18,8 +18,7 @@ const success = (msg, ...rest) => console.info(chalk.green(msg), ...rest);
 const log = (...args) => console.log(...args);
 
 function getProjectNameFromCwd() {
-  const folders = CURRENT_DIR.split('/');
-  return folders[folders.length - 1];
+  return path.basename(CURRENT_DIR);
 }
 
 function getConfirmation() {

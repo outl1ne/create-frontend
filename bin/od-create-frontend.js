@@ -23,8 +23,11 @@ function getProjectNameFromCwd() {
 }
 
 function getConfirmation() {
+  console.log('');
   return readline.question(
-    `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}? (y/N) `
+    chalk.blue(
+      `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}? (y/N) `
+    )
   );
 }
 
@@ -45,7 +48,7 @@ function findExistingFrontendFiles() {
 function init() {
   // Get confirmation from user
   if (getConfirmation().toLowerCase() !== 'y') {
-    log('Aborting.');
+    log('Aborted.');
     return;
   }
 
@@ -71,7 +74,9 @@ Please remove the following files and retry:`
   // Copy contents of template folder into cwd
   fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
   // Install npm dependencies
+  console.log('');
   success('OD frontend boilerplate generated.');
+  console.log('');
   info('Installing modules (this may take some time)...\n');
   exec(`npm install`)
     .then(res => {

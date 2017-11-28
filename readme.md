@@ -1,12 +1,62 @@
 # OD Frontend
 
+This is a toolkit that generates your project's frontend build system. It uses
+Webpack under the hood.
+
+## Features
+
+* JS with Babel
+* SCSS with autoprefixer, normalize.css
+* Hot reload for development
+* Works with zero configuration, but customization is possible if needed
+
+## Usage
+
+1. Install the toolkit globally: `npm install -g @optimistdigital/od-frontend`
+2. In the CLI, go into your project root, type `od-create-frontend` and follow
+   the instructions
+
+### CLI
+
+* `npm run build` - Build assets for production
+* `npm run build:debug` - Build assets with extra debug logs. In JS, `__DEBUG__`
+  will be [transformed](https://webpack.js.org/plugins/define-plugin/) to `true`
+* `npm run dev` - Start a webpack server for development
+
+### Using hot module replacement
+
+[Hot module replacement](https://webpack.js.org/api/hot-module-replacement/) is
+enabled for the app, however you must choose manually what you want to update
+when changes are made. To do this, go into your `entry.js` file and uncomment
+the relevant code.
+
+## Project structure
+
+* `/client` - your frontend source code lives here.
+* `/public/build` - your production code will be built here.
+* `/asset-manifest.json` - this file is generated automatically, and contains
+  the paths for your app entry points. Use this to link the assets in your
+  backend.
+* `.eslintrc` - [Eslint](https://webpack.js.org/api/hot-module-replacement/)
+  configuration.
+* `.prettierrc` - [Prettier](https://prettier.io/) configuration.
+
 ## Development
 
-To develop this generator, you need to make a test project where you will be
-using this generator. You also need to symlink this project so your test project
+To start development, type `npm run dev`. Assets will be served on a webpack
+server.
+
+# Contributing
+
+To develop this toolkit, you need to make a test project where you will be using
+this generator. You also need to symlink this project so your test project
 installs the local version, instead of from npm.
 
 * `npm install` - install node modules
 * `npm link` while in this directory - makes `od-create-frontend` accesible
   globally
 * Go to your test project and type `od-create-frontend --dev`
+
+```
+
+```

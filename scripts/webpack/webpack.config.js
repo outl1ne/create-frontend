@@ -246,9 +246,6 @@ module.exports.plugins = [
         new webpack.NamedModulesPlugin(), // Named modules for HMR
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
-        new (require('progress-bar-webpack-plugin'))({
-          format: `Client progress [:bar] ${chalk.green.bold(':percent')}`,
-        }),
         new (require('./plugins/BuildDonePlugin'))(
           chalk.green.bold('\n=== Client build done === \n')
         ),

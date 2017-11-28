@@ -11,6 +11,7 @@ module.exports = () => {
   const WebpackDevServer = require('webpack-dev-server');
   const config = require('./config');
   const webpack = require('webpack');
+  const chalk = require('chalk');
 
   const compiler = webpack(require('./webpack/webpack.config'));
 
@@ -35,6 +36,28 @@ module.exports = () => {
   };
 
   const devServer = new WebpackDevServer(compiler, serverConf).listen(
-    config.WEBPACK_PORT
+    config.WEBPACK_PORT,
+    config.WEBPACK_DOMAIN,
+    err => {
+      if (err) {
+        return console.error('Dev server failed to start:', err);
+      }
+
+      console.info(
+        chalk.green.bold(
+          `\n=== Webpack dev server started. ===\nAssets are being server at: ${
+            config.APP_PROTOCOL
+          }://${config.WEBPACK_DOMAIN}:${config.WEBPACK_PORT}\n`
+        )
+      );
+
+      function abort() {
+        devServer.close();
+        process.exit();
+      }
+
+      process.on('SIGINT', abort);
+      process.on('SIGTERM', abort);
+    }
   );
 };

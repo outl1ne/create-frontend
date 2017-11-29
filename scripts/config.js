@@ -14,9 +14,19 @@ const ENTRY_POINTS = appConfig.entryPoints || {
 };
 const HASH_FILENAMES =
   typeof appConfig.hashFileNames === 'boolean' ? appConfig.hashFileNames : true;
+const ENABLE_DEV_SOURCEMAPS =
+  typeof appConfig.enableDevSourcemaps === 'boolean'
+    ? appConfig.enableDevSourcemaps
+    : true;
+const ENABLE_PROD_SOURCEMAPS =
+  typeof appConfig.enableProdSourcemaps === 'boolean'
+    ? appConfig.enableProdSourcemaps
+    : true;
 
 module.exports = {
   APP_PROTOCOL,
+  ENABLE_DEV_SOURCEMAPS,
+  ENABLE_PROD_SOURCEMAPS,
   ENTRY_POINTS,
   HASH_FILENAMES,
   IS_DEBUG,

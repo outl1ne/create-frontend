@@ -18,7 +18,9 @@ module.exports = ({ name, isDev }) => {
       'entryPoints': {
         'app': 'client/js/entry.js',
       },
-      'hashFileNames': true
+      'hashFileNames': true,
+      'enableDevSourcemaps': true,
+      'enableProdSourcemaps': false,
     },
     'dependencies': {
       'babel-polyfill': '^6.13.0',

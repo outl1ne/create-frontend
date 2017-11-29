@@ -2,9 +2,7 @@ const chalk = require('chalk');
 const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-plugin-manifest');
-const path = require('path');
 const webpack = require('webpack');
-const args = require('minimist')(process.argv.slice(2));
 const paths = require('../paths');
 const config = require('../config');
 const getBabelOpts = require('./getBabelOpts');
@@ -26,7 +24,15 @@ module.exports.target = 'web';
  * This devtool is fast, but no column mappings.
  * Comparison: https://webpack.github.io/docs/build-performance.html#sourcemaps
  */
-module.exports.devtool = IS_PRODUCTION ? false : 'eval-cheap-module-source-map';
+if (IS_PRODUCTION) {
+  module.exports.devtool =
+    IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS ? 'source-map' : false;
+} else {
+  module.exports.devtool =
+    !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS
+      ? 'eval-cheap-module-source-map'
+      : false;
+}
 
 /**
  * Context: Make context be root dir
@@ -109,22 +115,24 @@ const developmentRules = [
   {
     test: /\.(sass|scss)$/,
     use: [
-      { loader: require.resolve('style-loader'), options: { sourceMap: true } },
+      { loader: require.resolve('style-loader') },
       {
         loader: require.resolve('css-loader'),
-        options: { importLoaders: 1, sourceMap: true },
+        options: { importLoaders: 1, sourceMap: config.ENABLE_DEV_SOURCEMAPS },
       },
       {
         loader: require.resolve('resolve-url-loader'),
-        options: { sourceMap: true },
       },
       {
         loader: require.resolve('postcss-loader'),
-        options: getPostCssOpts(),
+        options: getPostCssOpts({ IS_PRODUCTION, config }),
       },
       {
         loader: require.resolve('sass-loader'),
-        options: { outputStyle: 'expanded', sourceMap: true },
+        options: {
+          outputStyle: 'expanded',
+          sourceMap: config.ENABLE_DEV_SOURCEMAPS,
+        },
       },
     ],
   },
@@ -167,19 +175,25 @@ const productionRules = [
       use: [
         {
           loader: require.resolve('css-loader'),
-          options: { importLoaders: 1, sourceMap: false, minimize: true },
+          options: {
+            importLoaders: 1,
+            sourceMap: config.ENABLE_PROD_SOURCEMAPS,
+            minimize: true,
+          },
         },
         {
           loader: require.resolve('postcss-loader'),
-          options: getPostCssOpts(),
+          options: getPostCssOpts({ IS_PRODUCTION, config }),
         },
         {
           loader: require.resolve('resolve-url-loader'),
-          options: { sourceMap: false },
         }, // Resolves relative paths in url() statements based on the original source file.
         {
           loader: require.resolve('sass-loader'),
-          options: { outputStyle: 'compressed', sourceMap: false },
+          options: {
+            outputStyle: 'compressed',
+            sourceMap: config.ENABLE_PROD_SOURCEMAPS,
+          },
         },
       ],
     }),
@@ -255,7 +269,7 @@ module.exports.plugins = [
           mangle: { screw_ie8: true },
           output: { comments: false, screw_ie8: true },
           comments: false,
-          sourceMap: false,
+          sourceMap: config.ENABLE_PROD_SOURCEMAPS,
         }),
       ]
     : [

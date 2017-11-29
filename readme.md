@@ -5,7 +5,8 @@ Webpack under the hood.
 
 ## Features
 
-* JS with Babel, eslint, babel-polyfill
+* JS with Babel, eslint, babel-polyfill. Imports relative to project root are
+  supported: `import x from 'client/js/y'`
 * SCSS with autoprefixer, normalize.css
 * Hot reload for development
 * Works with zero configuration, but customization is possible if needed

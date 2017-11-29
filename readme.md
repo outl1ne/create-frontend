@@ -28,9 +28,19 @@ Webpack under the hood.
 You can configure the build process with the `od-frontend` property in your
 `package.json`. Possible options (default in parens):
 
-* `publicDirectory` (_public_) - the public root of your project. `buildPath`
-* `buildPath` (_build_) - relative to the public directory. Build files will be
-  generated into this path.
+* `publicDirectory` (_public_) - The public directory that your server will
+  serve. Relative to project root.
+* `buildPath` (_build_) - Build files will be generated into this path. Relative
+  to the public directory.
+* `entryPoints` - Object|string|array that contains the
+  [entry points](https://webpack.js.org/concepts/entry-points/) for your
+  application. A separate file will be built for each entry point. Relative to
+  project root. Default:
+  ```js
+  {
+      app: 'client/js/entry.js',
+  }
+  ```
 
 ### Using hot module replacement
 

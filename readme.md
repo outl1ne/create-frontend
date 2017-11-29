@@ -5,7 +5,7 @@ Webpack under the hood.
 
 ## Features
 
-* JS with Babel
+* JS with Babel, eslint, babel-polyfill
 * SCSS with autoprefixer, normalize.css
 * Hot reload for development
 * Works with zero configuration, but customization is possible if needed

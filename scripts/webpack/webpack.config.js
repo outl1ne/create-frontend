@@ -38,8 +38,8 @@ module.exports.context = paths.APP_DIRECTORY;
  */
 
 const DEV_ENTRY_CONF = [
-  `webpack-dev-server/client?${config.WEBPACK_SERVER}`,
-  'webpack/hot/only-dev-server',
+  `${require.resolve('webpack-dev-server/client')}?${config.WEBPACK_SERVER}`,
+  require.resolve('webpack/hot/only-dev-server'),
 ];
 
 const DEV_ENTRY_POINTS = {};

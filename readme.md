@@ -1,12 +1,12 @@
 # OD Frontend
 
-This is a toolkit that generates your project's frontend build system. It uses
-Webpack under the hood.
+This toolkit generates your project's frontend build system. It uses Webpack
+under the hood.
 
 ## Features
 
-* JS with Babel, eslint, babel-polyfill. Imports relative to project root are
-  supported: `import x from 'client/js/y'`
+* JS (Babel, Eslint, Babel-Polyfill). Can import relative to project root:
+  `import x from 'client/js/y'`
 * SCSS with autoprefixer, normalize.css
 * Hot reload for development
 * Works with zero configuration, but customization is possible if needed
@@ -14,36 +14,33 @@ Webpack under the hood.
 ## Usage
 
 1. Install the toolkit globally: `npm install -g @optimistdigital/od-frontend`
-2. In the CLI, go into your project root, type `od-create-frontend` and follow
-   the instructions
+2. Type `od-create-frontend` in your project root and follow the instructions
 
 ### CLI
 
-* `npm run build` - Build assets for production
-* `npm run build:debug` - Build assets with extra debug logs. In JS, `__DEBUG__`
-  will be [transformed](https://webpack.js.org/plugins/define-plugin/) to `true`
 * `npm run dev` - Start a webpack server for development
+* `npm run build` - Build assets for production
+* `npm run build:debug` - Build assets with debug logs. In JS, `__DEBUG__` will
+  be [transformed](https://webpack.js.org/plugins/define-plugin/) to `true`
 
-You can also pass some environment specific variables to the scripts:
+There are also flags to customize the dev environment:
 
-* `npm run dev -- --webpackPort=8000` - Starts the dev server at a custom port
-* `npm run dev -- --webpackDomain=localhost` - Starts the dev server at a custom
-  domain
-* `npm run dev -- --protocol=https` - Starts the dev server at a custom protocol
+* `npm run dev -- --webpackPort=8000` - Custom port for dev server
+* `npm run dev -- --webpackDomain=localhost` - Custom domain for dev server
+* `npm run dev -- --protocol=https` - Run the dev server with https
 
 ### Configuration
 
-You can configure the build process with the `od-frontend` property in your
-`package.json`. Possible options (default in parens):
+Configuration goes in the your package.json under the `od-frontend` field
+(default in parens):
 
-* `publicDirectory` (_public_) - The public directory that your server will
-  serve. Relative to project root.
-* `buildPath` (_build_) - Build files will be generated into this path. Relative
-  to the public directory.
-* `entryPoints` - Object|string|array that contains the
+* `publicDirectory` (_public_) - Project's public root. Relative to project
+  root.
+* `buildPath` (_build_) - Where the build files will go. Relative to the public
+  directory.
+* `entryPoints` - Object/string/array that contains the
   [entry points](https://webpack.js.org/concepts/entry-points/) for your
-  application. A separate file will be built for each entry point. Relative to
-  project root. Default:
+  application. Relative to project root. Default:
   ```js
   {
       app: 'client/js/entry.js',
@@ -62,7 +59,8 @@ the relevant code.
 
 ## Project structure
 
-* `/client` - your frontend source code lives here.
+* `/client` - your frontend source code lives here. Can be configured with
+  `entryPoints`
 * `/public/build` - your production code will be built here.
 * `/asset-manifest.json` - this file is generated automatically, and contains
   the paths for your app entry points. Use this to link the assets in your
@@ -70,11 +68,6 @@ the relevant code.
 * `.eslintrc` - [Eslint](https://webpack.js.org/api/hot-module-replacement/)
   configuration.
 * `.prettierrc` - [Prettier](https://prettier.io/) configuration.
-
-## Development
-
-To start development, type `npm run dev`. Assets will be served on a webpack
-server.
 
 # Contributing
 

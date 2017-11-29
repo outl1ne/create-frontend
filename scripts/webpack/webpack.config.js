@@ -55,7 +55,10 @@ module.exports.entry = IS_PRODUCTION ? config.ENTRY_POINTS : DEV_ENTRY_POINTS;
  */
 module.exports.output = {
   path: paths.BUILD_DIRECTORY,
-  filename: IS_PRODUCTION ? '[name]-[chunkhash].js' : '[name].js',
+  filename:
+    IS_PRODUCTION && config.HASH_FILENAMES
+      ? '[name]-[chunkhash].js'
+      : '[name].js',
   chunkFilename: '[name].js',
   publicPath: IS_PRODUCTION
     ? `/${paths.BUILD_PATH}/`
@@ -240,7 +243,9 @@ module.exports.plugins = [
         new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
         new ExtractTextPlugin({
           // Extract css files from bundles
-          filename: '[name]-[contenthash].css',
+          filename: config.HASH_FILENAMES
+            ? '[name]-[contenthash].css'
+            : '[name].css',
           allChunks: true,
         }),
         new webpack.optimize.UglifyJsPlugin({

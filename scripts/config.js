@@ -12,12 +12,15 @@ const WEBPACK_SERVER = `${APP_PROTOCOL}://${WEBPACK_DOMAIN}:${WEBPACK_PORT}`;
 const ENTRY_POINTS = appConfig.entryPoints || {
   app: 'client/js/entry.js',
 };
+const HASH_FILENAMES =
+  typeof appConfig.hashFileNames === 'boolean' ? appConfig.hashFileNames : true;
 
 module.exports = {
-  IS_DEBUG,
   APP_PROTOCOL,
-  WEBPACK_PORT,
-  WEBPACK_DOMAIN,
-  WEBPACK_SERVER,
   ENTRY_POINTS,
+  HASH_FILENAMES,
+  IS_DEBUG,
+  WEBPACK_DOMAIN,
+  WEBPACK_PORT,
+  WEBPACK_SERVER,
 };

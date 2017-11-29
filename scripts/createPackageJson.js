@@ -14,7 +14,11 @@ module.exports = ({ name, isDev }) => {
     },
     'od-frontend': {
       'publicDirectory': 'public',
-      'buildPath': 'build'
+      'buildPath': 'build',
+      'entryPoints': {
+        'app': 'client/js/entry.js',
+      },
+      'hashFileNames': true
     },
     'dependencies': {
       'babel-polyfill': '^6.13.0',

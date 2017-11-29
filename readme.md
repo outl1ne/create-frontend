@@ -41,6 +41,9 @@ You can configure the build process with the `od-frontend` property in your
       app: 'client/js/entry.js',
   }
   ```
+* `hashFileNames` (_true_) - Whether or not filenames should be hashed in
+  production (e.g `app-503dcc37.js`). An `asset-manifest.json` file will be
+  generated either way.
 
 ### Using hot module replacement
 

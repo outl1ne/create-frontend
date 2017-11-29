@@ -90,14 +90,6 @@ module.exports.stats = config.IS_DEBUG ? 'verbose' : 'errors-only';
  * Module: Mainly for loaders. Some loaders are shared, others are specific to dev/prod
  */
 
-const sharedRules = [
-  // Fonts
-  {
-    test: /\.(eot|ttf|woff|woff2)$/,
-    use: [{ loader: require.resolve('file-loader') }],
-  },
-];
-
 const developmentRules = [
   // JS
   {
@@ -121,35 +113,16 @@ const developmentRules = [
         options: { importLoaders: 1, sourceMap: config.ENABLE_DEV_SOURCEMAPS },
       },
       {
-        loader: require.resolve('resolve-url-loader'),
-      },
-      {
         loader: require.resolve('postcss-loader'),
         options: getPostCssOpts({ IS_PRODUCTION, config }),
       },
+      { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
       {
         loader: require.resolve('sass-loader'),
         options: {
           outputStyle: 'expanded',
-          sourceMap: config.ENABLE_DEV_SOURCEMAPS,
+          sourceMap: true, // resolve-url-loader always needs a sourcemap
         },
-      },
-    ],
-  },
-  // URL loader - inline if <10kB
-  // Excluded is everything that we're not handling explicitly with some other loader.
-  // If you add a new loader somewhere, you have to update this exclude list as well
-  {
-    exclude: [
-      /\.(sass|scss)$/,
-      /\.jsx?$/,
-      /\.json$/,
-      /\.(eot|ttf|woff|woff2)$/,
-    ],
-    use: [
-      {
-        loader: require.resolve('url-loader'),
-        options: { limit: 10240, name: '[name].[ext]' },
       },
     ],
   },
@@ -185,42 +158,49 @@ const productionRules = [
           loader: require.resolve('postcss-loader'),
           options: getPostCssOpts({ IS_PRODUCTION, config }),
         },
-        {
-          loader: require.resolve('resolve-url-loader'),
-        }, // Resolves relative paths in url() statements based on the original source file.
+        { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
         {
           loader: require.resolve('sass-loader'),
           options: {
             outputStyle: 'compressed',
-            sourceMap: config.ENABLE_PROD_SOURCEMAPS,
+            sourceMap: true, // resolve-url-loader always needs a sourcemap
           },
         },
       ],
     }),
   },
-  // URL loader - inline if <10kB
-  // Excluded is everything that we're not handling explicitly with some other loader.
-  // If you add a new loader somewhere, you have to update this exclude list as well
-  {
-    exclude: [
-      /\.(sass|scss)$/,
-      /\.jsx?$/,
-      /\.json$/,
-      /\.(eot|ttf|woff|woff2)$/,
-    ],
-    use: [
-      {
-        loader: require.resolve('url-loader'),
-        options: { limit: 10240, name: '[name].[hash:8].[ext]' },
-      },
-    ],
-  },
 ];
 
 module.exports.module = {
   rules: [
-    ...sharedRules,
-    ...(IS_PRODUCTION ? productionRules : developmentRules),
+    {
+      oneOf: [
+        // Inline small images instead of creating separate assets
+        {
+          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+          loader: require.resolve('url-loader'),
+          options: {
+            limit: 10000,
+            name: config.HASH_FILENAMES
+              ? '[name].[hash:8].[ext]'
+              : '[name].[ext]',
+          },
+        },
+        // Add production / development specific rules
+        ...(IS_PRODUCTION ? productionRules : developmentRules),
+        // If nothing matched, use file-loader.
+        // Except in the cases of js/html/json to allow webpack's default loaders to handle those.
+        {
+          loader: require.resolve('file-loader'),
+          exclude: [/\.js$/, /\.html$/, /\.json$/],
+          options: {
+            name: config.HASH_FILENAMES
+              ? '[name].[hash:8].[ext]'
+              : '[name].[ext]',
+          },
+        },
+      ],
+    },
   ],
 };
 

@@ -24,6 +24,13 @@ Webpack under the hood.
   will be [transformed](https://webpack.js.org/plugins/define-plugin/) to `true`
 * `npm run dev` - Start a webpack server for development
 
+You can also pass some environment specific variables to the scripts:
+
+* `npm run dev -- --webpackPort=8000` - Starts the dev server at a custom port
+* `npm run dev -- --webpackDomain=localhost` - Starts the dev server at a custom
+  domain
+* `npm run dev -- --protocol=https` - Starts the dev server at a custom protocol
+
 ### Configuration
 
 You can configure the build process with the `od-frontend` property in your

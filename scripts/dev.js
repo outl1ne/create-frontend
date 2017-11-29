@@ -40,7 +40,8 @@ module.exports = () => {
     config.WEBPACK_DOMAIN,
     err => {
       if (err) {
-        return console.error('Dev server failed to start:', err);
+        console.error('Dev server failed to start:', err);
+        return;
       }
 
       console.info(

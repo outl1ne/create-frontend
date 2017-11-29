@@ -1,18 +1,22 @@
-'use strict';
 const path = require('path');
-
+/* eslint-disable object-shorthand */
 // prettier-ignore
+
 module.exports = ({ name, isDev }) => {
   const json = {
-    name: name,
-    version: '0.1.0',
-    private: true,
-    scripts: {
+    'name': name,
+    'version': '0.1.0',
+    'private': true,
+    'scripts': {
       'dev': 'od-frontend dev',
       'build': 'od-frontend build',
       'build:debug': 'od-frontend build --debug',
     },
-    dependencies: {
+    'od-frontend': {
+      'publicDirectory': 'public',
+      'buildPath': 'build'
+    },
+    'dependencies': {
       'babel-polyfill': '^6.13.0',
       'eslint': '^4.12.0',
       'eslint-plugin-flowtype': '^2.39.1',

@@ -23,6 +23,15 @@ Webpack under the hood.
   will be [transformed](https://webpack.js.org/plugins/define-plugin/) to `true`
 * `npm run dev` - Start a webpack server for development
 
+### Configuration
+
+You can configure the build process with the `od-frontend` property in your
+`package.json`. Possible options (default in parens):
+
+* `publicDirectory` (_public_) - the public root of your project. `buildPath`
+* `buildPath` (_build_) - relative to the public directory. Build files will be
+  generated into this path.
+
 ### Using hot module replacement
 
 [Hot module replacement](https://webpack.js.org/api/hot-module-replacement/) is

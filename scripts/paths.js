@@ -6,11 +6,14 @@ function resolveApp(...args) {
 }
 
 const APP_DIRECTORY = fs.realpathSync(process.cwd());
-const PUBLIC_DIRECTORY = resolveApp('public');
-const BUILD_PATH = 'build';
+const appPackage = require(resolveApp('package.json'));
+const appConfig = appPackage['od-frontend'] || {};
+const BUILD_PATH = appConfig.buildPath || 'build';
+const PUBLIC_DIRECTORY = resolveApp(appConfig.publicDirectory || 'public');
 const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);
 
 module.exports = {
+  resolveApp,
   APP_DIRECTORY,
   PUBLIC_DIRECTORY,
   BUILD_PATH,

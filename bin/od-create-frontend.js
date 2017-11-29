@@ -1,10 +1,9 @@
 #! /usr/bin/env node
-'use strict';
 const fs = require('fs-extra');
 const path = require('path');
 const readline = require('readline-sync');
 const chalk = require('chalk');
-const getPackageJson = require('../scripts/getPackageJson');
+const createPackageJson = require('../scripts/createPackageJson');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const args = require('minimist')(process.argv.slice(2));
@@ -15,7 +14,7 @@ const TEMPLATE_PATH = path.resolve(__dirname, '..', 'template');
 const error = (err, ...rest) => console.error(chalk.red.bold(err), ...rest);
 const info = (msg, ...rest) => console.info(chalk.blue(msg), ...rest);
 const success = (msg, ...rest) => console.info(chalk.green(msg), ...rest);
-const log = (...args) => console.log(...args);
+const log = (...rest) => console.log(...rest);
 
 function getProjectNameFromCwd() {
   return path.basename(CURRENT_DIR);
@@ -64,7 +63,7 @@ Please remove the following files and retry:`
   }
 
   // Generate package.json
-  const packageJson = getPackageJson({
+  const packageJson = createPackageJson({
     name: getProjectNameFromCwd(),
     isDev: !!args.dev,
   });

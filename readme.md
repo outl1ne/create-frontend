@@ -13,7 +13,7 @@ under the hood.
 
 ## Usage
 
-1. Install the toolkit globally: `npm install -g @optimistdigital/od-frontend`
+1. Install the toolkit globally: `npm install -g @optimistdigital/frontend`
 2. Type `od-create-frontend` in your project root and follow the instructions
 
 ### CLI

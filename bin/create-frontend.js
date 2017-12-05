@@ -20,13 +20,9 @@ function getProjectNameFromCwd() {
   return path.basename(CURRENT_DIR);
 }
 
-function getConfirmation() {
+function getConfirmation(msg) {
   console.log('');
-  return readline.question(
-    chalk.blue(
-      `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}? (y/N) `
-    )
-  );
+  return readline.question(chalk.blue(msg));
 }
 
 function findExistingFrontendFiles() {
@@ -45,7 +41,11 @@ function findExistingFrontendFiles() {
 
 function init() {
   // Get confirmation from user
-  if (getConfirmation().toLowerCase() !== 'y') {
+  if (
+    getConfirmation(
+      `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}? (y/N) `
+    ).toLowerCase() !== 'y'
+  ) {
     log('Aborted.');
     return;
   }
@@ -53,13 +53,29 @@ function init() {
   // Check if cwd has conflicting ciles
   const existingFrontendFiles = findExistingFrontendFiles();
   if (existingFrontendFiles.length > 0) {
-    error(
-      `We have detected an existing frontend setup in your current directory.
-Please remove the following files and retry:`
-    );
-    log(existingFrontendFiles.map(name => `- ${name}`).join('\n'));
+    if (args.overwrite === true) {
+      if (
+        getConfirmation(
+          `The following files will be overwritten. Are you sure? (y/N)\n${existingFrontendFiles
+            .map(name => `- ${name}`)
+            .join('\n')}\n`
+        ).toLowerCase() !== 'y'
+      ) {
+        log('Aborted.');
+        return;
+      }
+    } else {
+      error(
+        `We have detected an existing frontend setup in your current directory. Please remove the following files and retry:`
+      );
+      info(existingFrontendFiles.map(name => `- ${name}`).join('\n'));
+      info('');
+      info(
+        `If you wish to overwrite these files, run this command with the --overwrite flag.`
+      );
 
-    return;
+      return;
+    }
   }
 
   // Generate package.json

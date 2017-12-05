@@ -72,9 +72,7 @@ Please remove the following files and retry:`
   // Copy contents of template folder into cwd
   fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
   // Install npm dependencies
-  console.log('');
-  success('OD frontend boilerplate generated.');
-  console.log('');
+  success('Optimist frontend boilerplate created.');
   info('Installing modules (this may take some time)...\n');
   exec(`npm install`)
     .then(res => {

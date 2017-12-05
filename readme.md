@@ -1,4 +1,4 @@
-# OD Frontend
+# Create Frontend
 
 This toolkit generates your project's frontend build system. It uses Webpack
 under the hood.
@@ -13,8 +13,9 @@ under the hood.
 
 ## Usage
 
-1. Install the toolkit globally: `npm install -g @optimistdigital/frontend`
-2. Type `od-create-frontend` in your project root and follow the instructions
+1. Install the toolkit globally: `npm install -g
+   @optimistdigital/create-frontend`
+2. Type `create-frontend` in your project root and follow the instructions
 
 ### CLI
 
@@ -31,7 +32,7 @@ There are also flags to customize the dev environment:
 
 ### Configuration
 
-Configuration goes in the your package.json under the `od-frontend` field
+Configuration goes in the your package.json under the `create-frontend` field
 (default in parens):
 
 * `publicDirectory` (_public_) - Project's public root. Relative to project
@@ -53,7 +54,8 @@ Configuration goes in the your package.json under the `od-frontend` field
 ### Adding custom webpack rules / plugins
 
 To configure the webpack rules and plugins, you can create a
-`.od-webpack.conf.js` file to the project root and export an object like this:
+`create-frontend.conf.js` file to the project root and export an object like
+this:
 
 ```js
 module.exports = {
@@ -99,10 +101,6 @@ this generator. You also need to symlink this project so your test project
 installs the local version, instead of from npm.
 
 * `npm install` - install node modules
-* `npm link` while in this directory - makes `od-create-frontend` accesible
+* `npm link` while in this directory - makes `create-frontend` accesible
   globally
-* Go to your test project and type `od-create-frontend --dev`
-
-```
-
-```
+* Go to your test project and type `create-frontend --dev`

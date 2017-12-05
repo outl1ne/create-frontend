@@ -7,29 +7,20 @@ module.exports = ({ name, isDev }) => {
     'name': name,
     'version': '0.1.0',
     'private': true,
+    'create-frontend': {},
     'scripts': {
-      'dev': 'od-frontend dev',
-      'build': 'od-frontend build',
-      'build:debug': 'od-frontend build --debug',
-    },
-    'od-frontend': {
-      'publicDirectory': 'public',
-      'buildPath': 'build',
-      'entryPoints': {
-        'app': 'client/js/entry.js',
-      },
-      'hashFileNames': true,
-      'enableDevSourcemaps': true,
-      'enableProdSourcemaps': false,
+      'dev': 'frontend-scripts dev',
+      'build': 'frontend-scripts build',
+      'build:debug': 'frontend-scripts build --debug',
     },
     'dependencies': {
+      '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '..') : '1.x.x',
       'babel-polyfill': '^6.13.0',
       'eslint': '^4.12.0',
       'eslint-plugin-flowtype': '^2.39.1',
       'eslint-plugin-import': '^2.8.0',
       'eslint-plugin-react': '^7.5.1',
-      'normalize.css': '7.x.x',
-      'od-frontend': isDev ? path.resolve(__dirname, '..') : '1.x.x',
+      'normalize.css': '7.x.x'
     },
   };
 

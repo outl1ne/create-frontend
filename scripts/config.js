@@ -2,14 +2,14 @@ const args = require('minimist')(process.argv.slice(2));
 const paths = require('./paths');
 
 const appPackage = require(paths.resolveApp('package.json'));
-const appConfig = appPackage['od-frontend'] || {};
+const appConfig = appPackage['create-frontend'] || {};
 
 let odWebpackConfig = {};
 try {
-  odWebpackConfig = require(paths.resolveApp('.od-webpack.conf'));
+  odWebpackConfig = require(paths.resolveApp('create-frontend.conf'));
 } catch (err) {
   if (err.code !== 'MODULE_NOT_FOUND') {
-    console.error('Error in .od-webpack.conf.js file:', err);
+    console.error('Error in create-frontend.conf.js file:', err);
   }
 }
 

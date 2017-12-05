@@ -82,7 +82,9 @@ Please remove the following files and retry:`
       success('Done!');
       success('For development, type `npm run dev`.');
       success('For production, type `npm run build`.');
-      success('Documentation: https://github.com/optimistdigital/frontend');
+      success(
+        'Documentation: https://github.com/optimistdigital/create-frontend'
+      );
     })
     .catch(err => {
       error('Installing node modules failed:', err.message);

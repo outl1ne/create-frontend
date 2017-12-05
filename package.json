@@ -1,13 +1,13 @@
 {
-  "name": "od-frontend",
+  "name": "create-frontend",
   "version": "1.0.0",
   "description": "Creates an encapsulated frontend build solution for js-based projects",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "od-create-frontend": "bin/od-create-frontend.js",
-    "od-frontend": "bin/od-frontend.js"
+    "create-frontend": "bin/create-frontend.js",
+    "frontend-scripts": "bin/frontend-scripts.js"
   },
   "author": "",
   "private": true,

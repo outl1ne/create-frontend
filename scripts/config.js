@@ -4,6 +4,15 @@ const paths = require('./paths');
 const appPackage = require(paths.resolveApp('package.json'));
 const appConfig = appPackage['od-frontend'] || {};
 
+let odWebpackConfig = {};
+try {
+  odWebpackConfig = require(paths.resolveApp('.od-webpack.conf'));
+} catch (err) {
+  if (err.code !== 'MODULE_NOT_FOUND') {
+    console.error('Error in .od-webpack.conf.js file:', err);
+  }
+}
+
 const IS_DEBUG = !!args.debug;
 const APP_PROTOCOL = args.protocol || 'http';
 const WEBPACK_PORT = args.webpackPort || 8000;
@@ -22,6 +31,14 @@ const ENABLE_PROD_SOURCEMAPS =
   typeof appConfig.enableProdSourcemaps === 'boolean'
     ? appConfig.enableProdSourcemaps
     : true;
+const getPlugins =
+  typeof odWebpackConfig.getPlugins === 'function'
+    ? odWebpackConfig.getPlugins
+    : () => [];
+const getRules =
+  typeof odWebpackConfig.getRules === 'function'
+    ? odWebpackConfig.getRules
+    : () => [];
 
 module.exports = {
   APP_PROTOCOL,
@@ -33,4 +50,6 @@ module.exports = {
   WEBPACK_DOMAIN,
   WEBPACK_PORT,
   WEBPACK_SERVER,
+  getPlugins,
+  getRules,
 };

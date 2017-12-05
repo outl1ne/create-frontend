@@ -50,6 +50,27 @@ Configuration goes in the your package.json under the `od-frontend` field
   production (e.g `app-503dcc37.js`). An `asset-manifest.json` file will be
   generated either way.
 
+### Adding custom webpack rules / plugins
+
+To configure the webpack rules and plugins, you can create a
+`.od-webpack.conf.js` file to the project root and export an object like this:
+
+```js
+module.exports = {
+  getPlugins: opts => [],
+  getRules: opts => [],
+};
+```
+
+* `getPlugins` - Function that returns an array of plugins. Appended to the end
+  of the plugins array.
+* `getRules` - Function that returns an array of rules. The first one to match
+  will be used
+  ([oneOf](https://webpack.js.org/configuration/module/#rule-oneof)). This may
+  override default rules.
+
+The `opts` parameter contains an `IS_DEVELOPMENT` boolean.
+
 ### Using hot module replacement
 
 [Hot module replacement](https://webpack.js.org/api/hot-module-replacement/) is

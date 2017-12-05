@@ -175,6 +175,7 @@ module.exports.module = {
   rules: [
     {
       oneOf: [
+        ...(config.getRules({ IS_PRODUCTION }) || []),
         // Inline small images instead of creating separate assets
         {
           test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -261,4 +262,7 @@ module.exports.plugins = [
           chalk.green.bold('\n=== Client build done === \n')
         ),
       ]),
+  ...(config.getPlugins({
+    IS_PRODUCTION,
+  }) || []),
 ];

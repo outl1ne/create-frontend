@@ -12,9 +12,9 @@ module.exports = () => {
   const config = require('./config');
   const webpack = require('webpack');
   const chalk = require('chalk');
-  const getPort = require('get-port');
+  const detectPort = require('detect-port');
 
-  getPort({ port: config.WEBPACK_PORT }).then(freePort => {
+  detectPort(config.WEBPACK_PORT, (_, freePort) => {
     if (config.WEBPACK_PORT !== freePort) {
       console.error(
         chalk.red.bold(

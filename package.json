@@ -1,7 +1,8 @@
 {
   "name": "@optimistdigital/create-frontend",
   "version": "1.0.0",
-  "description": "Creates an encapsulated frontend build solution for js-based projects",
+  "description":
+    "Creates an encapsulated frontend build solution for js-based projects",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +11,6 @@
     "frontend-scripts": "bin/frontend-scripts.js"
   },
   "author": "",
-  "private": true,
   "dependencies": {
     "@optimistdigital/eslint-config-rules": "^1.7.1",
     "autoprefixer": "^7.1.6",

@@ -1,6 +1,6 @@
 {
   "name": "@optimistdigital/create-frontend",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Creates an encapsulated frontend build solution for js-based projects",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

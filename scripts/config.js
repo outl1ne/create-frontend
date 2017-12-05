@@ -30,7 +30,7 @@ const ENABLE_DEV_SOURCEMAPS =
 const ENABLE_PROD_SOURCEMAPS =
   typeof appConfig.enableProdSourcemaps === 'boolean'
     ? appConfig.enableProdSourcemaps
-    : true;
+    : false;
 const getPlugins =
   typeof odWebpackConfig.getPlugins === 'function'
     ? odWebpackConfig.getPlugins

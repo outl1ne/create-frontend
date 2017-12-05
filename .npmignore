@@ -1,3 +1,7 @@
 .editorconfig
 .eslintrc
 .prettierrc
+.vscode
+.gitignore
+package.json
+package-lock.json

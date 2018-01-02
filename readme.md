@@ -81,6 +81,12 @@ enabled for the app, however you must choose manually what you want to update
 when changes are made. To do this, go into your `entry.js` file and uncomment
 the relevant code.
 
+## Updating
+
+To update the local version of the toolkit, type `npm install @optimistdigital/create-frontend`. Please look at the changelog to see if there are any breaking changes.
+
+The global version can be updated with `npm install -g @optimistdigital/create-frontend`, and will ensure that newly created projects use the latest version.
+
 # Contributing
 
 To develop this toolkit, you need to make a test project where you will be using

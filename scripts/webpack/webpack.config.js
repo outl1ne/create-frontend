@@ -14,12 +14,14 @@ const getPostCssOpts = require('./getPostCssOpts');
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 // Pass these to config functions (like getRules)
-const CONFIG_GETTER_OPTIONS = { IS_PRODUCTION };
+const WEBPACK_CONF_PARAMS = { IS_PRODUCTION };
+
+const output = {};
 
 /**
  * Target: Different for server/client
  */
-module.exports.target = 'web';
+output.target = 'web';
 
 /**
  * Devtool: Keep sourcemaps for development only.
@@ -27,10 +29,10 @@ module.exports.target = 'web';
  * Comparison: https://webpack.github.io/docs/build-performance.html#sourcemaps
  */
 if (IS_PRODUCTION) {
-  module.exports.devtool =
+  output.devtool =
     IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS ? 'source-map' : false;
 } else {
-  module.exports.devtool =
+  output.devtool =
     !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS
       ? 'eval-cheap-module-source-map'
       : false;
@@ -39,7 +41,7 @@ if (IS_PRODUCTION) {
 /**
  * Context: Make context be root dir
  */
-module.exports.context = paths.APP_DIRECTORY;
+output.context = paths.APP_DIRECTORY;
 
 /**
  * Entry: Production uses separate entry points for CSS assets, development has only 1 bundle
@@ -56,12 +58,12 @@ Object.keys(config.ENTRY_POINTS).forEach(key => {
   DEV_ENTRY_POINTS[key] = [...DEV_ENTRY_CONF, config.ENTRY_POINTS[key]];
 });
 
-module.exports.entry = IS_PRODUCTION ? config.ENTRY_POINTS : DEV_ENTRY_POINTS;
+output.entry = IS_PRODUCTION ? config.ENTRY_POINTS : DEV_ENTRY_POINTS;
 
 /**
  * Output
  */
-module.exports.output = {
+output.output = {
   path: paths.BUILD_DIRECTORY,
   filename:
     IS_PRODUCTION && config.HASH_FILENAMES
@@ -77,7 +79,7 @@ module.exports.output = {
  * Resolve: We use the project root to import modules in JS absolutely, in addition to node_modules
  */
 
-module.exports.resolve = {
+output.resolve = {
   modules: ['.', 'node_modules'],
   extensions: ['.json', '.js', '.jsx', '.vue'],
 };
@@ -86,7 +88,7 @@ module.exports.resolve = {
  * Stats: In non-debug mode, we don't want to pollute the terminal with stats in case some errors would be missed
  */
 
-module.exports.stats = config.IS_DEBUG ? 'verbose' : 'errors-only';
+output.stats = config.IS_DEBUG ? 'verbose' : 'errors-only';
 
 /**
  * Module: Mainly for loaders. Some loaders are shared, others are specific to dev/prod
@@ -173,11 +175,11 @@ const productionRules = [
   },
 ];
 
-module.exports.module = {
+output.module = {
   rules: [
     {
       oneOf: [
-        ...(config.APPEND_RULES(CONFIG_GETTER_OPTIONS) || []),
+        ...(config.APPEND_RULES(WEBPACK_CONF_PARAMS) || []),
         // Inline small images instead of creating separate assets
         {
           test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -211,7 +213,7 @@ module.exports.module = {
  * Plugins: Some plugins are shared, others are specific to dev/prod
  */
 
-module.exports.plugins = [
+output.plugins = [
   /* SHARED PLUGINS */
   new webpack.DefinePlugin({
     'process.env': {
@@ -264,5 +266,13 @@ module.exports.plugins = [
           chalk.green.bold('\n=== Client build done === \n')
         ),
       ]),
-  ...(config.APPEND_PLUGINS(CONFIG_GETTER_OPTIONS) || []),
+  ...(console.log('config.APPEND_PLUGINS', typeof config.APPEND_PLUGINS) ||
+    config.APPEND_PLUGINS(WEBPACK_CONF_PARAMS) ||
+    []),
 ];
+
+module.exports = Object.assign(
+  {},
+  output,
+  config.MERGE_CONFIG(WEBPACK_CONF_PARAMS)
+);

@@ -28,7 +28,7 @@ const ENABLE_PROD_SOURCEMAPS = getAppConfigValue('enableProdSourcemaps', false);
 
 const APPEND_PLUGINS = getWebpackConfigValue('appendPlugins', () => []);
 const APPEND_RULES = getWebpackConfigValue('appendRules', () => []);
-const MERGE_CONFIG = getWebpackConfigValue('mergeConfig', () => []);
+const MERGE_CONFIG = getWebpackConfigValue('mergeConfig', () => ({}));
 
 module.exports = {
   APP_PROTOCOL,
@@ -50,14 +50,14 @@ module.exports = {
  */
 
 function getWebpackConfigValue(key, fallback) {
-  if (typeof odWebpackConfig[key] === 'undefined') {
+  if (odWebpackConfig[key] == null) {
     return fallback;
   }
   return odWebpackConfig[key];
 }
 
 function getAppConfigValue(key, fallback) {
-  if (typeof appConfig[key] === 'undefined') {
+  if (appConfig[key] == null) {
     return fallback;
   }
   return appConfig[key];

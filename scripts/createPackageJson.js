@@ -14,7 +14,7 @@ module.exports = ({ name, isDev }) => {
       'build:debug': 'frontend-scripts build --debug',
     },
     'dependencies': {
-      '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '..') : '1.x.x',
+      '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '..') : '2.x.x',
       'babel-polyfill': '^6.13.0',
       'eslint': '^4.12.0',
       'eslint-plugin-flowtype': '^2.39.1',

@@ -59,17 +59,18 @@ this:
 
 ```js
 module.exports = {
-  getPlugins: opts => [],
-  getRules: opts => [],
+  appendPlugins: opts => [],
+  appendRules: opts => [],
 };
 ```
-
-* `getPlugins` - Function that returns an array of plugins. Appended to the end
+* `appendPlugins` - Function that returns an array of plugins. Appended to the end
   of the plugins array.
-* `getRules` - Function that returns an array of rules. The first one to match
+* `appendRules` - Function that returns an array of rules. The first one to match
   will be used
   ([oneOf](https://webpack.js.org/configuration/module/#rule-oneof)). This may
   override default rules.
+* `mergeConfig` - Function that returns a webpack configuration object.
+  This will be merged with the default values - overriding them - and should only be used as an escape hatch. 
 
 The `opts` parameter contains an `IS_DEVELOPMENT` boolean.
 

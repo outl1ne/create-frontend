@@ -18,27 +18,17 @@ const APP_PROTOCOL = args.protocol || 'http';
 const WEBPACK_PORT = args.webpackPort || 8000;
 const WEBPACK_DOMAIN = args.webpackDomain || 'localhost';
 const WEBPACK_SERVER = `${APP_PROTOCOL}://${WEBPACK_DOMAIN}:${WEBPACK_PORT}`;
-const ENTRY_POINTS = appConfig.entryPoints || {
+
+const ENTRY_POINTS = getAppConfigValue('entryPoints', {
   app: 'client/js/entry.js',
-};
-const HASH_FILENAMES =
-  typeof appConfig.hashFileNames === 'boolean' ? appConfig.hashFileNames : true;
-const ENABLE_DEV_SOURCEMAPS =
-  typeof appConfig.enableDevSourcemaps === 'boolean'
-    ? appConfig.enableDevSourcemaps
-    : true;
-const ENABLE_PROD_SOURCEMAPS =
-  typeof appConfig.enableProdSourcemaps === 'boolean'
-    ? appConfig.enableProdSourcemaps
-    : false;
-const getPlugins =
-  typeof odWebpackConfig.getPlugins === 'function'
-    ? odWebpackConfig.getPlugins
-    : () => [];
-const getRules =
-  typeof odWebpackConfig.getRules === 'function'
-    ? odWebpackConfig.getRules
-    : () => [];
+});
+const HASH_FILENAMES = getAppConfigValue('hashFileNames', true);
+const ENABLE_DEV_SOURCEMAPS = getAppConfigValue('enableDevSourcemaps', true);
+const ENABLE_PROD_SOURCEMAPS = getAppConfigValue('enableProdSourcemaps', false);
+
+const APPEND_PLUGINS = getWebpackConfigValue('appendPlugins', () => []);
+const APPEND_RULES = getWebpackConfigValue('appendRules', () => []);
+const MERGE_CONFIG = getWebpackConfigValue('mergeConfig', () => []);
 
 module.exports = {
   APP_PROTOCOL,
@@ -50,6 +40,25 @@ module.exports = {
   WEBPACK_DOMAIN,
   WEBPACK_PORT,
   WEBPACK_SERVER,
-  getPlugins,
-  getRules,
+  APPEND_PLUGINS,
+  APPEND_RULES,
+  MERGE_CONFIG,
 };
+
+/**
+ * Utils
+ */
+
+function getWebpackConfigValue(key, fallback) {
+  if (typeof odWebpackConfig[key] === 'undefined') {
+    return fallback;
+  }
+  return odWebpackConfig[key];
+}
+
+function getAppConfigValue(key, fallback) {
+  if (typeof appConfig[key] === 'undefined') {
+    return fallback;
+  }
+  return appConfig[key];
+}

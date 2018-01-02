@@ -13,6 +13,8 @@ const getPostCssOpts = require('./getPostCssOpts');
  */
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+// Pass these to config functions (like getRules)
+const CONFIG_GETTER_OPTIONS = { IS_PRODUCTION };
 
 /**
  * Target: Different for server/client
@@ -77,7 +79,7 @@ module.exports.output = {
 
 module.exports.resolve = {
   modules: ['.', 'node_modules'],
-  extensions: ['.json', '.js'],
+  extensions: ['.json', '.js', '.jsx', '.vue'],
 };
 
 /**
@@ -175,7 +177,7 @@ module.exports.module = {
   rules: [
     {
       oneOf: [
-        ...(config.getRules({ IS_PRODUCTION }) || []),
+        ...(config.APPEND_RULES(CONFIG_GETTER_OPTIONS) || []),
         // Inline small images instead of creating separate assets
         {
           test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -262,7 +264,5 @@ module.exports.plugins = [
           chalk.green.bold('\n=== Client build done === \n')
         ),
       ]),
-  ...(config.getPlugins({
-    IS_PRODUCTION,
-  }) || []),
+  ...(config.APPEND_PLUGINS(CONFIG_GETTER_OPTIONS) || []),
 ];

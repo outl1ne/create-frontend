@@ -266,9 +266,7 @@ output.plugins = [
           chalk.green.bold('\n=== Client build done === \n')
         ),
       ]),
-  ...(console.log('config.APPEND_PLUGINS', typeof config.APPEND_PLUGINS) ||
-    config.APPEND_PLUGINS(WEBPACK_CONF_PARAMS) ||
-    []),
+  ...(config.APPEND_PLUGINS(WEBPACK_CONF_PARAMS) || []),
 ];
 
 module.exports = Object.assign(

@@ -61,6 +61,7 @@ this:
 module.exports = {
   appendPlugins: opts => [],
   appendRules: opts => [],
+  mergeConfig: opts => ({})
 };
 ```
 * `appendPlugins` - Function that returns an array of plugins. Appended to the end

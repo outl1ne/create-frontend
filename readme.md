@@ -10,6 +10,7 @@ under the hood.
 * SCSS with autoprefixer, normalize.css
 * Hot reload for development
 * Works with zero configuration, but customization is possible if needed
+* Use whatever backend you want. Html files are built from `/client/html` by default, with assets automatically linked.
 
 ## Usage
 
@@ -50,6 +51,9 @@ Configuration goes in the your package.json under the `create-frontend` field
 * `hashFileNames` (_true_) - Whether or not filenames should be hashed in
   production (e.g `app-503dcc37.js`). An `asset-manifest.json` file will be
   generated either way.
+* `htmlPath` (_client/html_) - Html files from this directory will be built 
+  into the public directory with [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin).
+* `htmlOptions` (_{}_) - Options that will get passed to html-webpack-plugin
 
 ### Adding custom webpack rules / plugins
 

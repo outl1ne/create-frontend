@@ -7,6 +7,9 @@ const paths = require('../paths');
 const config = require('../config');
 const getBabelOpts = require('./getBabelOpts');
 const getPostCssOpts = require('./getPostCssOpts');
+const readFiles = require('fs-readdir-recursive');
+const HtmlPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 /**
  * Set NODE_ENV to production as a fallback, if it hasn't been set by something else
@@ -213,8 +216,21 @@ output.module = {
  * Plugins: Some plugins are shared, others are specific to dev/prod
  */
 
+const PAGE_FILES = readFiles(paths.HTML_PATH);
 output.plugins = [
   /* SHARED PLUGINS */
+  ...PAGE_FILES.map(
+    pageFile =>
+      new HtmlPlugin(
+        Object.assign({}, config.HTML_OPTIONS, {
+          template: path.resolve(paths.HTML_PATH, pageFile),
+          filename: path.join(
+            path.dirname(pageFile),
+            `${path.basename(pageFile, path.extname(pageFile))}.html`
+          ),
+        })
+      )
+  ),
   new webpack.DefinePlugin({
     'process.env': {
       NODE_ENV: JSON.stringify(process.env.NODE_ENV),

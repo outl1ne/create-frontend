@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0] - 2018-01-04
+### Added
+- html-webpack-plugin is now built-in. Customizable through options (more info in readme)
+
 ## [2.0.0] - 2018-01-02
 ### Added
 - Added .vue and .jsx to resolve.extensions by default. They can now be imported in js without adding the extension

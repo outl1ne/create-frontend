@@ -25,6 +25,7 @@ const ENTRY_POINTS = getAppConfigValue('entryPoints', {
 const HASH_FILENAMES = getAppConfigValue('hashFileNames', true);
 const ENABLE_DEV_SOURCEMAPS = getAppConfigValue('enableDevSourcemaps', true);
 const ENABLE_PROD_SOURCEMAPS = getAppConfigValue('enableProdSourcemaps', false);
+const HTML_OPTIONS = getAppConfigValue('htmlOptions', {});
 
 const APPEND_PLUGINS = getWebpackConfigValue('appendPlugins', () => []);
 const APPEND_RULES = getWebpackConfigValue('appendRules', () => []);
@@ -43,6 +44,7 @@ module.exports = {
   APPEND_PLUGINS,
   APPEND_RULES,
   MERGE_CONFIG,
+  HTML_OPTIONS,
 };
 
 /**

@@ -11,6 +11,7 @@ const appConfig = appPackage['create-frontend'] || {};
 const BUILD_PATH = appConfig.buildPath || 'build';
 const PUBLIC_DIRECTORY = resolveApp(appConfig.publicDirectory || 'public');
 const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);
+const HTML_PATH = resolveApp(appConfig.htmlPath || 'client/html');
 
 module.exports = {
   resolveApp,
@@ -18,4 +19,5 @@ module.exports = {
   PUBLIC_DIRECTORY,
   BUILD_PATH,
   BUILD_DIRECTORY,
+  HTML_PATH,
 };

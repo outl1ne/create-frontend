@@ -196,11 +196,16 @@ output.module = {
         },
         // Add production / development specific rules
         ...(IS_PRODUCTION ? productionRules : developmentRules),
+        {
+          test: [/\.html$/],
+          loader: require.resolve('html-loader'),
+          options: {},
+        },
         // If nothing matched, use file-loader.
-        // Except in the cases of js/html/json to allow webpack's default loaders to handle those.
+        // Except in the cases of js/json to allow webpack's default loaders to handle those.
         {
           loader: require.resolve('file-loader'),
-          exclude: [/\.js$/, /\.html$/, /\.json$/],
+          exclude: [/\.js$/, /\.json$/],
           options: {
             name: config.HASH_FILENAMES
               ? '[name].[hash:8].[ext]'

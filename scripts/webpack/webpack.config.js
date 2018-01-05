@@ -224,10 +224,17 @@ output.plugins = [
       new HtmlPlugin(
         Object.assign({}, config.HTML_OPTIONS, {
           template: path.resolve(paths.HTML_PATH, pageFile),
-          filename: path.join(
-            path.dirname(pageFile),
-            `${path.basename(pageFile, path.extname(pageFile))}.html`
-          ),
+          // For production, we want the html to be generated into the public directory.
+          // For development, we are serving the build directory, so we put the html there instead
+          filename: IS_PRODUCTION
+            ? path.join(
+                paths.PUBLIC_DIRECTORY,
+                `${path.basename(pageFile, path.extname(pageFile))}.html`
+              )
+            : path.join(
+                path.dirname(pageFile),
+                `${path.basename(pageFile, path.extname(pageFile))}.html`
+              ),
         })
       )
   ),

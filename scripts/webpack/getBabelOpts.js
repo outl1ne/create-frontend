@@ -31,8 +31,8 @@ module.exports = () => ({
           {
             transforms: [
               {
-                transform: 'react-transform-catch-errors',
-                imports: ['react', 'redbox-react'],
+                transform: require.resolve('react-transform-catch-errors'),
+                imports: ['react', require.resolve('redbox-react')],
               },
             ],
           },

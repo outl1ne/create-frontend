@@ -1,8 +1,11 @@
 # Changelog
 
+## [2.2.1] - 2018-01-08
+### Fixed
+- Fixed React transforms that were throwing errors during development due to missing dependencies
+
 ## [2.2.0] - 2018-01-05
 ### Added
-
 - html-loader for html-webpack-plugin. This resolves the issue where <img src="../images/filename.ext"> wasn't properly
 copying the assets over. PS! Absolute URL's here still don't work. 
 

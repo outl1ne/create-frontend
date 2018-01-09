@@ -27,4 +27,9 @@ module.exports = {
       jsx: true,
     },
   },
+  globals: {
+    __DEVELOPMENT__: true,
+    __PRODUCTION__: true,
+    __DEBUG__: true,
+  },
 };

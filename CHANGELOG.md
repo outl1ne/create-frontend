@@ -1,5 +1,8 @@
 # Changelog
 
+# Unreleased
+- Added globals into eslint config, which are injected into the app by webpack : `__DEVELOPMENT__`, `__PRODUCTION__`, `__DEBUG__`
+
 ## [2.2.1] - 2018-01-08
 ### Fixed
 - Fixed React transforms that were throwing errors during development due to missing dependencies

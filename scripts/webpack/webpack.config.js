@@ -2,6 +2,7 @@ const chalk = require('chalk');
 const CleanPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-plugin-manifest');
+const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const paths = require('../paths');
 const config = require('../config');
@@ -224,6 +225,13 @@ output.module = {
 const PAGE_FILES = readFiles(paths.HTML_PATH);
 output.plugins = [
   /* SHARED PLUGINS */
+  paths.COPY_PATH !== null &&
+    new CopyPlugin([
+      {
+        from: paths.COPY_PATH,
+        to: paths.PUBLIC_DIRECTORY,
+      },
+    ]),
   ...PAGE_FILES.map(
     pageFile =>
       new HtmlPlugin(

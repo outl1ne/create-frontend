@@ -10,7 +10,9 @@ under the hood.
 * SCSS with autoprefixer, normalize.css
 * Hot reload for development
 * Works with zero configuration, but customization is possible if needed
-* Use whatever backend you want. Html files are built from `/client/html` by default, with assets automatically linked.
+* Usable with any backend.
+* `.html` files are built from `/client/html` by default, with assets automatically linked.
+* Files from `/client/copy` are copied into the public directory automatically
 
 ## Usage
 
@@ -45,6 +47,7 @@ Configuration goes in the your package.json under the `create-frontend` field
   generated either way.
 * `htmlPath` (_client/html_) - Html files from this directory will be built 
   into the public directory with [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin).
+* `copyPath` (_client/copy_) - Files in this directory will be copied to the public directory.
 * `htmlOptions` (_{}_) - Options that will get passed to html-webpack-plugin
 * `entryPoints` - Object/string/array that contains the
   [entry points](https://webpack.js.org/concepts/entry-points/) for your

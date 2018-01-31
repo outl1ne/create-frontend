@@ -1,6 +1,12 @@
 # Changelog
 
-# Unreleased
+## [2.3.0] - 2018-01-31
+### Added
+- Added more data to the `opts` object that is passed to the mergeConfig/appendRules/appendPlugins callbacks.
+It now additionally contains `paths` and `config` objects
+
+## [2.2.2] - 2018-01-09
+### Added
 - Added globals into eslint config, which are injected into the app by webpack : `__DEVELOPMENT__`, `__PRODUCTION__`, `__DEBUG__`
 
 ## [2.2.1] - 2018-01-08

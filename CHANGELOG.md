@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.4.0] - 2017-01-31
+### Added
+- Files from `client/copy` are now automatically copied into the public directory. Path is customizable in settings
+
 ## [2.3.0] - 2018-01-31
 ### Added
 - Added more data to the `opts` object that is passed to the mergeConfig/appendRules/appendPlugins callbacks.

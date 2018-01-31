@@ -17,7 +17,7 @@ const path = require('path');
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 // Pass these to config functions (like getRules)
-const WEBPACK_CONF_PARAMS = { IS_PRODUCTION };
+const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, paths, config };
 
 const output = {};
 

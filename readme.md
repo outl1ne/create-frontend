@@ -77,7 +77,7 @@ module.exports = {
 * `mergeConfig` - Function that returns a webpack configuration object.
   This will be merged with the default values - overriding them - and should only be used as an escape hatch. 
 
-The `opts` parameter contains an `IS_DEVELOPMENT` boolean.
+The `opts` parameter contains the following object: `{ IS_PRODUCTION: boolean, paths: Object, config: Object }`
 
 ### Using hot module replacement
 

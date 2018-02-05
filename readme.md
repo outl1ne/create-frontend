@@ -12,7 +12,7 @@ under the hood.
 * Works with zero configuration, but customization is possible if needed
 * Usable with any backend.
 * `.html` files are built from `/client/html` by default, with assets automatically linked.
-* Files from `/client/copy` are copied into the public directory automatically
+* Can configure any files to be automatically copied to the public directory
 
 ## Usage
 
@@ -47,7 +47,7 @@ Configuration goes in the your package.json under the `create-frontend` field
   generated either way.
 * `htmlPath` (_client/html_) - Html files from this directory will be built 
   into the public directory with [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin).
-* `copyPath` (_client/copy_) - Files in this directory will be copied to the public directory.
+* `copyPath` (_null_) - Files in this directory will be copied to the public directory. If not specified, files will not be copied.
 * `htmlOptions` (_{}_) - Options that will get passed to html-webpack-plugin
 * `entryPoints` - Object/string/array that contains the
   [entry points](https://webpack.js.org/concepts/entry-points/) for your
@@ -67,16 +67,15 @@ this:
 ```js
 module.exports = {
   appendPlugins: opts => [],
-  appendRules: opts => [],
+  prependRules: opts => [],
   mergeConfig: opts => ({})
 };
 ```
 * `appendPlugins` - Function that returns an array of plugins. Appended to the end
   of the plugins array.
-* `appendRules` - Function that returns an array of rules. The first one to match
+* `prependRules` - Function that returns an array of rules. The first one to match
   will be used
-  ([oneOf](https://webpack.js.org/configuration/module/#rule-oneof)). This may
-  override default rules.
+  ([oneOf](https://webpack.js.org/configuration/module/#rule-oneof)). These take precedence over default rules - if your custom rule matches, the default ones will not be used.
 * `mergeConfig` - Function that returns a webpack configuration object.
   This will be merged with the default values - overriding them - and should only be used as an escape hatch. 
 

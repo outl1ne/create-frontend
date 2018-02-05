@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.0.0] - 2018-01-05
+### Fixed
+- Fixed html plugin not maintaining nested directory structure when building for production
+
+### Changed
+- Copy plugin now has to be opted into manually (`copyPath` in options). This fixes an error that occured when the user didn't have a `client/copy` directory. This error is now acceptable because the user opted in manually and has to be notified about broken configuration. 
+- `appendRules` has been renamed to `prependRules`. "Append" was misleading, because the webpack rules are actually added to the beginning of the `oneOf` array, and will take precendence over the default rules. 
+
+### Upgrading
+- If you used create-frontend.conf.js file with `appendRules`, change it to `prependRules` (logic is same)
+- If you used the default copy path, add `"copyPath": "client/copy"` to your create-frontend configuration in package.json
+- If you relied on nested .html files being flattened into the public directory, they must now be flat in the source as well
+
 ## [2.4.0] - 2017-01-31
 ### Added
 - Files from `client/copy` are now automatically copied into the public directory. Path is customizable in settings

@@ -28,7 +28,7 @@ const ENABLE_PROD_SOURCEMAPS = getAppConfigValue('enableProdSourcemaps', false);
 const HTML_OPTIONS = getAppConfigValue('htmlOptions', {});
 
 const APPEND_PLUGINS = getWebpackConfigValue('appendPlugins', () => []);
-const APPEND_RULES = getWebpackConfigValue('appendRules', () => []);
+const PREPEND_RULES = getWebpackConfigValue('prependRules', () => []);
 const MERGE_CONFIG = getWebpackConfigValue('mergeConfig', () => ({}));
 
 module.exports = {
@@ -42,7 +42,7 @@ module.exports = {
   WEBPACK_PORT,
   WEBPACK_SERVER,
   APPEND_PLUGINS,
-  APPEND_RULES,
+  PREPEND_RULES,
   MERGE_CONFIG,
   HTML_OPTIONS,
 };

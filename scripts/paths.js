@@ -13,9 +13,9 @@ const PUBLIC_DIRECTORY = resolveApp(appConfig.publicDirectory || 'public');
 const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);
 const HTML_PATH = resolveApp(appConfig.htmlPath || 'client/html');
 const COPY_PATH =
-  appConfig.copyPath === null
-    ? null
-    : resolveApp(appConfig.copyPath || 'client/copy');
+  typeof appConfig.copyPath === 'string'
+    ? resolveApp(appConfig.copyPath)
+    : null;
 
 module.exports = {
   resolveApp,

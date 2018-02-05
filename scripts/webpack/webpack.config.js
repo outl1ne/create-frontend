@@ -183,7 +183,7 @@ output.module = {
   rules: [
     {
       oneOf: [
-        ...(config.APPEND_RULES(WEBPACK_CONF_PARAMS) || []),
+        ...(config.PREPEND_RULES(WEBPACK_CONF_PARAMS) || []),
         // Inline small images instead of creating separate assets
         {
           test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
@@ -221,17 +221,19 @@ output.module = {
 /**
  * Plugins: Some plugins are shared, others are specific to dev/prod
  */
-
 const PAGE_FILES = readFiles(paths.HTML_PATH);
 output.plugins = [
   /* SHARED PLUGINS */
-  paths.COPY_PATH !== null &&
-    new CopyPlugin([
-      {
-        from: paths.COPY_PATH,
-        to: paths.PUBLIC_DIRECTORY,
-      },
-    ]),
+  ...(paths.COPY_PATH !== null
+    ? [
+        new CopyPlugin([
+          {
+            from: paths.COPY_PATH,
+            to: paths.PUBLIC_DIRECTORY,
+          },
+        ]),
+      ]
+    : []),
   ...PAGE_FILES.map(
     pageFile =>
       new HtmlPlugin(
@@ -242,6 +244,7 @@ output.plugins = [
           filename: IS_PRODUCTION
             ? path.join(
                 paths.PUBLIC_DIRECTORY,
+                path.dirname(pageFile),
                 `${path.basename(pageFile, path.extname(pageFile))}.html`
               )
             : path.join(

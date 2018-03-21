@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.1] - 2018-03-21
+### Fixed
+- Fixed issue where static files were not being served properly in the dev server: https://github.com/optimistdigital/create-frontend/pull/1
+
 ## [3.0.0] - 2018-01-05
 ### Fixed
 - Fixed html plugin not maintaining nested directory structure when building for production

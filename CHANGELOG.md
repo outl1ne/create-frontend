@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.0] - 2018-03-22
+### Added
+- Added `mergeDevServerConfig` property to the create-frontend.conf.js configuration file. This can be used to customize the webpack dev server.
+
 ## [3.0.1] - 2018-03-21
 ### Fixed
 - Fixed issue where static files were not being served properly in the dev server: https://github.com/optimistdigital/create-frontend/pull/1

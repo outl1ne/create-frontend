@@ -68,7 +68,8 @@ this:
 module.exports = {
   appendPlugins: opts => [],
   prependRules: opts => [],
-  mergeConfig: opts => ({})
+  mergeConfig: opts => ({}),
+  mergeDevServerConfig: opts => ({})
 };
 ```
 * `appendPlugins` - Function that returns an array of plugins. Appended to the end
@@ -77,7 +78,8 @@ module.exports = {
   will be used
   ([oneOf](https://webpack.js.org/configuration/module/#rule-oneof)). These take precedence over default rules - if your custom rule matches, the default ones will not be used.
 * `mergeConfig` - Function that returns a webpack configuration object.
-  This will be merged with the default values - overriding them - and should only be used as an escape hatch. 
+  This will be merged with the default values, overriding them, and should only be used as an escape hatch. 
+* `mergeDevServerConfig` - Function that returns a [webpack dev server configuration object](https://webpack.js.org/configuration/dev-server/). Will be merged with default values, overriding them. 
 
 The `opts` parameter contains the following object: `{ IS_PRODUCTION: boolean, paths: Object, config: Object }`
 

@@ -30,6 +30,10 @@ const HTML_OPTIONS = getAppConfigValue('htmlOptions', {});
 const APPEND_PLUGINS = getWebpackConfigValue('appendPlugins', () => []);
 const PREPEND_RULES = getWebpackConfigValue('prependRules', () => []);
 const MERGE_CONFIG = getWebpackConfigValue('mergeConfig', () => ({}));
+const MERGE_DEV_SERVER_CONFIG = getWebpackConfigValue(
+  'mergeDevServerConfig',
+  () => ({})
+);
 
 module.exports = {
   APP_PROTOCOL,
@@ -44,6 +48,7 @@ module.exports = {
   APPEND_PLUGINS,
   PREPEND_RULES,
   MERGE_CONFIG,
+  MERGE_DEV_SERVER_CONFIG,
   HTML_OPTIONS,
 };
 

@@ -64,7 +64,8 @@ module.exports = () => {
 
       console.info(
         chalk.green.bold(
-          `\n=== Webpack dev server started. ===\nAssets are being server at: ${config.APP_PROTOCOL}://${config.WEBPACK_DOMAIN}:${config.WEBPACK_PORT}\n`
+          `=== Webpack dev server started at ${config.APP_PROTOCOL}://${config.WEBPACK_DOMAIN}:${config.WEBPACK_PORT} ===
+=== Building... ===`
         )
       );
 

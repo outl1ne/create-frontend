@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const CleanPlugin = require('clean-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const ManifestPlugin = require('webpack-plugin-manifest');
+const ExtractPlugin = require('mini-css-extract-plugin');
+const ManifestPlugin = require('webpack-assets-manifest');
 const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const paths = require('../paths');
@@ -11,6 +11,7 @@ const getPostCssOpts = require('./getPostCssOpts');
 const readFiles = require('fs-readdir-recursive');
 const HtmlPlugin = require('html-webpack-plugin');
 const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 /**
  * Set NODE_ENV to production as a fallback, if it hasn't been set by something else
@@ -21,6 +22,11 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, paths, config };
 
 const output = {};
+
+/**
+ * Mode: production/development
+ */
+output.mode = IS_PRODUCTION ? 'production' : 'development';
 
 /**
  * Target: Different for server/client
@@ -41,6 +47,21 @@ if (IS_PRODUCTION) {
       ? 'eval-cheap-module-source-map'
       : false;
 }
+
+/**
+ * Optimization
+ */
+output.optimization = {
+  minimizer: [
+    new UglifyJsPlugin({
+      sourceMap: config.ENABLE_PROD_SOURCEMAPS,
+      uglifyOptions: {
+        compress: { warnings: false, drop_console: !config.IS_DEBUG },
+        output: { comments: false },
+      },
+    }),
+  ],
+};
 
 /**
  * Context: Make context be root dir
@@ -148,34 +169,32 @@ const productionRules = [
       },
     ],
   },
-  // SCSS - extract from bundle with ExtractTextPlugin
+  // SCSS - extract from bundle with ExtractPlugin
   {
     test: /\.(sass|scss)$/,
-    use: ExtractTextPlugin.extract({
-      fallback: require.resolve('style-loader'),
-      use: [
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            importLoaders: 1,
-            sourceMap: config.ENABLE_PROD_SOURCEMAPS,
-            minimize: true,
-          },
+    use: [
+      ExtractPlugin.loader,
+      {
+        loader: require.resolve('css-loader'),
+        options: {
+          importLoaders: 1,
+          sourceMap: config.ENABLE_PROD_SOURCEMAPS,
+          minimize: true,
         },
-        {
-          loader: require.resolve('postcss-loader'),
-          options: getPostCssOpts({ IS_PRODUCTION, config }),
+      },
+      {
+        loader: require.resolve('postcss-loader'),
+        options: getPostCssOpts({ IS_PRODUCTION, config }),
+      },
+      { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
+      {
+        loader: require.resolve('sass-loader'),
+        options: {
+          outputStyle: 'compressed',
+          sourceMap: true, // resolve-url-loader always needs a sourcemap
         },
-        { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
-        {
-          loader: require.resolve('sass-loader'),
-          options: {
-            outputStyle: 'compressed',
-            sourceMap: true, // resolve-url-loader always needs a sourcemap
-          },
-        },
-      ],
-    }),
+      },
+    ],
   },
 ];
 
@@ -263,9 +282,9 @@ output.plugins = [
     __DEBUG__: process.env.APP_DEBUG === 'true',
   }),
   new ManifestPlugin({
-    fileName: 'asset-manifest.json',
-    prettyPrint: true,
-    path: paths.APP_DIRECTORY,
+    output: path.join(paths.APP_DIRECTORY, 'asset-manifest.json'),
+    publicPath: true,
+    writeToDisk: true,
   }),
   ...(config.IS_DEBUG
     ? [
@@ -279,21 +298,11 @@ output.plugins = [
         /* PRODUCTION PLUGINS */
         new CleanPlugin([paths.BUILD_DIRECTORY], { root: paths.APP_DIRECTORY }), // Clean previously built assets before making new bundle
         new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
-        new ExtractTextPlugin({
+        new ExtractPlugin({
           // Extract css files from bundles
           filename: config.HASH_FILENAMES
             ? '[name]-[contenthash].css'
             : '[name].css',
-          allChunks: true,
-        }),
-        new webpack.optimize.UglifyJsPlugin({
-          // Minify JS
-          minimize: true,
-          compress: { warnings: false, drop_console: !config.IS_DEBUG },
-          mangle: { screw_ie8: true },
-          output: { comments: false, screw_ie8: true },
-          comments: false,
-          sourceMap: config.ENABLE_PROD_SOURCEMAPS,
         }),
       ]
     : [

@@ -3,7 +3,7 @@ function BuildDonePlugin(msg) {
 }
 
 BuildDonePlugin.prototype.apply = function apply(compiler) {
-  compiler.plugin('done', () => {
+  compiler.hooks.done.tap('BuildDonePlugin', () => {
     console.info(this.msg);
   });
 };

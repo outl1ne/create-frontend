@@ -311,7 +311,7 @@ output.plugins = [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new (require('./plugins/BuildDonePlugin'))(
-          chalk.green.bold('\n=== Client build done === \n')
+          chalk.green.bold('\n=== Build done === \n')
         ),
       ]),
   ...(config.APPEND_PLUGINS(WEBPACK_CONF_PARAMS) || []),

@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.0] - 2018-04-09: Webpack 4
+
+### Added
+- Updated to webpack 4. There are no breaking changes if you didn't use a `create-frontend.conf.js` file to modify the webpack config directly.
+
+    If you did, then some things changed: notably, there is no longer an extract-text-plugin, instead, we are using mini-css-extract-plugin. Custom plugins also need to be updated to use the new webpack 4 API.
+
 ## [3.1.0] - 2018-03-22
 ### Added
 - Added `mergeDevServerConfig` property to the create-frontend.conf.js configuration file. This can be used to customize the webpack dev server.

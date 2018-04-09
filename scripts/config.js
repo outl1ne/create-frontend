@@ -1,14 +1,15 @@
 const args = require('minimist')(process.argv.slice(2));
 const paths = require('./paths');
+const fs = require('fs');
 
 const appPackage = require(paths.resolveApp('package.json'));
 const appConfig = appPackage['create-frontend'] || {};
 
 let odWebpackConfig = {};
-try {
-  odWebpackConfig = require(paths.resolveApp('create-frontend.conf'));
-} catch (err) {
-  if (err.code !== 'MODULE_NOT_FOUND') {
+if (fs.existsSync(paths.resolveApp('create-frontend.conf.js'))) {
+  try {
+    odWebpackConfig = require(paths.resolveApp('create-frontend.conf'));
+  } catch (err) {
     console.error('Error in create-frontend.conf.js file:', err);
   }
 }

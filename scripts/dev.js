@@ -27,36 +27,34 @@ module.exports = () => {
 
     const compiler = webpack(require('./webpack/webpack.config'));
 
-    const serverConf = Object.assign(
-      {},
-      {
-        clientLogLevel: 'none',
-        stats: 'minimal',
-        port: config.WEBPACK_PORT,
-        inline: false,
-        host: config.WEBPACK_DOMAIN,
-        publicPath: `${config.WEBPACK_SERVER}/`,
-        contentBase: `${paths.PUBLIC_DIRECTORY}`,
-        hot: true,
-        watchOptions: {
-          ignored: /node_modules/,
-        },
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods':
-            'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-          'Access-Control-Allow-Headers':
-            'X-Requested-With, content-type, Authorization',
-        },
-        https: config.APP_PROTOCOL === 'https',
+    const defaultServerConf = {
+      clientLogLevel: 'none',
+      stats: 'minimal',
+      port: config.WEBPACK_PORT,
+      inline: false,
+      host: config.WEBPACK_DOMAIN,
+      publicPath: `${config.WEBPACK_SERVER}/`,
+      contentBase: `${paths.PUBLIC_DIRECTORY}`,
+      hot: true,
+      watchOptions: {
+        ignored: /node_modules/,
       },
-      config.MERGE_DEV_SERVER_CONFIG()
-    );
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods':
+          'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+        'Access-Control-Allow-Headers':
+          'X-Requested-With, content-type, Authorization',
+      },
+      https: config.APP_PROTOCOL === 'https',
+    };
+    const serverConf =
+      config.EDIT_DEV_SERVER_CONFIG(defaultServerConf) || defaultServerConf;
 
     const devServer = new WebpackDevServer(
       compiler,
       serverConf
-    ).listen(config.WEBPACK_PORT, config.WEBPACK_DOMAIN, err => {
+    ).listen(serverConf.port, serverConf.host, err => {
       if (err) {
         console.error('Dev server failed to start:', err);
         return;
@@ -64,7 +62,7 @@ module.exports = () => {
 
       console.info(
         chalk.green.bold(
-          `=== Webpack dev server started at ${config.APP_PROTOCOL}://${config.WEBPACK_DOMAIN}:${config.WEBPACK_PORT} ===
+          `=== Webpack dev server started at ${config.APP_PROTOCOL}://${serverConf.host}:${serverConf.port} ===
 === Building... ===`
         )
       );

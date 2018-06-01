@@ -30,10 +30,10 @@ const HTML_OPTIONS = getAppConfigValue('htmlOptions', {});
 
 const APPEND_PLUGINS = getWebpackConfigValue('appendPlugins', () => []);
 const PREPEND_RULES = getWebpackConfigValue('prependRules', () => []);
-const MERGE_CONFIG = getWebpackConfigValue('mergeConfig', () => ({}));
-const MERGE_DEV_SERVER_CONFIG = getWebpackConfigValue(
-  'mergeDevServerConfig',
-  () => ({})
+const EDIT_CONFIG = getWebpackConfigValue('editConfig', config => config);
+const EDIT_DEV_SERVER_CONFIG = getWebpackConfigValue(
+  'editDevServerConfig',
+  config => config
 );
 
 module.exports = {
@@ -48,8 +48,8 @@ module.exports = {
   WEBPACK_SERVER,
   APPEND_PLUGINS,
   PREPEND_RULES,
-  MERGE_CONFIG,
-  MERGE_DEV_SERVER_CONFIG,
+  EDIT_CONFIG,
+  EDIT_DEV_SERVER_CONFIG,
   HTML_OPTIONS,
 };
 
@@ -69,4 +69,13 @@ function getAppConfigValue(key, fallback) {
     return fallback;
   }
   return appConfig[key];
+}
+
+/**
+ * API change warnings
+ */
+if (typeof odWebpackConfig.mergeConfig !== 'undefined') {
+  throw new Error(
+    'mergeConfig property is no longer supported. Please use editConfig instead.'
+  );
 }

@@ -317,8 +317,5 @@ output.plugins = [
   ...(config.APPEND_PLUGINS(WEBPACK_CONF_PARAMS) || []),
 ];
 
-module.exports = Object.assign(
-  {},
-  output,
-  config.MERGE_CONFIG(WEBPACK_CONF_PARAMS)
-);
+// Falls back to default conf if replacer function returns a falsy value
+module.exports = config.EDIT_CONFIG(output, WEBPACK_CONF_PARAMS) || output;

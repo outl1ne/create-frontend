@@ -1,5 +1,29 @@
 # Changelog
 
+## [5.0.0] - Unreleased
+
+### Replaced
+- The `create-frontend.conf.js` configuration file has been updated:
+    - Replaced `mergeConfig` with `editConfig = (config, options) => newConfig`.
+        This can be used as an escape hatch to add/remove rules/plugins, etc, by providing you with full access to the webpack configuration object. 
+        The `mergeConfig` property is no longer supported, because it was a more limited version of the same functionality. 
+    - Replaced `mergeDevServerConfig` with `editDevServerConfig` for the same reason.
+
+### Upgrading
+- Code that you had in `mergeConfig` can be replaced with the following:
+```
+module.exports = {
+    editConfig: config => {
+        ...config,
+        ...modifications
+    },
+    editDevServerConfig: config => {
+        ...config,
+        ...modifications,
+    }
+}
+```
+
 ## [4.0.0] - 2018-04-09: Webpack 4
 
 ### Added

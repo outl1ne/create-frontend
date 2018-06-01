@@ -54,7 +54,7 @@ module.exports = () => {
     const devServer = new WebpackDevServer(
       compiler,
       serverConf
-    ).listen(serverConf.port, serverConf.host, err => {
+    ).listen(config.WEBPACK_PORT, config.WEBPACK_DOMAIN, err => {
       if (err) {
         console.error('Dev server failed to start:', err);
         return;
@@ -62,7 +62,7 @@ module.exports = () => {
 
       console.info(
         chalk.green.bold(
-          `=== Webpack dev server started at ${config.APP_PROTOCOL}://${serverConf.host}:${serverConf.port} ===
+          `=== Webpack dev server started at ${config.APP_PROTOCOL}://${config.WEBPACK_DOMAIN}:${config.WEBPACK_PORT} ===
 === Building... ===`
         )
       );

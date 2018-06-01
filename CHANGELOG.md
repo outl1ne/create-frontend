@@ -30,6 +30,12 @@ module.exports = {
 }
 ```
 
+- If you're importing any css files from scss, make sure they end with .css, and don't have node_modules at the beginning:
+```
+- @import 'node_modules/normalize.css/normalize';
++ @import 'normalize.css/normalize.css';
+```
+
 ## [4.0.0] - 2018-04-09: Webpack 4
 
 ### Added

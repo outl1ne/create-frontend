@@ -1,6 +1,6 @@
 # Changelog
 
-## [5.0.0] - Unreleased
+## [5.0.0] - 2018-06-01
 
 ### Replaced
 - The `create-frontend.conf.js` configuration file has been updated:

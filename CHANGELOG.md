@@ -9,6 +9,12 @@
         The `mergeConfig` property is no longer supported, because it was a more limited version of the same functionality. 
     - Replaced `mergeDevServerConfig` with `editDevServerConfig` for the same reason.
 
+### Added
+- `postcss-import` plugin to the postcss config. This gets rid of the deprecation warning about importing css files from scss. `entry.scss` template has been updated to show the proper way to import css files from node_modules.
+
+### Changed
+- Autoprefixer browser support has been bumped up slightly. 
+
 ### Upgrading
 - Code that you had in `mergeConfig` can be replaced with the following:
 ```

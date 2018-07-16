@@ -42,9 +42,11 @@ function findExistingFrontendFiles() {
 
 function init() {
   const template = templates[args.template] || null;
+  const skipConfirmation = args.y === true;
 
   // Get confirmation from user
   if (
+    !skipConfirmation &&
     getConfirmation(
       `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}? (y/N) `
     ).toLowerCase() !== 'y'
@@ -58,6 +60,7 @@ function init() {
   if (existingFrontendFiles.length > 0) {
     if (args.overwrite === true) {
       if (
+        !skipConfirmation &&
         getConfirmation(
           `The following files will be overwritten. Are you sure? (y/N)\n${existingFrontendFiles
             .map(name => `- ${name}`)

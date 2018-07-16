@@ -7,7 +7,7 @@ function getCurrentVersion() {
 }
 
 // prettier-ignore
-module.exports = ({ name, isDev }) => {
+module.exports = ({ name, isDev, customDependencies = {} }) => {
   const json = {
     'name': name,
     'version': '0.1.0',
@@ -28,6 +28,12 @@ module.exports = ({ name, isDev }) => {
       'normalize.css': '8.x.x'
     },
   };
+
+  if (customDependencies) {
+    Object.entries(customDependencies).forEach(([depName, depVersion]) => {
+      json.dependencies[depName] = depVersion;
+    });
+  }
 
   return JSON.stringify(json, null, 2);
 };

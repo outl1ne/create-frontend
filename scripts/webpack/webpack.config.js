@@ -39,13 +39,13 @@ output.target = 'web';
  * Comparison: https://webpack.github.io/docs/build-performance.html#sourcemaps
  */
 if (IS_PRODUCTION) {
-  output.devtool =
-    IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS ? 'source-map' : false;
+  output.devtool = IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS
+    ? 'source-map'
+    : false;
 } else {
-  output.devtool =
-    !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS
-      ? 'eval-cheap-module-source-map'
-      : false;
+  output.devtool = !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS
+    ? 'eval-cheap-module-source-map'
+    : false;
 }
 
 /**
@@ -90,10 +90,9 @@ output.entry = IS_PRODUCTION ? config.ENTRY_POINTS : DEV_ENTRY_POINTS;
  */
 output.output = {
   path: paths.BUILD_DIRECTORY,
-  filename:
-    IS_PRODUCTION && config.HASH_FILENAMES
-      ? '[name]-[chunkhash].js'
-      : '[name].js',
+  filename: IS_PRODUCTION && config.HASH_FILENAMES
+    ? '[name]-[chunkhash].js'
+    : '[name].js',
   chunkFilename: '[name].js',
   publicPath: IS_PRODUCTION
     ? `/${paths.BUILD_PATH}/`

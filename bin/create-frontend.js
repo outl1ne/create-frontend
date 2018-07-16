@@ -7,6 +7,7 @@ const createPackageJson = require('../scripts/createPackageJson');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const args = require('minimist')(process.argv.slice(2));
+const templates = require('../scripts/templates/templates');
 
 const CURRENT_DIR = process.cwd();
 const TEMPLATE_PATH = path.resolve(__dirname, '..', 'template');
@@ -40,6 +41,8 @@ function findExistingFrontendFiles() {
 }
 
 function init() {
+  const template = templates[args.template] || null;
+
   // Get confirmation from user
   if (
     getConfirmation(
@@ -82,11 +85,14 @@ function init() {
   const packageJson = createPackageJson({
     name: getProjectNameFromCwd(),
     isDev: !!args.dev,
+    customDependencies: template && template.install,
   });
+
   // Write package.json into cwd
   fs.writeFileSync(path.resolve(CURRENT_DIR, 'package.json'), packageJson);
   // Copy contents of template folder into cwd
   fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
+  template.templatePath && fs.copySync(template.templatePath, CURRENT_DIR);
   // Install npm dependencies
   success('Optimist frontend boilerplate created.');
   info('Installing modules (this may take some time)...\n');

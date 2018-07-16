@@ -1,5 +1,11 @@
 # Changelog
 
+## [5.1.0] - 2018-07-16
+
+### Added two CLI flags for create-frontend command:
+- `--template=react` will add a React-specific boilerplate
+- `-y` flag will skip user confirmation
+
 ## [5.0.0] - 2018-06-01
 
 ### Replaced

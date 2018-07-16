@@ -16,9 +16,10 @@ under the hood.
 
 ## Usage
 
-1. Install the toolkit globally: `npm install -g
-   @optimistdigital/create-frontend`
-2. Type `create-frontend` in your project root and follow the instructions
+1. In Bash, navigate into your project directory
+2. Type `npx @optimistdigital/create-frontend` and follow the instructions. You may also specify flags:
+    - `--template=react` - Generates a React boilerplate
+    - `-y` - Skips user confirmation (assume yes)
 
 ### CLI
 

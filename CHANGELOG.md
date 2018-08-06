@@ -1,5 +1,10 @@
 # Changelog
 
+## [5.1.1] - 2018-08-06
+
+### Fixed
+- Fixed error during create-frontend command if no template is specified
+
 ## [5.1.0] - 2018-07-16
 
 ### Added two CLI flags for create-frontend command:

@@ -140,11 +140,11 @@ const developmentRules = [
         loader: require.resolve('css-loader'),
         options: { importLoaders: 1, sourceMap: config.ENABLE_DEV_SOURCEMAPS },
       },
-      { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
       {
         loader: require.resolve('postcss-loader'),
         options: getPostCssOpts({ IS_PRODUCTION, config }),
       },
+      { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
       {
         loader: require.resolve('sass-loader'),
         options: {
@@ -181,11 +181,11 @@ const productionRules = [
           minimize: true,
         },
       },
-      { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
       {
         loader: require.resolve('postcss-loader'),
         options: getPostCssOpts({ IS_PRODUCTION, config }),
       },
+      { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
       {
         loader: require.resolve('sass-loader'),
         options: {

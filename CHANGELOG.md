@@ -1,5 +1,10 @@
 # Changelog
 
+## [5.1.2] - 2018-08-13
+
+### Fixed
+- Fixed resolve-url-loader error in Windows (issue #4)
+
 ## [5.1.1] - 2018-08-06
 
 ### Fixed

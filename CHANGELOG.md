@@ -1,5 +1,8 @@
 # Changelog
 
+## [6.0.0] - Unreleased
+- Updated babel to 7.0.0
+
 ## [5.1.2] - 2018-08-13
 
 ### Fixed

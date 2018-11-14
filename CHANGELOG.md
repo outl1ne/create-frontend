@@ -102,7 +102,7 @@ It now additionally contains `paths` and `config` objects
 
 ## [2.2.0] - 2018-01-05
 ### Added
-- html-loader for html-webpack-plugin. This resolves the issue where <img src="../images/filename.ext"> wasn't properly
+- html-loader for html-webpack-plugin. This resolves the issue where `<img src="../images/filename.ext">` wasn't properly
 copying the assets over. PS! Absolute URL's here still don't work. 
 
 ## [2.1.0] - 2018-01-04

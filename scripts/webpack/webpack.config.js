@@ -2,7 +2,6 @@ const chalk = require('chalk');
 const CleanPlugin = require('clean-webpack-plugin');
 const ExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-assets-manifest');
-const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const paths = require('../paths');
 const config = require('../config');
@@ -39,13 +38,13 @@ output.target = 'web';
  * Comparison: https://webpack.github.io/docs/build-performance.html#sourcemaps
  */
 if (IS_PRODUCTION) {
-  output.devtool = IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS
-    ? 'source-map'
-    : false;
+  output.devtool =
+    IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS ? 'source-map' : false;
 } else {
-  output.devtool = !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS
-    ? 'eval-cheap-module-source-map'
-    : false;
+  output.devtool =
+    !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS
+      ? 'eval-cheap-module-source-map'
+      : false;
 }
 
 /**
@@ -90,9 +89,10 @@ output.entry = IS_PRODUCTION ? config.ENTRY_POINTS : DEV_ENTRY_POINTS;
  */
 output.output = {
   path: paths.BUILD_DIRECTORY,
-  filename: IS_PRODUCTION && config.HASH_FILENAMES
-    ? '[name]-[chunkhash].js'
-    : '[name].js',
+  filename:
+    IS_PRODUCTION && config.HASH_FILENAMES
+      ? '[name]-[chunkhash].js'
+      : '[name].js',
   chunkFilename: '[name].js',
   publicPath: IS_PRODUCTION
     ? `/${paths.BUILD_PATH}/`
@@ -242,16 +242,6 @@ output.module = {
 const PAGE_FILES = readFiles(paths.HTML_PATH);
 output.plugins = [
   /* SHARED PLUGINS */
-  ...(paths.COPY_PATH !== null
-    ? [
-        new CopyPlugin([
-          {
-            from: paths.COPY_PATH,
-            to: paths.PUBLIC_DIRECTORY,
-          },
-        ]),
-      ]
-    : []),
   ...PAGE_FILES.map(
     pageFile =>
       new HtmlPlugin(

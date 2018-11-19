@@ -2,6 +2,8 @@
 
 ## [6.0.0] - Unreleased
 - Updated babel to 7.0.0
+- Removed `copyPath` - this plugin isn't necessary, because files can be placed in the public directory manually. Other use cases should be rare enough that this plugin can be added on a case-by-case basis.
+
 
 ## [5.1.2] - 2018-08-13
 

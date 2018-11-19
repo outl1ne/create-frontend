@@ -12,10 +12,6 @@ const BUILD_PATH = appConfig.buildPath || 'build';
 const PUBLIC_DIRECTORY = resolveApp(appConfig.publicDirectory || 'public');
 const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);
 const HTML_PATH = resolveApp(appConfig.htmlPath || 'client/html');
-const COPY_PATH =
-  typeof appConfig.copyPath === 'string'
-    ? resolveApp(appConfig.copyPath)
-    : null;
 
 module.exports = {
   resolveApp,
@@ -24,5 +20,4 @@ module.exports = {
   BUILD_PATH,
   BUILD_DIRECTORY,
   HTML_PATH,
-  COPY_PATH,
 };

@@ -13,6 +13,7 @@ if (fs.existsSync(paths.resolveApp('create-frontend.conf.js'))) {
     console.error('Error in create-frontend.conf.js file:', err);
   }
 }
+const config = Object.assign({}, appConfig, odWebpackConfig);
 
 const IS_DEBUG = !!args.debug;
 const APP_PROTOCOL = args.protocol || 'http';
@@ -20,21 +21,18 @@ const WEBPACK_PORT = args.webpackPort || 8000;
 const WEBPACK_DOMAIN = args.webpackDomain || 'localhost';
 const WEBPACK_SERVER = `${APP_PROTOCOL}://${WEBPACK_DOMAIN}:${WEBPACK_PORT}`;
 
-const ENTRY_POINTS = getAppConfigValue('entryPoints', {
+const ENTRY_POINTS = getConfigValue('entryPoints', {
   app: 'client/js/entry.js',
 });
-const HASH_FILENAMES = getAppConfigValue('hashFileNames', true);
-const ENABLE_DEV_SOURCEMAPS = getAppConfigValue('enableDevSourcemaps', true);
-const ENABLE_PROD_SOURCEMAPS = getAppConfigValue('enableProdSourcemaps', false);
-const HTML_OPTIONS = getAppConfigValue('htmlOptions', {});
+const HASH_FILENAMES = getConfigValue('hashFileNames', true);
+const ENABLE_DEV_SOURCEMAPS = getConfigValue('enableDevSourcemaps', true);
+const ENABLE_PROD_SOURCEMAPS = getConfigValue('enableProdSourcemaps', false);
+const HTML_OPTIONS = getConfigValue('htmlOptions', {});
 
-const APPEND_PLUGINS = getWebpackConfigValue('appendPlugins', () => []);
-const PREPEND_RULES = getWebpackConfigValue('prependRules', () => []);
-const EDIT_CONFIG = getWebpackConfigValue('editConfig', config => config);
-const EDIT_DEV_SERVER_CONFIG = getWebpackConfigValue(
-  'editDevServerConfig',
-  config => config
-);
+const APPEND_PLUGINS = getConfigValue('appendPlugins', () => []);
+const PREPEND_RULES = getConfigValue('prependRules', () => []);
+const EDIT_CONFIG = getConfigValue('editConfig', _ => _);
+const EDIT_DEV_SERVER_CONFIG = getConfigValue('editDevServerConfig', _ => _);
 
 module.exports = {
   APP_PROTOCOL,
@@ -57,25 +55,9 @@ module.exports = {
  * Utils
  */
 
-function getWebpackConfigValue(key, fallback) {
-  if (odWebpackConfig[key] == null) {
+function getConfigValue(key, fallback) {
+  if (config[key] == null) {
     return fallback;
   }
-  return odWebpackConfig[key];
-}
-
-function getAppConfigValue(key, fallback) {
-  if (appConfig[key] == null) {
-    return fallback;
-  }
-  return appConfig[key];
-}
-
-/**
- * API change warnings
- */
-if (typeof odWebpackConfig.mergeConfig !== 'undefined') {
-  throw new Error(
-    'mergeConfig property is no longer supported. Please use editConfig instead.'
-  );
+  return config[key];
 }

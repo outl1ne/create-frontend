@@ -1,6 +1,6 @@
 # Changelog
 
-## [6.0.0] - Unreleased
+## [6.0.0] - 2018-11-19
 - Updated babel to 7.0.0
 - Removed `copyPath` - this plugin isn't necessary, because files can be placed in the public directory manually. Other use cases should be rare enough that this plugin can be added on a case-by-case basis.
 - Consolidated `create-frontend.conf.js` and the package.json `create-frontend` property to affect a single, global, config. This makes the configuration process less confusing and allows the entire config to be in one place, written in JS instead of JSON.

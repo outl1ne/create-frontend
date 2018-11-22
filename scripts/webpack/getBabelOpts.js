@@ -22,20 +22,5 @@ module.exports = () => ({
     test: {
       plugins: [require.resolve('@babel/plugin-transform-modules-commonjs')],
     },
-    development: {
-      plugins: [
-        [
-          require.resolve('babel-plugin-react-transform'),
-          {
-            transforms: [
-              {
-                transform: require.resolve('react-transform-catch-errors'),
-                imports: ['react', require.resolve('redbox-react')],
-              },
-            ],
-          },
-        ],
-      ],
-    },
   },
 });

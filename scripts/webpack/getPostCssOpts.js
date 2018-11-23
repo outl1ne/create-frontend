@@ -1,4 +1,6 @@
-module.exports = ({ IS_PRODUCTION, config }) => ({
+const config = require('../config');
+
+module.exports = ({ IS_PRODUCTION }) => ({
   ident: 'postcss',
   sourceMap:
     (IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS) ||

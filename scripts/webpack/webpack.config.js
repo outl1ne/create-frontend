@@ -126,7 +126,7 @@ const developmentRules = [
     use: [
       {
         loader: require.resolve('babel-loader'),
-        options: getBabelOpts({ config }),
+        options: getBabelOpts(),
       },
       { loader: require.resolve('eslint-loader') },
     ],

@@ -7,7 +7,7 @@ module.exports = ({ IS_PRODUCTION, config }) => ({
     require('postcss-import')(),
     require('precss')(),
     require('autoprefixer')({
-      browsers: ['>1%', 'last 3 versions', 'Firefox ESR', 'not ie < 11'],
+      browsers: config.BROWSERS_LIST,
     }),
   ],
 });

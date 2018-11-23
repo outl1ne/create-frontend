@@ -1,4 +1,4 @@
-module.exports = () => ({
+module.exports = ({ config }) => ({
   presets: [
     require.resolve('@babel/preset-react'),
     require.resolve('@babel/preset-flow'),
@@ -7,7 +7,7 @@ module.exports = () => ({
       {
         modules: false,
         targets: {
-          browsers: ['last 2 versions', '> 1%', 'Safari >= 8'],
+          browsers: config.BROWSERS_LIST,
         },
         useBuiltIns: 'entry',
       },

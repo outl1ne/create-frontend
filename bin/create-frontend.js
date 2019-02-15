@@ -48,7 +48,7 @@ function init() {
   if (
     !skipConfirmation &&
     getConfirmation(
-      `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}? (y/N) `
+      `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}${template ? ` with template ${args.template}` : ''}? (y/N) `
     ).toLowerCase() !== 'y'
   ) {
     log('Aborted.');

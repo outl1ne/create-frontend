@@ -20,11 +20,11 @@ module.exports = ({ name, isDev, customDependencies = {} }) => {
     },
     'dependencies': {
       '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '..') : getCurrentVersion(),
-      'babel-polyfill': '^6.26.0',
-      'eslint': '^4.19.0',
-      'eslint-plugin-flowtype': '^2.46.1',
-      'eslint-plugin-import': '^2.10.0',
-      'eslint-plugin-react': '^7.7.0',
+      '@babel/polyfill': '^7.2.5',
+      'eslint': '^5.13.0',
+      'eslint-plugin-flowtype': '^3.4.2',
+      'eslint-plugin-import': '^2.16.0',
+      'eslint-plugin-react': '^7.12.4',
       'normalize.css': '8.x.x'
     },
   };

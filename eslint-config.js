@@ -17,6 +17,11 @@ module.exports = {
     es6: true,
     jest: true,
   },
+  settings: {
+    react: {
+      "version": "detect"
+    },
+  },
   plugins: ['import', 'react', 'flowtype'],
   parserOptions: {
     ecmaVersion: 7,

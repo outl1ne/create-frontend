@@ -1,5 +1,8 @@
 # Changelog
 
+## [7.0.0] - 2019-02-18
+- Updated dependencies and internal configuration. No external breaking changes.
+
 ## [6.1.0] - 2018-11-23
 - Added `browserslist` config option
 

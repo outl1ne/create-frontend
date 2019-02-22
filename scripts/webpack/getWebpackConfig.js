@@ -87,11 +87,15 @@ module.exports = target => {
 
   const DEV_ENTRY_POINTS = {};
 
-  Object.keys(config.ENTRY_POINTS).forEach(key => {
-    DEV_ENTRY_POINTS[key] = [...DEV_ENTRY_CONF, config.ENTRY_POINTS[key]];
+  const entryPoints = IS_NODE
+    ? [config.SERVER_ENTRY_POINT]
+    : config.ENTRY_POINTS;
+
+  Object.keys(entryPoints).forEach(key => {
+    DEV_ENTRY_POINTS[key] = [...DEV_ENTRY_CONF, entryPoints[key]];
   });
 
-  output.entry = IS_PRODUCTION ? config.ENTRY_POINTS : DEV_ENTRY_POINTS;
+  output.entry = IS_PRODUCTION ? entryPoints : DEV_ENTRY_POINTS;
 
   /**
    * Output

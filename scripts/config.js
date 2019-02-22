@@ -32,6 +32,10 @@ module.exports = function getConfig(target) {
   const ENTRY_POINTS = getConfigValue('entryPoints', {
     app: 'client/js/entry.js',
   });
+  const SERVER_ENTRY_POINT = getConfigValue(
+    'serverEntryPoint',
+    'server/entry.js'
+  );
   const HASH_FILENAMES = getConfigValue('hashFileNames', true);
   const ENABLE_DEV_SOURCEMAPS = getConfigValue('enableDevSourcemaps', true);
   const ENABLE_PROD_SOURCEMAPS = getConfigValue('enableProdSourcemaps', false);
@@ -51,6 +55,7 @@ module.exports = function getConfig(target) {
     ENABLE_DEV_SOURCEMAPS,
     ENABLE_PROD_SOURCEMAPS,
     ENTRY_POINTS,
+    SERVER_ENTRY_POINT,
     HASH_FILENAMES,
     IS_DEBUG,
     WEBPACK_DOMAIN,

@@ -3,7 +3,6 @@ const CleanPlugin = require('clean-webpack-plugin');
 const ExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-assets-manifest');
 const webpack = require('webpack');
-const paths = require('../paths');
 const getConfig = require('../config');
 const getBabelOpts = require('./getBabelOpts');
 const getPostCssOpts = require('./getPostCssOpts');
@@ -25,7 +24,7 @@ module.exports = target => {
   const IS_WEB = target === 'web';
   const IS_NODE = target === 'node';
   const config = getConfig(target);
-  const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, paths, config, target };
+  const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, config, target };
 
   const output = {};
 
@@ -74,7 +73,7 @@ module.exports = target => {
   /**
    * Context: Make context be root dir
    */
-  output.context = paths.APP_DIRECTORY;
+  output.context = config.APP_DIRECTORY;
 
   /**
    * Entry: Production uses separate entry points for CSS assets, development has only 1 bundle
@@ -101,14 +100,14 @@ module.exports = target => {
    * Output
    */
   output.output = {
-    path: paths.BUILD_DIRECTORY,
+    path: IS_NODE ? config.SERVER_BUILD_DIRECTORY : config.BUILD_DIRECTORY,
     filename:
       IS_PRODUCTION && config.HASH_FILENAMES
         ? '[name]-[chunkhash].js'
         : '[name].js',
     chunkFilename: '[name].js',
     publicPath: IS_PRODUCTION
-      ? `/${paths.BUILD_PATH}/`
+      ? `/${config.BUILD_PATH}/`
       : `${config.WEBPACK_SERVER}/`,
   };
 
@@ -158,7 +157,7 @@ module.exports = target => {
         },
         {
           loader: require.resolve('postcss-loader'),
-          options: getPostCssOpts({ IS_PRODUCTION, config }),
+          options: getPostCssOpts(WEBPACK_CONF_PARAMS),
         },
         { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
         {
@@ -199,7 +198,7 @@ module.exports = target => {
         },
         {
           loader: require.resolve('postcss-loader'),
-          options: getPostCssOpts({ IS_PRODUCTION, config }),
+          options: getPostCssOpts(WEBPACK_CONF_PARAMS),
         },
         { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
         {
@@ -255,19 +254,19 @@ module.exports = target => {
   /**
    * Plugins: Some plugins are shared, others are specific to dev/prod
    */
-  const PAGE_FILES = readFiles(paths.HTML_PATH);
+  const PAGE_FILES = readFiles(config.HTML_PATH);
   output.plugins = [
     /* SHARED PLUGINS */
     ...PAGE_FILES.map(
       pageFile =>
         new HtmlPlugin(
           Object.assign({}, config.HTML_OPTIONS, {
-            template: path.resolve(paths.HTML_PATH, pageFile),
+            template: path.resolve(config.HTML_PATH, pageFile),
             // For production, we want the html to be generated into the public directory.
             // For development, we are serving the build directory, so we put the html there instead
             filename: IS_PRODUCTION
               ? path.join(
-                  paths.PUBLIC_DIRECTORY,
+                  config.PUBLIC_DIRECTORY,
                   path.dirname(pageFile),
                   `${path.basename(pageFile, path.extname(pageFile))}.html`
                 )
@@ -287,7 +286,7 @@ module.exports = target => {
       __DEBUG__: process.env.APP_DEBUG === 'true',
     }),
     new ManifestPlugin({
-      output: path.join(paths.APP_DIRECTORY, 'asset-manifest.json'),
+      output: path.join(config.APP_DIRECTORY, 'asset-manifest.json'),
       publicPath: true,
       writeToDisk: true,
     }),
@@ -301,8 +300,8 @@ module.exports = target => {
     ...(IS_PRODUCTION
       ? [
           /* PRODUCTION PLUGINS */
-          new CleanPlugin([paths.BUILD_DIRECTORY], {
-            root: paths.APP_DIRECTORY,
+          new CleanPlugin([config.BUILD_DIRECTORY], {
+            root: config.APP_DIRECTORY,
           }), // Clean previously built assets before making new bundle
           new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
           new ExtractPlugin({

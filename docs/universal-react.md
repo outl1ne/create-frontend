@@ -5,4 +5,5 @@ It comes with React-Router by default.
 
 There are some additional configuration options:
 
--   `serverEntryPoint` (_/server/entry.js_) - Entry point for your server.
+-   `serverEntryPoint` (_server/entry.js_) - Entry point for your server.
+-   `serverBuildPath` (_server/build_) - Where the compiled server will be built. Relative to project root.

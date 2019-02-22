@@ -1,7 +1,7 @@
 const getConfig = require('../config');
 
 module.exports = opts => {
-  const config = getConfig(opts);
+  const config = getConfig(opts.target);
 
   return {
     ident: 'postcss',

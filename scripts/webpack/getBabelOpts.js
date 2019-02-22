@@ -9,7 +9,7 @@ module.exports = opts => ({
       {
         modules: false,
         targets: {
-          browsers: getConfig(opts).BROWSERS_LIST,
+          browsers: getConfig(opts.target).BROWSERS_LIST,
         },
         useBuiltIns: 'entry',
       },

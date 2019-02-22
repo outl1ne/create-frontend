@@ -13,8 +13,6 @@ module.exports = () => {
   const webpack = require('webpack');
   const chalk = require('chalk');
   const detectPort = require('detect-port');
-  const paths = require('./paths');
-
   const config = getConfig('web');
 
   detectPort(config.WEBPACK_PORT, (_, freePort) => {
@@ -38,7 +36,7 @@ module.exports = () => {
       inline: false,
       host: config.WEBPACK_DOMAIN,
       publicPath: `${config.WEBPACK_SERVER}/`,
-      contentBase: `${paths.PUBLIC_DIRECTORY}`,
+      contentBase: `${config.PUBLIC_DIRECTORY}`,
       hot: true,
       watchOptions: {
         ignored: /node_modules/,

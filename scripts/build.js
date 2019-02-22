@@ -12,7 +12,7 @@ module.exports = () => {
 
   console.log('Building...');
   console.log('');
-  webpack(require('./webpack/webpack.config')).run((err, stats) => {
+  webpack(require('./webpack/webpack.config.client')).run((err, stats) => {
     if (err) {
       console.error(err);
       process.exit(1);

@@ -1,15 +1,19 @@
-const config = require('../config');
+const getConfig = require('../config');
 
-module.exports = ({ IS_PRODUCTION }) => ({
-  ident: 'postcss',
-  sourceMap:
-    (IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS) ||
-    (!IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS),
-  plugins: [
-    require('postcss-import')(),
-    require('precss')(),
-    require('autoprefixer')({
-      browsers: config.BROWSERS_LIST,
-    }),
-  ],
-});
+module.exports = opts => {
+  const config = getConfig(opts);
+
+  return {
+    ident: 'postcss',
+    sourceMap:
+      (opts.IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS) ||
+      (!opts.IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS),
+    plugins: [
+      require('postcss-import')(),
+      require('precss')(),
+      require('autoprefixer')({
+        browsers: config.BROWSERS_LIST,
+      }),
+    ],
+  };
+};

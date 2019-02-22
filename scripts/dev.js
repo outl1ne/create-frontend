@@ -9,23 +9,27 @@ module.exports = () => {
   process.env.NODE_ENV = 'development';
 
   const WebpackDevServer = require('webpack-dev-server');
-  const config = require('./config');
+  const getConfig = require('./config');
   const webpack = require('webpack');
   const chalk = require('chalk');
   const detectPort = require('detect-port');
   const paths = require('./paths');
 
+  const config = getConfig('web');
+
   detectPort(config.WEBPACK_PORT, (_, freePort) => {
     if (config.WEBPACK_PORT !== freePort) {
       console.error(
         chalk.red.bold(
-          `The port (${config.WEBPACK_PORT}) is not available. Pick an unused port such as ${freePort} by running "npm run dev -- --webpackPort=${freePort}"`
+          `The port (${
+            config.WEBPACK_PORT
+          }) is not available. Pick an unused port such as ${freePort} by running "npm run dev -- --webpackPort=${freePort}"`
         )
       );
       return;
     }
 
-    const compiler = webpack(require('./webpack/webpack.config'));
+    const compiler = webpack(require('./webpack/webpack.config.client'));
 
     const defaultServerConf = {
       clientLogLevel: 'none',
@@ -51,29 +55,32 @@ module.exports = () => {
     const serverConf =
       config.EDIT_DEV_SERVER_CONFIG(defaultServerConf) || defaultServerConf;
 
-    const devServer = new WebpackDevServer(
-      compiler,
-      serverConf
-    ).listen(config.WEBPACK_PORT, config.WEBPACK_DOMAIN, err => {
-      if (err) {
-        console.error('Dev server failed to start:', err);
-        return;
-      }
+    const devServer = new WebpackDevServer(compiler, serverConf).listen(
+      config.WEBPACK_PORT,
+      config.WEBPACK_DOMAIN,
+      err => {
+        if (err) {
+          console.error('Dev server failed to start:', err);
+          return;
+        }
 
-      console.info(
-        chalk.green.bold(
-          `=== Webpack dev server started at ${config.APP_PROTOCOL}://${config.WEBPACK_DOMAIN}:${config.WEBPACK_PORT} ===
+        console.info(
+          chalk.green.bold(
+            `=== Webpack dev server started at ${config.APP_PROTOCOL}://${
+              config.WEBPACK_DOMAIN
+            }:${config.WEBPACK_PORT} ===
 === Building... ===`
-        )
-      );
+          )
+        );
 
-      function abort() {
-        devServer.close();
-        process.exit();
+        function abort() {
+          devServer.close();
+          process.exit();
+        }
+
+        process.on('SIGINT', abort);
+        process.on('SIGTERM', abort);
       }
-
-      process.on('SIGINT', abort);
-      process.on('SIGTERM', abort);
-    });
+    );
   });
 };

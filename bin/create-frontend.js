@@ -7,7 +7,7 @@ const createPackageJson = require('../scripts/createPackageJson');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const args = require('minimist')(process.argv.slice(2));
-const templates = require('../scripts/templates/templates');
+const getTemplate = require('../scripts/templates/templates');
 
 const CURRENT_DIR = process.cwd();
 
@@ -45,8 +45,13 @@ function findExistingFrontendFiles(templatePaths) {
 }
 
 function init() {
+  const isDev = !!args.dev;
   const templateName = args.template || 'default';
-  const template = templates[templateName] || null;
+  const templateOpts = {
+    name: getProjectNameFromCwd(),
+    isDev,
+  };
+  const template = getTemplate(templateName, templateOpts);
 
   if (template == null) {
     error(`The template "${templateName}" does not exist.`);
@@ -70,8 +75,8 @@ function init() {
 
   // Get array of template paths
   const templatePaths = [template.templatePath];
-  if (template.mergeWithDefault === true)
-    templatePaths.unshift(templates.default.templatePath);
+  if (template.mergeTemplateWithDefault === true)
+    templatePaths.unshift(getTemplate('default', templateOpts).templatePath);
 
   // Check if cwd has conflicting ciles
   const existingFrontendFiles = findExistingFrontendFiles(templatePaths);
@@ -104,12 +109,7 @@ function init() {
   }
 
   // Generate package.json
-  const packageJson = createPackageJson({
-    name: getProjectNameFromCwd(),
-    isDev: !!args.dev,
-    customDependencies: template && template.install,
-    template,
-  });
+  const packageJson = createPackageJson(template);
 
   // Write package.json into cwd
   fs.writeFileSync(path.resolve(CURRENT_DIR, 'package.json'), packageJson);
@@ -120,6 +120,7 @@ function init() {
   });
 
   success('Optimist frontend boilerplate created.');
+  info('');
 
   // Install npm dependencies
   info('Installing modules (this may take some time)...\n');

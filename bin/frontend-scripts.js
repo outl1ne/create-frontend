@@ -10,10 +10,10 @@ const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
 switch (script) {
   case 'dev':
-    require('../scripts/dev')(nodeArgs);
+    require('../scripts/cli/dev')(nodeArgs);
     return;
   case 'build':
-    require('../scripts/build')(nodeArgs);
+    require('../scripts/cli/build')(nodeArgs);
     return;
   default:
     console.error(`Script not found: ${script}`);

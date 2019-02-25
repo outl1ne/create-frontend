@@ -1,4 +1,4 @@
-/** @flow
+/**
  * This function starts a webpack production builds.
  */
 module.exports = () => {
@@ -9,7 +9,7 @@ module.exports = () => {
   process.env.NODE_ENV = 'development';
 
   const WebpackDevServer = require('webpack-dev-server');
-  const getConfig = require('./config');
+  const getConfig = require('../config');
   const webpack = require('webpack');
   const chalk = require('chalk');
   const detectPort = require('detect-port');
@@ -27,7 +27,7 @@ module.exports = () => {
       return;
     }
 
-    const compiler = webpack(require('./webpack/webpack.config.client'));
+    const compiler = webpack(require('../webpack/webpack.config.client'));
 
     const defaultServerConf = {
       clientLogLevel: 'none',

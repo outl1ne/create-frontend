@@ -10,7 +10,6 @@ const args = require('minimist')(process.argv.slice(2));
 const templates = require('../scripts/templates/templates');
 
 const CURRENT_DIR = process.cwd();
-const TEMPLATE_PATH = path.resolve(__dirname, '..', 'template');
 
 const error = (err, ...rest) => console.error(chalk.red.bold(err), ...rest);
 const info = (msg, ...rest) => console.info(chalk.blue(msg), ...rest);
@@ -26,37 +25,56 @@ function getConfirmation(msg) {
   return readline.question(chalk.blue(msg));
 }
 
-function findExistingFrontendFiles() {
+function findExistingFrontendFiles(templatePaths) {
   const needles = [path.resolve(CURRENT_DIR, 'package.json')];
-  const output = needles.filter(file => fs.existsSync(file));
+  const paths = needles.filter(file => fs.existsSync(file));
 
-  fs.readdirSync(TEMPLATE_PATH).forEach(file => {
-    const destinationPath = path.resolve(CURRENT_DIR, file);
-    if (fs.existsSync(destinationPath)) {
-      output.push(destinationPath);
-    }
+  templatePaths.forEach(templatePath => {
+    fs.readdirSync(templatePath).forEach(file => {
+      const destinationPath = path.resolve(CURRENT_DIR, file);
+      if (fs.existsSync(destinationPath)) {
+        paths.push(destinationPath);
+      }
+    });
   });
+
+  // Remove duplicates
+  const output = Array.from(new Set(paths));
 
   return output;
 }
 
 function init() {
-  const template = templates[args.template] || null;
+  const templateName = args.template || 'default';
+  const template = templates[templateName] || null;
+
+  if (template == null) {
+    error(`The template "${templateName}" does not exist.`);
+    return;
+  }
+
   const skipConfirmation = args.y === true;
 
   // Get confirmation from user
   if (
     !skipConfirmation &&
     getConfirmation(
-      `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}${template ? ` with template ${args.template}` : ''}? (y/N) `
+      `Are you sure you want to generate a front-end for ${getProjectNameFromCwd()}${
+        template ? ` with template ${args.template}` : ''
+      }? (y/N) `
     ).toLowerCase() !== 'y'
   ) {
     log('Aborted.');
     return;
   }
 
+  // Get array of template paths
+  const templatePaths = [template.templatePath];
+  if (template.mergeWithDefault === true)
+    templatePaths.unshift(templates.default.templatePath);
+
   // Check if cwd has conflicting ciles
-  const existingFrontendFiles = findExistingFrontendFiles();
+  const existingFrontendFiles = findExistingFrontendFiles(templatePaths);
   if (existingFrontendFiles.length > 0) {
     if (args.overwrite === true) {
       if (
@@ -71,6 +89,7 @@ function init() {
         return;
       }
     } else {
+      info('');
       error(
         `We have detected an existing frontend setup in your current directory. Please remove the following files and retry:`
       );
@@ -89,17 +108,20 @@ function init() {
     name: getProjectNameFromCwd(),
     isDev: !!args.dev,
     customDependencies: template && template.install,
+    template,
   });
 
   // Write package.json into cwd
   fs.writeFileSync(path.resolve(CURRENT_DIR, 'package.json'), packageJson);
-  // Copy contents of template folder into cwd
-  fs.copySync(TEMPLATE_PATH, CURRENT_DIR);
-  template &&
-    template.templatePath &&
-    fs.copySync(template.templatePath, CURRENT_DIR);
-  // Install npm dependencies
+
+  // Copy templates into cwd
+  templatePaths.forEach(templatePath => {
+    fs.copySync(templatePath, CURRENT_DIR);
+  });
+
   success('Optimist frontend boilerplate created.');
+
+  // Install npm dependencies
   info('Installing modules (this may take some time)...\n');
   exec(`npm install`)
     .then(res => {

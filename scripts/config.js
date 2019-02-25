@@ -24,7 +24,6 @@ function getConfigValue(key, fallback) {
 }
 
 module.exports = function getConfig(target) {
-  console.log(`Target! ${target}`);
   const IS_DEBUG = !!args.debug;
   const APP_PROTOCOL = args.protocol || 'http';
   const WEBPACK_PORT = args.webpackPort || 8000;

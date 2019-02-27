@@ -12,3 +12,8 @@ server.use('/', async (req, res) => {
     return res.status(500).send('Internal server error');
   }
 });
+
+const APP_PORT = process.env.APP_PORT || 3000;
+server.listen(APP_PORT, () => {
+  console.info(`✅  Server started at http://localhost:${APP_PORT}`);
+});

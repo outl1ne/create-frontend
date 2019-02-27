@@ -27,7 +27,6 @@ module.exports = target => {
   const IS_NODE = target === 'node';
   const config = getConfig(target);
   const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, config, target };
-  const SERVER_OUTPUT_FILE = 'build-server';
   const OUTPUT_PATH = IS_NODE
     ? config.SERVER_BUILD_DIRECTORY
     : config.BUILD_DIRECTORY;
@@ -81,10 +80,6 @@ module.exports = target => {
   /**
    * Optimization
    */
-  output.optimization = {
-    minimize: false,
-  };
-
   if (IS_PRODUCTION) {
     output.optimization = {
       minimizer: [
@@ -93,7 +88,7 @@ module.exports = target => {
           uglifyOptions: {
             compress: {
               warnings: false,
-              drop_console: !config.IS_DEBUG,
+              drop_console: IS_WEB && !config.IS_DEBUG,
             },
             output: { comments: false },
           },
@@ -123,7 +118,7 @@ module.exports = target => {
   const DEV_ENTRY_POINTS = {};
 
   const entryPoints = IS_NODE
-    ? { [SERVER_OUTPUT_FILE]: config.SERVER_ENTRY_POINT }
+    ? { [config.SERVER_OUTPUT_FILE]: config.SERVER_ENTRY_POINT }
     : config.ENTRY_POINTS;
 
   Object.keys(entryPoints).forEach(key => {
@@ -316,9 +311,7 @@ module.exports = target => {
         )
     ),
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-      },
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       __DEVELOPMENT__: !IS_PRODUCTION,
       __PRODUCTION__: IS_PRODUCTION,
       __DEBUG__: process.env.APP_DEBUG === 'true',
@@ -378,7 +371,7 @@ module.exports = target => {
     if (IS_NODE) {
       output.plugins.push(
         new StartServerPlugin({
-          name: `${SERVER_OUTPUT_FILE}.js`,
+          name: `${config.SERVER_OUTPUT_FILE}.js`,
         })
       );
     }

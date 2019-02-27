@@ -13,7 +13,6 @@ async function renderOnClient(App, domNode) {
   return ReactDOM.render(<App />, domNode);
 }
 
-async function renderOnServer(App, req) {
-  console.log('req', req);
+async function renderOnServer(App) {
   return ReactDOMServer.renderToString(<App />);
 }

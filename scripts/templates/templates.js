@@ -64,9 +64,11 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'dev': 'frontend-scripts dev-universal-react',
         'build': 'frontend-scripts build-universal-react',
         'build:debug': 'frontend-scripts build-universal-react --debug',
+        'start': 'frontend-scripts start-universal-react'
       },
       'dependencies': {
         '@babel/polyfill': '^7.2.5',
+        '@babel/runtime': '7.3.4',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'eslint-plugin-flowtype': '^3.4.2',
         'eslint-plugin-import': '^2.16.0',

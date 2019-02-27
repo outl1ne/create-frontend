@@ -22,6 +22,9 @@ switch (script) {
   case 'dev-universal-react':
     require('../scripts/cli/universal-react/dev')();
     break;
+  case 'start-universal-react':
+    require('../scripts/cli/universal-react/start')();
+    break;
   default:
     console.error(`Script not found: ${script}`);
     break;

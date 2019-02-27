@@ -60,6 +60,7 @@ module.exports = function getConfig(target) {
   );
   const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);
   const HTML_PATH = resolveApp(getConfigValue('htmlPath', 'client/html'));
+  const SERVER_OUTPUT_FILE = 'build-server';
 
   return {
     APP_DIRECTORY,
@@ -84,5 +85,6 @@ module.exports = function getConfig(target) {
     WEBPACK_DOMAIN,
     WEBPACK_PORT,
     WEBPACK_SERVER,
+    SERVER_OUTPUT_FILE,
   };
 };

@@ -18,7 +18,7 @@ module.exports = async () => {
     logStats(serverStats, 'Server');
 
     console.log('');
-    console.log(`Build done!`);
+    console.log(`✅  Build done!`);
   } catch (err) {
     (Array.isArray(err) ? err : [err]).forEach(error => {
       console.error('Error while trying to build:', error);

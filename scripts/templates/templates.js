@@ -14,25 +14,25 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     templatePath: path.resolve(__dirname, 'default'),
     // prettier-ignore
     packageJson: {
-    'name': name,
-    'version': '0.1.0',
-    'private': true,
-    'create-frontend': {},
-    'scripts': {
-      'dev': 'frontend-scripts dev',
-      'build': 'frontend-scripts build',
-      'build:debug': 'frontend-scripts build --debug',
-    },
-    'dependencies': {
-      '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
-      '@babel/polyfill': '^7.2.5',
-      'eslint': '^5.13.0',
-      'eslint-plugin-flowtype': '^3.4.2',
-      'eslint-plugin-import': '^2.16.0',
-      'eslint-plugin-react': '^7.12.4',
-      'normalize.css': '8.x.x'
-    },
-  }
+      'name': name,
+      'version': '0.1.0',
+      'private': true,
+      'create-frontend': {},
+      'scripts': {
+        'dev': 'frontend-scripts dev',
+        'build': 'frontend-scripts build',
+        'build:debug': 'frontend-scripts build --debug',
+      },
+      'dependencies': {
+        '@babel/polyfill': '^7.2.5',
+        '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
+        'eslint-plugin-flowtype': '^3.4.2',
+        'eslint-plugin-import': '^2.16.0',
+        'eslint-plugin-react': '^7.12.4',
+        'eslint': '^5.13.0',
+        'normalize.css': '8.x.x',
+      },
+    }
   };
 
   const react = {
@@ -41,12 +41,49 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
       react: '^16.8.2',
       'react-dom': '^16.8.2',
     },
-    mergeTemplateWithDefault: true,
+    mergeDefaultFiles: true,
     templatePath: path.resolve(__dirname, 'react'),
     packageJson: defaultTemplate.packageJson,
   };
 
-  const templates = { default: defaultTemplate, react };
+  const universalReact = {
+    name: 'react',
+    install: {
+      react: '^16.8.2',
+      'react-dom': '^16.8.2',
+    },
+    mergeDefaultFiles: true,
+    templatePath: path.resolve(__dirname, 'universal-react'),
+    // prettier-ignore
+    packageJson: {
+      'name': name,
+      'version': '0.1.0',
+      'private': true,
+      'create-frontend': {},
+      'scripts': {
+        'dev': 'frontend-scripts dev-universal-react',
+        'build': 'frontend-scripts build-universal-react',
+        'build:debug': 'frontend-scripts build-universal-react --debug',
+      },
+      'dependencies': {
+        '@babel/polyfill': '^7.2.5',
+        '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
+        'eslint-plugin-flowtype': '^3.4.2',
+        'eslint-plugin-import': '^2.16.0',
+        'eslint-plugin-react': '^7.12.4',
+        'eslint': '^5.13.0',
+        'express': '^4.16.4',
+        'normalize.css': '8.x.x',
+        'react-helmet': '^5.2.0',
+      },
+    }
+  };
+
+  const templates = {
+    default: defaultTemplate,
+    react,
+    'universal-react': universalReact,
+  };
 
   return templates[templateName];
 };

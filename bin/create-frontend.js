@@ -75,7 +75,7 @@ function init() {
 
   // Get array of template paths
   const templatePaths = [template.templatePath];
-  if (template.mergeTemplateWithDefault === true)
+  if (template.mergeDefaultFiles === true)
     templatePaths.unshift(getTemplate('default', templateOpts).templatePath);
 
   // Check if cwd has conflicting ciles

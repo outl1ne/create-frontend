@@ -1,46 +1,57 @@
 /** @flow
  * This function starts a webpack production builds.
  */
-module.exports = () => {
-  /**
-   * Load environment variables from .env
-   */
-  require('dotenv').load();
-  process.env.NODE_ENV = 'production';
+module.exports = (config, report = true) => {
+  const log = (...args) => (report ? console.log(...args) : null);
 
-  const webpack = require('webpack');
+  return new Promise((resolve, reject) => {
+    /**
+     * Load environment variables from .env
+     */
+    require('dotenv').load();
+    process.env.NODE_ENV = 'production';
 
-  console.log('Building...');
-  console.log('');
-  webpack(require('../webpack/webpack.config.client')).run((err, stats) => {
-    if (err) {
-      console.error(err);
-      process.exit(1);
-    }
+    const webpack = require('webpack');
 
-    const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats];
-
-    statsArr.forEach((statsObj, i) => {
-      console.log('');
-      console.log(`Bundle #${i + 1}:`);
-      console.log('');
-
-      if (statsObj.compilation.errors.length) {
-        console.log('Failed to compile.', statsObj.compilation.errors);
-        process.exit(1);
+    log('Building...');
+    log('');
+    webpack(config).run((err, stats) => {
+      if (err) {
+        reject([err]);
+        if (report) {
+          console.error(err);
+          process.exit(1);
+        }
       }
 
-      console.log(
-        statsObj.toString({
-          colors: true,
-          children: false,
-          chunks: false,
-          modules: false,
-          assetsSort: 'name',
-        })
-      );
+      const statsArr = Array.isArray(stats.stats) ? stats.stats : [stats];
+
+      statsArr.forEach((statsObj, i) => {
+        log('');
+        log(`Bundle #${i + 1}:`);
+        log('');
+
+        if (statsObj.compilation.errors.length) {
+          reject(statsObj.compilation.errors);
+          if (report) {
+            log('Failed to compile.', statsObj.compilation.errors);
+            process.exit(1);
+          }
+        }
+
+        log(
+          statsObj.toString({
+            colors: true,
+            children: false,
+            chunks: false,
+            modules: false,
+            assetsSort: 'name',
+          })
+        );
+      });
+      log('');
+      log('Build done!');
+      resolve(statsArr);
     });
-    console.log('');
-    console.log('Build done!');
   });
 };

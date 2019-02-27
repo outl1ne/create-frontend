@@ -19,8 +19,17 @@ module.exports = opts => ({
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),
+    require.resolve('@babel/plugin-transform-runtime'),
   ],
   env: {
+    production: {
+      plugins: [
+        require.resolve('babel-plugin-transform-react-remove-prop-types'),
+      ],
+    },
+    development: {
+      plugins: [require.resolve('@babel/plugin-transform-react-jsx-source')],
+    },
     test: {
       plugins: [require.resolve('@babel/plugin-transform-modules-commonjs')],
     },

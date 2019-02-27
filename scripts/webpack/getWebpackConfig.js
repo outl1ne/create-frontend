@@ -10,6 +10,8 @@ const readFiles = require('fs-readdir-recursive');
 const HtmlPlugin = require('html-webpack-plugin');
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
+const StartServerPlugin = require('start-server-webpack-plugin');
 
 /**
  * @param {string} target - webpack target (web/node)
@@ -25,6 +27,10 @@ module.exports = target => {
   const IS_NODE = target === 'node';
   const config = getConfig(target);
   const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, config, target };
+  const SERVER_OUTPUT_FILE = 'build-server';
+  const OUTPUT_PATH = IS_NODE
+    ? config.SERVER_BUILD_DIRECTORY
+    : config.BUILD_DIRECTORY;
 
   const output = {};
 
@@ -37,6 +43,23 @@ module.exports = target => {
    * Target: Different for server/client
    */
   output.target = target;
+
+  /**
+   * Externals: Ignore node_modules in the bundle
+   */
+  if (IS_NODE) {
+    output.externals = nodeExternals({
+      whitelist: [
+        'webpack/hot/poll?300',
+        '@optimistdigital/create-frontend/universal-react',
+      ],
+    });
+  }
+
+  /* Enable watch mode in dev node server */
+  if (IS_NODE && !IS_PRODUCTION) {
+    output.watch = true;
+  }
 
   /**
    * Devtool: Keep sourcemaps for development only.
@@ -59,16 +82,25 @@ module.exports = target => {
    * Optimization
    */
   output.optimization = {
-    minimizer: [
-      new UglifyJsPlugin({
-        sourceMap: config.ENABLE_PROD_SOURCEMAPS,
-        uglifyOptions: {
-          compress: { warnings: false, drop_console: !config.IS_DEBUG },
-          output: { comments: false },
-        },
-      }),
-    ],
+    minimize: false,
   };
+
+  if (IS_PRODUCTION) {
+    output.optimization = {
+      minimizer: [
+        new UglifyJsPlugin({
+          sourceMap: config.ENABLE_PROD_SOURCEMAPS,
+          uglifyOptions: {
+            compress: {
+              warnings: false,
+              drop_console: !config.IS_DEBUG,
+            },
+            output: { comments: false },
+          },
+        }),
+      ],
+    };
+  }
 
   /**
    * Context: Make context be root dir
@@ -79,15 +111,19 @@ module.exports = target => {
    * Entry: Production uses separate entry points for CSS assets, development has only 1 bundle
    */
 
-  const DEV_ENTRY_CONF = [
-    `${require.resolve('webpack-dev-server/client')}?${config.WEBPACK_SERVER}`,
-    require.resolve('webpack/hot/only-dev-server'),
-  ];
+  const DEV_ENTRY_CONF = IS_NODE
+    ? ['webpack/hot/poll?300']
+    : [
+        `${require.resolve('webpack-dev-server/client')}?${
+          config.WEBPACK_SERVER
+        }`,
+        require.resolve('webpack/hot/only-dev-server'),
+      ];
 
   const DEV_ENTRY_POINTS = {};
 
   const entryPoints = IS_NODE
-    ? [config.SERVER_ENTRY_POINT]
+    ? { [SERVER_OUTPUT_FILE]: config.SERVER_ENTRY_POINT }
     : config.ENTRY_POINTS;
 
   Object.keys(entryPoints).forEach(key => {
@@ -100,9 +136,9 @@ module.exports = target => {
    * Output
    */
   output.output = {
-    path: IS_NODE ? config.SERVER_BUILD_DIRECTORY : config.BUILD_DIRECTORY,
+    path: OUTPUT_PATH,
     filename:
-      IS_PRODUCTION && config.HASH_FILENAMES
+      IS_PRODUCTION && IS_WEB && config.HASH_FILENAMES
         ? '[name]-[chunkhash].js'
         : '[name].js',
     chunkFilename: '[name].js',
@@ -147,7 +183,8 @@ module.exports = target => {
     {
       test: /\.(sass|scss)$/,
       use: [
-        { loader: require.resolve('style-loader') },
+        // Disable style-loader for node (doesn't work)
+        !IS_NODE && { loader: require.resolve('style-loader') },
         {
           loader: require.resolve('css-loader'),
           options: {
@@ -167,7 +204,7 @@ module.exports = target => {
             sourceMap: true, // resolve-url-loader always needs a sourcemap
           },
         },
-      ],
+      ].filter(Boolean),
     },
   ];
 
@@ -193,7 +230,6 @@ module.exports = target => {
           options: {
             importLoaders: 1,
             sourceMap: config.ENABLE_PROD_SOURCEMAPS,
-            minimize: true,
           },
         },
         {
@@ -222,6 +258,7 @@ module.exports = target => {
             test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
             loader: require.resolve('url-loader'),
             options: {
+              emitFile: IS_WEB,
               limit: 10000,
               name: config.HASH_FILENAMES
                 ? '[name].[hash:8].[ext]'
@@ -241,6 +278,7 @@ module.exports = target => {
             loader: require.resolve('file-loader'),
             exclude: [/\.js$/, /\.json$/],
             options: {
+              emitFile: IS_WEB,
               name: config.HASH_FILENAMES
                 ? '[name].[hash:8].[ext]'
                 : '[name].[ext]',
@@ -285,43 +323,69 @@ module.exports = target => {
       __PRODUCTION__: IS_PRODUCTION,
       __DEBUG__: process.env.APP_DEBUG === 'true',
     }),
-    new ManifestPlugin({
-      output: path.join(config.APP_DIRECTORY, 'asset-manifest.json'),
-      publicPath: true,
-      writeToDisk: true,
-    }),
-    ...(config.IS_DEBUG
-      ? [
-          new (require('webpack-visualizer-plugin'))({
-            filename: './stats.html',
-          }),
-        ]
-      : []),
-    ...(IS_PRODUCTION
-      ? [
-          /* PRODUCTION PLUGINS */
-          new CleanPlugin([config.BUILD_DIRECTORY], {
-            root: config.APP_DIRECTORY,
-          }), // Clean previously built assets before making new bundle
-          new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
-          new ExtractPlugin({
-            // Extract css files from bundles
-            filename: config.HASH_FILENAMES
-              ? '[name]-[contenthash].css'
-              : '[name].css',
-          }),
-        ]
-      : [
-          /* DEVELOPMENT PLUGINS */
-          new webpack.NamedModulesPlugin(), // Named modules for HMR
-          new webpack.HotModuleReplacementPlugin(),
-          new webpack.NoEmitOnErrorsPlugin(),
-          new (require('./plugins/BuildDonePlugin'))(
-            chalk.green.bold('\n=== Build done === \n')
-          ),
-        ]),
-    ...(config.APPEND_PLUGINS(WEBPACK_CONF_PARAMS) || []),
   ];
+
+  /* SHARED WEB PLUGINS */
+  if (IS_WEB) {
+    output.plugins.push(
+      new ManifestPlugin({
+        output: path.join(config.APP_DIRECTORY, 'asset-manifest.json'),
+        publicPath: true,
+        writeToDisk: true,
+      })
+    );
+  }
+
+  /* DEBUG PLUGINS */
+  if (config.IS_DEBUG) {
+    output.plugins.push(
+      new (require('webpack-visualizer-plugin'))({
+        filename: './stats.html',
+      })
+    );
+  }
+
+  /* PRODUCTION PLUGINS */
+  if (IS_PRODUCTION) {
+    output.plugins.push(
+      new CleanPlugin([OUTPUT_PATH], {
+        root: config.APP_DIRECTORY,
+      }), // Clean previously built assets before making new bundle
+      new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
+      new ExtractPlugin({
+        // Extract css files from bundles
+        filename: config.HASH_FILENAMES
+          ? '[name]-[contenthash].css'
+          : '[name].css',
+      })
+    );
+  }
+
+  /* DEVELOPMENT PLUGINS */
+  if (!IS_PRODUCTION) {
+    output.plugins.push(
+      new webpack.NamedModulesPlugin(), // Named modules for HMR
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.NoEmitOnErrorsPlugin(),
+      new (require('./plugins/BuildDonePlugin'))(
+        chalk.green.bold('\n=== Build for ' + target + ' done === \n')
+      )
+    );
+
+    /**
+     * NODE DEVELOPMENT PLUGINS
+     */
+    if (IS_NODE) {
+      output.plugins.push(
+        new StartServerPlugin({
+          name: `${SERVER_OUTPUT_FILE}.js`,
+        })
+      );
+    }
+  }
+
+  /* USER DEFINED PLUGINS */
+  output.plugins.push(...(config.APPEND_PLUGINS(WEBPACK_CONF_PARAMS) || []));
 
   // Falls back to default conf if replacer function returns a falsy value
   return config.EDIT_CONFIG(output, WEBPACK_CONF_PARAMS) || output;

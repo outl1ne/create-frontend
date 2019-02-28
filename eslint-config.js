@@ -19,7 +19,7 @@ module.exports = {
   },
   settings: {
     react: {
-      "version": "detect"
+      version: 'detect',
     },
   },
   plugins: ['import', 'react', 'flowtype'],
@@ -36,5 +36,6 @@ module.exports = {
     __DEVELOPMENT__: true,
     __PRODUCTION__: true,
     __DEBUG__: true,
+    __OCF_MANIFEST_PATH__: true,
   },
 };

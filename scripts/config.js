@@ -61,6 +61,7 @@ module.exports = function getConfig(target) {
   const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);
   const HTML_PATH = resolveApp(getConfigValue('htmlPath', 'client/html'));
   const SERVER_OUTPUT_FILE = 'build-server';
+  const MANIFEST_PATH = resolveApp(BUILD_DIRECTORY, 'asset-manifest.json');
 
   return {
     APP_DIRECTORY,
@@ -86,5 +87,6 @@ module.exports = function getConfig(target) {
     WEBPACK_PORT,
     WEBPACK_SERVER,
     SERVER_OUTPUT_FILE,
+    MANIFEST_PATH,
   };
 };

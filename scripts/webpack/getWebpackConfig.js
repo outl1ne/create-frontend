@@ -50,7 +50,7 @@ module.exports = target => {
     output.externals = nodeExternals({
       whitelist: [
         'webpack/hot/poll?300',
-        '@optimistdigital/create-frontend/universal-react',
+        /^@optimistdigital\/create-frontend\/universal-react\/.*/,
       ],
     });
   }
@@ -80,6 +80,9 @@ module.exports = target => {
   /**
    * Optimization
    */
+  // output.optimization = {
+  //   minimize: false,
+  // };
   if (IS_PRODUCTION) {
     output.optimization = {
       minimizer: [
@@ -315,6 +318,7 @@ module.exports = target => {
       __DEVELOPMENT__: !IS_PRODUCTION,
       __PRODUCTION__: IS_PRODUCTION,
       __DEBUG__: process.env.APP_DEBUG === 'true',
+      __OCF_MANIFEST_PATH__: JSON.stringify(config.MANIFEST_PATH),
     }),
   ];
 
@@ -322,7 +326,7 @@ module.exports = target => {
   if (IS_WEB) {
     output.plugins.push(
       new ManifestPlugin({
-        output: path.join(config.APP_DIRECTORY, 'asset-manifest.json'),
+        output: config.MANIFEST_PATH,
         publicPath: true,
         writeToDisk: true,
       })

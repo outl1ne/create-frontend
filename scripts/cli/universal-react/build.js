@@ -5,7 +5,7 @@ const clientConf = require('../..//webpack/webpack.config.client');
 const serverConf = require('../..//webpack/webpack.config.server');
 
 module.exports = async () => {
-  console.log('Building Universal React App...');
+  console.log('🚧  Building Universal React App...');
   console.log('');
 
   try {
@@ -21,7 +21,7 @@ module.exports = async () => {
     console.log(`✅  Build done!`);
   } catch (err) {
     (Array.isArray(err) ? err : [err]).forEach(error => {
-      console.error('Error while trying to build:', error);
+      console.error('❌  Error while trying to build:', error);
       process.exit(1);
     });
   }
@@ -34,7 +34,7 @@ function logStats(stats, name) {
     console.log('');
 
     if (statsObj.compilation.errors.length) {
-      console.log('Failed to compile.', statsObj.compilation.errors);
+      console.log('❌  Failed to compile.', statsObj.compilation.errors);
       process.exit(1);
     }
 

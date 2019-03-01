@@ -327,6 +327,7 @@ module.exports = target => {
     output.plugins.push(
       new CleanPlugin([OUTPUT_PATH], {
         root: config.APP_DIRECTORY,
+        verbose: false,
       }), // Clean previously built assets before making new bundle
       new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
       new ExtractPlugin({

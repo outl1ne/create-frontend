@@ -1,8 +1,12 @@
 import express from 'express';
 import App from '../app/App';
 import render from '@optimistdigital/create-frontend/universal-react/server/render';
+import staticMiddleware from './middleware/staticMiddleware';
 
 const server = express();
+
+server.use(staticMiddleware);
+server.disable('etag');
 
 server.use('/', async (req, res) => {
   try {
@@ -13,7 +17,4 @@ server.use('/', async (req, res) => {
   }
 });
 
-const APP_PORT = process.env.APP_PORT || 3000;
-server.listen(APP_PORT, () => {
-  console.info(`✅  Server started at http://localhost:${APP_PORT}`);
-});
+export default server;

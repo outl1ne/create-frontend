@@ -135,6 +135,7 @@ module.exports = target => {
    * Output
    */
   output.output = {
+    libraryTarget: IS_NODE ? 'commonjs2' : 'var',
     path: OUTPUT_PATH,
     filename:
       IS_PRODUCTION && IS_WEB && config.HASH_FILENAMES

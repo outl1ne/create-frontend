@@ -1,6 +1,7 @@
 const getConfig = require('../../config');
 
-module.exports = () => {
+module.exports = args => {
+  const appPort = args.appPort || 3000;
   /**
    * Initialize configuration
    */
@@ -36,5 +37,8 @@ module.exports = () => {
   /**
    * Start server
    */
-  require(serverPath);
+  const server = require(serverPath).default;
+  server.listen(appPort, () => {
+    console.info(`✅  Server started at http://localhost:${appPort}`);
+  });
 };

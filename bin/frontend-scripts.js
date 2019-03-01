@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const args = process.argv.slice(2);
+const parsedArgs = require('minimist')(args);
 
 const scriptIndex = args.findIndex(
   x => x === 'build' || x === 'eject' || x === 'start' || x === 'test'
@@ -23,7 +24,7 @@ switch (script) {
     require('../scripts/cli/universal-react/dev')();
     break;
   case 'start-universal-react':
-    require('../scripts/cli/universal-react/start')();
+    require('../scripts/cli/universal-react/start')(parsedArgs);
     break;
   default:
     console.error(`Script not found: ${script}`);

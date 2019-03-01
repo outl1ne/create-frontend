@@ -9,10 +9,7 @@ module.exports = async () => {
   console.log('');
 
   try {
-    const [clientStats, serverStats] = await Promise.all([
-      build(clientConf, false),
-      build(serverConf, false),
-    ]);
+    const [clientStats, serverStats] = await Promise.all([build(clientConf, false), build(serverConf, false)]);
 
     logStats(clientStats, 'Client');
     logStats(serverStats, 'Server');
@@ -34,7 +31,7 @@ function logStats(stats, name) {
     console.log('');
 
     if (statsObj.compilation.errors.length) {
-      console.log('❌  Failed to compile.', statsObj.compilation.errors);
+      console.error('❌  Failed to compile.', statsObj.compilation.errors);
       process.exit(1);
     }
 

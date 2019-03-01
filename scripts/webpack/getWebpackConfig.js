@@ -137,7 +137,7 @@ module.exports = target => {
    */
 
   output.resolve = {
-    modules: ['.', resolveApp('node_modules'), resolveOwn('node_modules')],
+    modules: [resolveApp('.'), resolveApp('node_modules'), resolveOwn('node_modules')],
     extensions: ['.mjs', '.json', '.js', '.jsx', '.vue', '.css'],
   };
 

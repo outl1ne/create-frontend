@@ -5,6 +5,8 @@
 require('dotenv').load();
 process.env.NODE_ENV = 'development';
 
+const detectPort = require('detect-port');
+const chalk = require('chalk');
 const args = require('minimist')(process.argv);
 const serverPath = args.src;
 const getConfig = require('../../scripts/config');
@@ -30,10 +32,20 @@ process.on('unhandledRejection', err => {
   process.exit(1);
 });
 
-/**
- * Start server
- */
-const server = require(serverPath).default;
-server.listen(serverPort, () => {
-  console.info(`✅  Server started at http://localhost:${serverPort}`);
+detectPort(serverPort, (_, freePort) => {
+  if (serverPort !== freePort) {
+    console.info(
+      chalk.yellow.bold(
+        `⚠️  The port (${serverPort}) is not available. Using ${freePort} instead. You can choose a custom port by running "npm run dev -- --serverPort=customPort"`
+      )
+    );
+  }
+
+  /**
+   * Start server
+   */
+  const server = require(serverPath).default;
+  server.listen(freePort, () => {
+    console.info(`✅  Server started at http://localhost:${freePort}`);
+  });
 });

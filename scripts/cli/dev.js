@@ -17,14 +17,13 @@ module.exports = () => {
 
   detectPort(config.WEBPACK_PORT, (_, freePort) => {
     if (config.WEBPACK_PORT !== freePort) {
-      console.error(
-        chalk.red.bold(
+      console.info(
+        chalk.yellow.bold(
           `The port (${
             config.WEBPACK_PORT
-          }) is not available. Pick an unused port such as ${freePort} by running "npm run dev -- --webpackPort=${freePort}"`
+          }) is not available. Using ${freePort} instead. You can choose a custom port by running "npm run dev -- --webpackPort=customPort"`
         )
       );
-      return;
     }
 
     const compiler = webpack(require('../webpack/webpack.config.client'));
@@ -32,7 +31,7 @@ module.exports = () => {
     const defaultServerConf = {
       clientLogLevel: 'none',
       stats: 'minimal',
-      port: config.WEBPACK_PORT,
+      port: freePort,
       inline: false,
       host: config.WEBPACK_DOMAIN,
       publicPath: `${config.WEBPACK_SERVER}/`,
@@ -54,7 +53,7 @@ module.exports = () => {
       config.EDIT_DEV_SERVER_CONFIG(defaultServerConf) || defaultServerConf;
 
     const devServer = new WebpackDevServer(compiler, serverConf).listen(
-      config.WEBPACK_PORT,
+      freePort,
       config.WEBPACK_DOMAIN,
       err => {
         if (err) {
@@ -66,7 +65,7 @@ module.exports = () => {
           chalk.green.bold(
             `=== Webpack dev server started at ${config.APP_PROTOCOL}://${
               config.WEBPACK_DOMAIN
-            }:${config.WEBPACK_PORT} ===
+            }:${freePort} ===
 === Building... ===`
           )
         );

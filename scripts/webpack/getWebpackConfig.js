@@ -73,8 +73,9 @@ module.exports = target => {
   // output.optimization = {
   //   minimize: false,
   // };
-  if (IS_PRODUCTION) {
+  if (IS_PRODUCTION && IS_WEB) {
     output.optimization = {
+      minimize: true,
       minimizer: [
         new UglifyJsPlugin({
           sourceMap: config.ENABLE_PROD_SOURCEMAPS,
@@ -87,6 +88,10 @@ module.exports = target => {
           },
         }),
       ],
+    };
+  } else {
+    output.optimization = {
+      minimize: false,
     };
   }
 

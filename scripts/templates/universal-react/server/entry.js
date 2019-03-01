@@ -1,20 +1,40 @@
-import express from 'express';
-import App from '../app/App';
-import render from '@optimistdigital/create-frontend/universal-react/server/render';
-import staticMiddleware from './middleware/staticMiddleware';
+import http from 'http';
+import detectPort from 'detect-port';
 
-const server = express();
+let app = require('./server').default;
 
-server.use(staticMiddleware);
-server.disable('etag');
+const server = http.createServer(app);
 
-server.use('/', async (req, res) => {
-  try {
-    return res.status(200).send(await render(App, req));
-  } catch (err) {
-    console.error('Server encountered error while rendering React app:', err);
-    return res.status(500).send('Internal server error');
+let currentApp = app;
+
+const SERVER_PORT = 3000;
+detectPort(SERVER_PORT, (_, freePort) => {
+  if (SERVER_PORT !== freePort) {
+    if (__PRODUCTION__) {
+      console.error(`❌  The port (${SERVER_PORT}) is not available. Please use a different port, such as ${freePort}`);
+      return;
+    }
+    console.info(`⚠️  The port (${SERVER_PORT}) is not available. Using ${freePort} instead.`);
+  }
+
+  server.listen(freePort, error => {
+    if (error) {
+      console.error(`❌  Failed to start server`, error);
+    }
+
+    console.info(`✅  Server started at http://localhost:${freePort}`);
+  });
+
+  if (module.hot) {
+    module.hot.accept('./server', () => {
+      try {
+        app = require('./server').default;
+        server.removeListener('request', currentApp);
+        server.on('request', app);
+        currentApp = app;
+      } catch (error) {
+        console.error(`❌  Failed to apply hot reload`.error);
+      }
+    });
   }
 });
-
-export default server;

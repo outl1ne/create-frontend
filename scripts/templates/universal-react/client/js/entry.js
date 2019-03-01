@@ -3,7 +3,7 @@ import '../scss/entry.scss';
 // Babel-polyfill adds support for newer browser features to ensure browser compatibility.
 import '@babel/polyfill';
 import App from '../../app/App.js';
-import render from '@optimistdigital/create-frontend/universal-react/client/render';
+import { render } from '@optimistdigital/create-frontend/universal-react/client';
 
 function hydrate() {
   render(App, document.getElementById('react-app'));

@@ -12,6 +12,7 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
+const { resolveApp, resolveOwn } = require('../paths');
 
 /**
  * @param {string} target - webpack target (web/node)
@@ -150,8 +151,8 @@ module.exports = target => {
    */
 
   output.resolve = {
-    modules: ['.', 'node_modules'],
-    extensions: ['.json', '.js', '.jsx', '.vue', '.css'],
+    modules: ['.', resolveApp('node_modules'), resolveOwn('node_modules')],
+    extensions: ['.mjs', '.json', '.js', '.jsx', '.vue', '.css'],
   };
 
   /**

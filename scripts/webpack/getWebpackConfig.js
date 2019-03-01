@@ -28,9 +28,7 @@ module.exports = target => {
   const IS_NODE = target === 'node';
   const config = getConfig(target);
   const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, config, target };
-  const OUTPUT_PATH = IS_NODE
-    ? config.SERVER_BUILD_DIRECTORY
-    : config.BUILD_DIRECTORY;
+  const OUTPUT_PATH = IS_NODE ? config.SERVER_BUILD_DIRECTORY : config.BUILD_DIRECTORY;
 
   const output = {};
 
@@ -49,10 +47,7 @@ module.exports = target => {
    */
   if (IS_NODE) {
     output.externals = nodeExternals({
-      whitelist: [
-        'webpack/hot/poll?300',
-        /^@optimistdigital\/create-frontend\/universal-react\/.*/,
-      ],
+      whitelist: ['webpack/hot/poll?300', /^@optimistdigital\/create-frontend\/universal-react\/.*/],
     });
   }
 
@@ -67,15 +62,9 @@ module.exports = target => {
    * Comparison: https://webpack.github.io/docs/build-performance.html#sourcemaps
    */
   if (IS_PRODUCTION) {
-    output.devtool =
-      IS_WEB && IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS
-        ? 'source-map'
-        : false;
+    output.devtool = IS_WEB && IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS ? 'source-map' : false;
   } else {
-    output.devtool =
-      IS_WEB && !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS
-        ? 'eval-cheap-module-source-map'
-        : false;
+    output.devtool = IS_WEB && !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS ? 'eval-cheap-module-source-map' : false;
   }
 
   /**
@@ -113,17 +102,13 @@ module.exports = target => {
   const DEV_ENTRY_CONF = IS_NODE
     ? ['webpack/hot/poll?300']
     : [
-        `${require.resolve('webpack-dev-server/client')}?${
-          config.WEBPACK_SERVER
-        }`,
+        `${require.resolve('webpack-dev-server/client')}?${config.WEBPACK_SERVER}`,
         require.resolve('webpack/hot/only-dev-server'),
       ];
 
   const DEV_ENTRY_POINTS = {};
 
-  const entryPoints = IS_NODE
-    ? { [config.SERVER_OUTPUT_FILE]: config.SERVER_ENTRY_POINT }
-    : config.ENTRY_POINTS;
+  const entryPoints = IS_NODE ? { [config.SERVER_OUTPUT_FILE]: config.SERVER_ENTRY_POINT } : config.ENTRY_POINTS;
 
   Object.keys(entryPoints).forEach(key => {
     DEV_ENTRY_POINTS[key] = [...DEV_ENTRY_CONF, entryPoints[key]];
@@ -137,14 +122,9 @@ module.exports = target => {
   output.output = {
     libraryTarget: IS_NODE ? 'commonjs2' : 'var',
     path: OUTPUT_PATH,
-    filename:
-      IS_PRODUCTION && IS_WEB && config.HASH_FILENAMES
-        ? '[name]-[chunkhash].js'
-        : '[name].js',
+    filename: IS_PRODUCTION && IS_WEB && config.HASH_FILENAMES ? '[name]-[chunkhash].js' : '[name].js',
     chunkFilename: '[name].js',
-    publicPath: IS_PRODUCTION
-      ? `/${config.BUILD_PATH}/`
-      : `${config.WEBPACK_SERVER}/`,
+    publicPath: IS_PRODUCTION ? `/${config.BUILD_PATH}/` : `${config.WEBPACK_SERVER}/`,
   };
 
   /**
@@ -260,9 +240,7 @@ module.exports = target => {
             options: {
               emitFile: IS_WEB,
               limit: 10000,
-              name: config.HASH_FILENAMES
-                ? '[name].[hash:8].[ext]'
-                : '[name].[ext]',
+              name: config.HASH_FILENAMES ? '[name].[hash:8].[ext]' : '[name].[ext]',
             },
           },
           // Add production / development specific rules
@@ -279,9 +257,7 @@ module.exports = target => {
             exclude: [/\.js$/, /\.json$/],
             options: {
               emitFile: IS_WEB,
-              name: config.HASH_FILENAMES
-                ? '[name].[hash:8].[ext]'
-                : '[name].[ext]',
+              name: config.HASH_FILENAMES ? '[name].[hash:8].[ext]' : '[name].[ext]',
             },
           },
         ],
@@ -308,10 +284,7 @@ module.exports = target => {
                   path.dirname(pageFile),
                   `${path.basename(pageFile, path.extname(pageFile))}.html`
                 )
-              : path.join(
-                  path.dirname(pageFile),
-                  `${path.basename(pageFile, path.extname(pageFile))}.html`
-                ),
+              : path.join(path.dirname(pageFile), `${path.basename(pageFile, path.extname(pageFile))}.html`),
           })
         )
     ),
@@ -353,9 +326,7 @@ module.exports = target => {
       new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
       new ExtractPlugin({
         // Extract css files from bundles
-        filename: config.HASH_FILENAMES
-          ? '[name]-[contenthash].css'
-          : '[name].css',
+        filename: config.HASH_FILENAMES ? '[name]-[contenthash].css' : '[name].css',
       })
     );
   }
@@ -366,10 +337,19 @@ module.exports = target => {
       new webpack.NamedModulesPlugin(), // Named modules for HMR
       new webpack.HotModuleReplacementPlugin(),
       new webpack.NoEmitOnErrorsPlugin(),
-      new (require('./plugins/BuildDonePlugin'))(
-        chalk.green.bold('\n=== Build for ' + target + ' done === \n')
-      )
+      new (require('./plugins/BuildDonePlugin'))(chalk.green.bold('\n=== Build for ' + target + ' done === \n'))
     );
+
+    /**
+     * NODE DEVELOPMENT PLUGINS
+     */
+    if (IS_NODE) {
+      output.plugins.push(
+        new StartServerPlugin({
+          name: `${config.SERVER_OUTPUT_FILE}.js`,
+        })
+      );
+    }
   }
 
   /* USER DEFINED PLUGINS */

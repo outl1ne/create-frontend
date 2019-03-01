@@ -7,10 +7,6 @@ There is an additional CLI scripts:
 
 -   `npm run start` - Starts the production server
 
-There are also flags that you can pass to the scripts:
-
--   `npm run start -- --serverPort=3030` - Custom port for the server
-
 There are some additional configuration options:
 
 -   `serverEntryPoint` (_server/entry.js_) - Entry point for your server.

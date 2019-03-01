@@ -20,6 +20,20 @@ module.exports = opts => ({
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),
     require.resolve('@babel/plugin-transform-runtime'),
+    [
+      require.resolve("babel-plugin-inline-react-svg"),
+      {
+          "svgo": {
+              "plugins": [
+                  {
+                      // Removing IDs might break logic if application
+                      // depends on paths having certain IDs
+                      "cleanupIDs": false
+                  }
+              ]
+          }
+      }
+    ],
   ],
   env: {
     production: {

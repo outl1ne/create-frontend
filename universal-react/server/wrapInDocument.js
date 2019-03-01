@@ -5,7 +5,6 @@ import fs from 'fs';
 const manifest = JSON.parse(fs.readFileSync(__OCF_MANIFEST_PATH__, 'utf8'));
 
 export default function wrapInDocument(content) {
-  console.log('manifest', manifest);
   const helmet = Helmet.renderStatic();
   return `<!doctype html>
 <html ${helmet.htmlAttributes.toString()}>

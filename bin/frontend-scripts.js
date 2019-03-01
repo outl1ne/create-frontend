@@ -1,12 +1,8 @@
 #!/usr/bin/env node
 
 const args = process.argv.slice(2);
-const parsedArgs = require('minimist')(args);
-
-const scriptIndex = args.findIndex(
-  x => x === 'build' || x === 'eject' || x === 'start' || x === 'test'
-);
-const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
+const script = args[0];
+const parsedArgs = require('minimist')(args.slice(1, args.length));
 
 switch (script) {
   case 'dev':
@@ -21,7 +17,7 @@ switch (script) {
     require('../scripts/cli/universal-react/build')();
     break;
   case 'dev-universal-react':
-    require('../scripts/cli/universal-react/dev')();
+    require('../scripts/cli/universal-react/dev')(parsedArgs);
     break;
   case 'start-universal-react':
     require('../scripts/cli/universal-react/start')(parsedArgs);

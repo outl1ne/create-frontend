@@ -1,7 +1,8 @@
 const getConfig = require('../../config');
 
 module.exports = args => {
-  const appPort = args.appPort || 3000;
+  const serverConfig = getConfig('node');
+  const serverPort = args.serverPort || serverConfig.DEFAULT_NODE_SERVER_PORT;
   /**
    * Initialize configuration
    */
@@ -29,7 +30,6 @@ module.exports = args => {
     process.exit(1);
   });
 
-  const serverConfig = getConfig('node');
   const serverPath = `${serverConfig.SERVER_BUILD_DIRECTORY}/${
     serverConfig.SERVER_OUTPUT_FILE
   }.js`;
@@ -38,7 +38,7 @@ module.exports = args => {
    * Start server
    */
   const server = require(serverPath).default;
-  server.listen(appPort, () => {
-    console.info(`✅  Server started at http://localhost:${appPort}`);
+  server.listen(serverPort, () => {
+    console.info(`✅  Server started at http://localhost:${serverPort}`);
   });
 };

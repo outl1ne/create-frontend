@@ -9,7 +9,7 @@ There is an additional CLI scripts:
 
 There are also flags that you can pass to the scripts:
 
--   `npm run start -- --appPort=3030` - Custom port for the production server
+-   `npm run start -- --serverPort=3030` - Custom port for the server
 
 There are some additional configuration options:
 

@@ -370,17 +370,6 @@ module.exports = target => {
         chalk.green.bold('\n=== Build for ' + target + ' done === \n')
       )
     );
-
-    /**
-     * NODE DEVELOPMENT PLUGINS
-     */
-    if (IS_NODE) {
-      output.plugins.push(
-        new StartServerPlugin({
-          name: `${config.SERVER_OUTPUT_FILE}.js`,
-        })
-      );
-    }
   }
 
   /* USER DEFINED PLUGINS */

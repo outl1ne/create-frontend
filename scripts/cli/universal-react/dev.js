@@ -1,34 +1,45 @@
 const detectPort = require('detect-port');
 const getConfig = require('../../config');
 const webpack = require('webpack');
-const chalk = require('chalk');
 const WebpackDevServer = require('webpack-dev-server');
+const DevNodeServer = require('../../../universal-react/helpers/DevNodeServer');
 
 require('dotenv').load();
+
 process.env.NODE_ENV = 'development';
 
-module.exports = () => {
+module.exports = args => {
   detectPort(getConfig('web').WEBPACK_PORT, (_, freePort) => {
     let watching = false;
-    getClientDevServer(freePort, () => {
+    startClientServer(freePort, () => {
       if (!watching) {
-        try {
-          const serverCompiler = webpack(
-            require('../../webpack/webpack.config.server')
-          );
-          serverCompiler.watch({}, stats => {
-            console.log('stats', stats);
-          });
-        } catch (err) {
-          console.log('err', err);
-        }
+        startNodeServer(args);
+        watching = true;
       }
-      watching = true;
     });
   });
 };
 
-function getClientDevServer(freePort, onDone) {
+function startNodeServer(args) {
+  try {
+    const compiler = webpack(require('../../webpack/webpack.config.server'));
+    const devNodeServer = new DevNodeServer(
+      `${getConfig('node').SERVER_OUTPUT_FILE}.js`,
+      args
+    );
+    compiler.hooks.afterEmit.tapAsync(
+      'CreateFrontendNodeBuildDone',
+      (compilation, callback) => {
+        devNodeServer.startOnce(compilation, callback);
+      }
+    );
+    compiler.watch({}, () => null);
+  } catch (err) {
+    console.error('Node dev server failed to start:', err);
+  }
+}
+
+function startClientServer(freePort, onDone) {
   const userConfig = getConfig('web');
 
   const defaultServerConf = {
@@ -65,25 +76,17 @@ function getClientDevServer(freePort, onDone) {
         return;
       }
 
-      console.info(
-        chalk.green.bold(
-          `=== Webpack dev server started at ${userConfig.APP_PROTOCOL}://${
-            userConfig.WEBPACK_DOMAIN
-          }:${freePort} ===
-=== Building... ===`
-        )
-      );
-
       function abort() {
         devServer.close();
         process.exit();
       }
+
       process.on('SIGINT', abort);
       process.on('SIGTERM', abort);
     }
   );
 
-  compiler.hooks.done.tap('CreateFrontendBuildDone', onDone);
+  compiler.hooks.done.tap('CreateFrontendWebBuildDone', onDone);
 
   return devServer;
 }

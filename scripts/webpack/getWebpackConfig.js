@@ -169,7 +169,17 @@ module.exports = target => {
       test: /\.(sass|scss)$/,
       use: [
         // Disable style-loader for node (doesn't work)
-        !IS_NODE && { loader: require.resolve('style-loader') },
+        IS_NODE
+          ? { loader: require.resolve('isomorphic-style-loader') }
+          : {
+              loader: require.resolve('style-loader'),
+              options: {
+                attrs: {
+                  // This id will be used to listen for load event
+                  id: 'ocf-client-styles',
+                },
+              },
+            },
         {
           loader: require.resolve('css-loader'),
           options: {

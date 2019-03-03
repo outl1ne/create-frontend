@@ -2,26 +2,42 @@ const detectPort = require('detect-port');
 const getConfig = require('../../config');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
+const { resolveApp } = require('../../paths');
+const path = require('path');
+const VirtualModulePlugin = require('webpack-virtual-modules');
 
 require('dotenv').load();
 
 process.env.NODE_ENV = 'development';
 
 module.exports = () => {
+  console.log('🚧  Starting dev server...');
   detectPort(getConfig('web').WEBPACK_PORT, (_, freePort) => {
     let watching = false;
-    startClientServer(freePort, () => {
+    let styleInjectionPlugin;
+    startClientServer(freePort, importedStyles => {
       if (!watching) {
-        startNodeServer();
+        styleInjectionPlugin = new VirtualModulePlugin({
+          'ocf-style-injection-hack.js': getStyleInjectionHack(importedStyles),
+        });
+        startNodeServer(styleInjectionPlugin);
         watching = true;
       }
     });
   });
 };
 
-function startNodeServer() {
+function startNodeServer(styleInjectionPlugin) {
   try {
-    const compiler = webpack(require('../../webpack/webpack.config.server'));
+    /**
+     * Make a copy of the webpack config with extra node dev only plugins for injecting SSR styles
+     */
+    const config = {
+      ...require('../../webpack/webpack.config.server'),
+    };
+    config.plugins = [...(config.plugins || []), styleInjectionPlugin];
+    const compiler = webpack(config);
+
     compiler.watch({}, () => null);
   } catch (err) {
     console.error('Node dev server failed to start:', err);
@@ -69,7 +85,38 @@ function startClientServer(freePort, onDone) {
     process.on('SIGTERM', abort);
   });
 
-  compiler.hooks.done.tap('CreateFrontendWebBuildDone', onDone);
+  /**
+   * Hooks into Webpack and gets all of the imported style paths,
+   * so we can pass them to the node dev server, and inject to document head to prevent FOUC
+   * "emit" hook happens before "done", so we can collect these here and pass them to the callback
+   */
+  let importedStyles = [];
+  compiler.hooks.emit.tap('OCFWebBuildEmit', compilation => {
+    // Clear the array of stuff from previous emit
+    importedStyles = [];
+    compilation.chunks.forEach(chunk => {
+      const modules = Array.from(chunk.modulesIterable).filter(
+        mod => typeof mod.id === 'string' && /^\.\/[a-zA-Z\/]*\.(?:css|scss|sass)$/.test(mod.id)
+      );
+      importedStyles.push(...modules.map(m => resolveApp(m.id)));
+    });
+  });
+
+  compiler.hooks.done.tap('OCFWebBuildDone', () => {
+    onDone(importedStyles);
+  });
 
   return devServer;
+}
+
+function getStyleInjectionHack(importedStyles) {
+  return `const styles = []; ${importedStyles
+    .map(
+      stylePath =>
+        `styles.push(require('${stylePath.replace(
+          new RegExp(path.sep.repeat(2), 'g'),
+          path.sep.repeat(2)
+        )}')._getCss())`
+    )
+    .join(';')}; module.exports = styles;`;
 }

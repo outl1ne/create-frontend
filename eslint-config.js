@@ -3,6 +3,7 @@ module.exports = {
   rules: {
     'flowtype/define-flow-type': 1,
     'react/jsx-indent': 0,
+    'no-param-reassign': 0,
     'new-cap': [
       1,
       {

@@ -351,11 +351,25 @@ module.exports = target => {
      */
     if (IS_NODE) {
       output.plugins.push(
+        /* Cleaning build directory in dev to prevent a billion useless hot-update files from piling up */
+        new CleanPlugin([OUTPUT_PATH], {
+          root: config.APP_DIRECTORY,
+          verbose: false,
+        }),
         new StartServerPlugin({
           name: `${config.SERVER_OUTPUT_FILE}.js`,
         })
       );
     }
+  }
+
+  /* NODE PLUGINS */
+  if (IS_NODE) {
+    output.plugins.push(
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
+      })
+    );
   }
 
   /* USER DEFINED PLUGINS */

@@ -1,7 +1,12 @@
 # Universal React App
 
 This template will set up a React project that renders on both the client and server with Node.js.
-It comes with React-Router by default.
+
+It comes with some extra features by default:
+
+-   [React Router](https://github.com/ReactTraining/react-router)
+-   [Emotion.js](https://github.com/emotion-js/emotion) for styling (optional)
+-   [inline-react-svg plugin](https://github.com/airbnb/babel-plugin-inline-react-svg) for easily rendering SVGs
 
 There is an additional CLI scripts:
 

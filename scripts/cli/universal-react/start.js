@@ -1,7 +1,7 @@
 const getConfig = require('../../config');
 
-module.exports = () => {
-  const serverConfig = getConfig('node');
+module.exports = async () => {
+  const serverConfig = await getConfig('node');
   /**
    * Initialize configuration
    */

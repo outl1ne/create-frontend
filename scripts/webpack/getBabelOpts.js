@@ -1,6 +1,6 @@
 const getConfig = require('../config');
 
-module.exports = opts => ({
+module.exports = async opts => ({
   presets: [
     require.resolve('@babel/preset-react'),
     require.resolve('@babel/preset-flow'),
@@ -9,12 +9,12 @@ module.exports = opts => ({
       {
         modules: false,
         targets: {
-          browsers: getConfig(opts.target).BROWSERS_LIST,
+          browsers: await getConfig(opts.target).BROWSERS_LIST,
         },
         useBuiltIns: 'entry',
       },
     ],
-    require.resolve('@emotion/babel-preset-css-prop')
+    require.resolve('@emotion/babel-preset-css-prop'),
   ],
   plugins: [
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
@@ -23,25 +23,23 @@ module.exports = opts => ({
     require.resolve('@babel/plugin-transform-runtime'),
     require.resolve('babel-plugin-emotion'),
     [
-      require.resolve("babel-plugin-inline-react-svg"),
+      require.resolve('babel-plugin-inline-react-svg'),
       {
-          "svgo": {
-              "plugins": [
-                  {
-                      // Removing IDs might break logic if application
-                      // depends on paths having certain IDs
-                      "cleanupIDs": false
-                  }
-              ]
-          }
-      }
+        svgo: {
+          plugins: [
+            {
+              // Removing IDs might break logic if application
+              // depends on paths having certain IDs
+              cleanupIDs: false,
+            },
+          ],
+        },
+      },
     ],
   ],
   env: {
     production: {
-      plugins: [
-        require.resolve('babel-plugin-transform-react-remove-prop-types'),
-      ],
+      plugins: [require.resolve('babel-plugin-transform-react-remove-prop-types')],
     },
     development: {
       plugins: [require.resolve('@babel/plugin-transform-react-jsx-source')],

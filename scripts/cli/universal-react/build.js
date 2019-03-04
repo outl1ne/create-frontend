@@ -1,12 +1,14 @@
 process.env.NODE_ENV = 'production';
 
 const build = require('../build');
-const clientConf = require('../..//webpack/webpack.config.client');
-const serverConf = require('../..//webpack/webpack.config.server');
+const getWebpackClientConfig = require('../../webpack/webpack.config.client');
+const getWebpackServerConfig = require('../../webpack/webpack.config.server');
 
 module.exports = async () => {
   console.log('🚧  Building Universal React App...');
   console.log('');
+
+  const [clientConf, serverConf] = await Promise.all([getWebpackClientConfig(), getWebpackServerConfig()]);
 
   try {
     const [clientStats, serverStats] = await Promise.all([build(clientConf, false), build(serverConf, false)]);

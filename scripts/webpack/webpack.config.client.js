@@ -1,2 +1,2 @@
 const getWebpackConfig = require('./getWebpackConfig');
-module.exports = getWebpackConfig('web');
+module.exports = async () => getWebpackConfig('web');

@@ -5,17 +5,30 @@ const WebpackDevServer = require('webpack-dev-server');
 const { resolveApp } = require('../../paths');
 const path = require('path');
 const VirtualModulePlugin = require('webpack-virtual-modules');
+const getWebpackClientConfig = require('../../webpack/webpack.config.client');
+const getWebpackServerConfig = require('../../webpack/webpack.config.server');
 
 require('dotenv').load();
 
 process.env.NODE_ENV = 'development';
 
-module.exports = () => {
+module.exports = async () => {
   console.log('🚧  Starting dev server...');
-  detectPort(getConfig('web').WEBPACK_PORT, (_, freePort) => {
+  const userConfig = await getConfig('web');
+
+  detectPort(userConfig.WEBPACK_PORT, (_, freePort) => {
+    if (userConfig.WEBPACK_PORT !== freePort) {
+      console.error(
+        `❌  The port (${
+          userConfig.WEBPACK_PORT
+        }) is not available. You can choose another port by running "npm run dev -- --webpackPort=${freePort}"`
+      );
+      return;
+    }
+
     let watching = false;
     let styleInjectionPlugin;
-    startClientServer(freePort, importedStyles => {
+    startClientServer(userConfig, importedStyles => {
       if (!watching) {
         styleInjectionPlugin = new VirtualModulePlugin({
           'ocf-style-injection-hack.js': getStyleInjectionHack(importedStyles),
@@ -27,13 +40,13 @@ module.exports = () => {
   });
 };
 
-function startNodeServer(styleInjectionPlugin) {
+async function startNodeServer(styleInjectionPlugin) {
   try {
     /**
      * Make a copy of the webpack config with extra node dev only plugins for injecting SSR styles
      */
     const config = {
-      ...require('../../webpack/webpack.config.server'),
+      ...(await getWebpackServerConfig()),
     };
     config.plugins = [...(config.plugins || []), styleInjectionPlugin];
     const compiler = webpack(config);
@@ -44,13 +57,11 @@ function startNodeServer(styleInjectionPlugin) {
   }
 }
 
-function startClientServer(freePort, onDone) {
-  const userConfig = getConfig('web');
-
+async function startClientServer(userConfig, onDone) {
   const defaultServerConf = {
     clientLogLevel: 'none',
     stats: 'minimal',
-    port: freePort,
+    port: userConfig.WEBPACK_PORT,
     inline: false,
     host: userConfig.WEBPACK_DOMAIN,
     publicPath: `${userConfig.WEBPACK_SERVER}/`,
@@ -68,22 +79,26 @@ function startClientServer(freePort, onDone) {
   };
   const serverConf = userConfig.EDIT_DEV_SERVER_CONFIG(defaultServerConf) || defaultServerConf;
 
-  const compiler = webpack(require('../../webpack/webpack.config.client'));
+  const compiler = webpack(await getWebpackClientConfig());
 
-  const devServer = new WebpackDevServer(compiler, serverConf).listen(freePort, userConfig.WEBPACK_DOMAIN, err => {
-    if (err) {
-      console.error('Dev server failed to start:', err);
-      return;
+  const devServer = new WebpackDevServer(compiler, serverConf).listen(
+    userConfig.WEBPACK_PORT,
+    userConfig.WEBPACK_DOMAIN,
+    err => {
+      if (err) {
+        console.error('Dev server failed to start:', err);
+        return;
+      }
+
+      function abort() {
+        devServer.close();
+        process.exit();
+      }
+
+      process.on('SIGINT', abort);
+      process.on('SIGTERM', abort);
     }
-
-    function abort() {
-      devServer.close();
-      process.exit();
-    }
-
-    process.on('SIGINT', abort);
-    process.on('SIGTERM', abort);
-  });
+  );
 
   /**
    * Hooks into Webpack and gets all of the imported style paths,

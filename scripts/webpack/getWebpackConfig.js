@@ -17,7 +17,7 @@ const { resolveApp, resolveOwn } = require('../paths');
 /**
  * @param {string} target - webpack target (web/node)
  */
-module.exports = target => {
+module.exports = async target => {
   /**
    * Set NODE_ENV to production as a fallback, if it hasn't been set by something else
    */
@@ -26,9 +26,11 @@ module.exports = target => {
   const IS_PRODUCTION = process.env.NODE_ENV === 'production';
   const IS_WEB = target === 'web';
   const IS_NODE = target === 'node';
-  const config = getConfig(target);
+  const config = await getConfig(target);
   const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, config, target };
   const OUTPUT_PATH = IS_NODE ? config.SERVER_BUILD_DIRECTORY : config.BUILD_DIRECTORY;
+  const babelOpts = await getBabelOpts(WEBPACK_CONF_PARAMS);
+  const postCssOpts = await getPostCssOpts(WEBPACK_CONF_PARAMS);
 
   const output = {};
 
@@ -159,7 +161,7 @@ module.exports = target => {
       use: [
         {
           loader: require.resolve('babel-loader'),
-          options: getBabelOpts(WEBPACK_CONF_PARAMS),
+          options: babelOpts,
         },
         { loader: require.resolve('eslint-loader') },
       ],
@@ -189,7 +191,7 @@ module.exports = target => {
         },
         {
           loader: require.resolve('postcss-loader'),
-          options: getPostCssOpts(WEBPACK_CONF_PARAMS),
+          options: postCssOpts,
         },
         { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
         {
@@ -211,7 +213,7 @@ module.exports = target => {
       use: [
         {
           loader: require.resolve('babel-loader'),
-          options: getBabelOpts(WEBPACK_CONF_PARAMS),
+          options: babelOpts,
         },
       ],
     },
@@ -229,7 +231,7 @@ module.exports = target => {
         },
         {
           loader: require.resolve('postcss-loader'),
-          options: getPostCssOpts(WEBPACK_CONF_PARAMS),
+          options: postCssOpts,
         },
         { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
         {

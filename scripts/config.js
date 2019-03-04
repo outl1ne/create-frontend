@@ -1,6 +1,7 @@
 const args = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
 const { resolveApp } = require('./paths');
+const detectPort = require('detect-port');
 
 let odWebpackConfig = {};
 if (fs.existsSync(resolveApp('create-frontend.conf.js'))) {
@@ -11,11 +12,7 @@ if (fs.existsSync(resolveApp('create-frontend.conf.js'))) {
   }
 }
 
-const config = Object.assign(
-  {},
-  require(resolveApp('package.json'))['create-frontend'] || {},
-  odWebpackConfig
-);
+const config = Object.assign({}, require(resolveApp('package.json'))['create-frontend'] || {}, odWebpackConfig);
 function getConfigValue(key, fallback) {
   if (config[key] == null) {
     return fallback;
@@ -23,10 +20,10 @@ function getConfigValue(key, fallback) {
   return config[key];
 }
 
-module.exports = function getConfig(target) {
+module.exports = async function getConfig() {
+  const WEBPACK_PORT = await getPort(args.webpackPort || 3000);
   const IS_DEBUG = !!args.debug;
   const APP_PROTOCOL = args.protocol || 'http';
-  const WEBPACK_PORT = args.webpackPort || 8000;
   const WEBPACK_DOMAIN = args.webpackDomain || 'localhost';
   const WEBPACK_SERVER = `${APP_PROTOCOL}://${WEBPACK_DOMAIN}:${WEBPACK_PORT}`;
   const ENTRY_POINTS = getConfigValue('entryPoints', {
@@ -40,29 +37,17 @@ module.exports = function getConfig(target) {
   const PREPEND_RULES = getConfigValue('prependRules', () => []);
   const EDIT_CONFIG = getConfigValue('editConfig', _ => _);
   const EDIT_DEV_SERVER_CONFIG = getConfigValue('editDevServerConfig', _ => _);
-  const BROWSERS_LIST = getConfigValue('browserslist', [
-    '>1%',
-    'last 3 versions',
-    'not ie < 11',
-  ]);
-  const SERVER_ENTRY_POINT = getConfigValue(
-    'serverEntryPoint',
-    'server/entry.js'
-  );
+  const BROWSERS_LIST = getConfigValue('browserslist', ['>1%', 'last 3 versions', 'not ie < 11']);
+  const SERVER_ENTRY_POINT = getConfigValue('serverEntryPoint', 'server/entry.js');
 
   const APP_DIRECTORY = fs.realpathSync(process.cwd());
-  const SERVER_BUILD_DIRECTORY = resolveApp(
-    getConfigValue('serverBuildPath', 'server/build')
-  );
+  const SERVER_BUILD_DIRECTORY = resolveApp(getConfigValue('serverBuildPath', 'server/build'));
   const BUILD_PATH = getConfigValue('buildPath', 'build');
-  const PUBLIC_DIRECTORY = resolveApp(
-    getConfigValue('publicDirectory', 'public')
-  );
+  const PUBLIC_DIRECTORY = resolveApp(getConfigValue('publicDirectory', 'public'));
   const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);
   const HTML_PATH = resolveApp(getConfigValue('htmlPath', 'client/html'));
   const SERVER_OUTPUT_FILE = 'build-server';
   const MANIFEST_PATH = resolveApp(BUILD_DIRECTORY, 'asset-manifest.json');
-  const DEFAULT_NODE_SERVER_PORT = 3000;
 
   return {
     APP_DIRECTORY,
@@ -89,6 +74,24 @@ module.exports = function getConfig(target) {
     WEBPACK_SERVER,
     SERVER_OUTPUT_FILE,
     MANIFEST_PATH,
-    DEFAULT_NODE_SERVER_PORT,
   };
 };
+
+// Store resolved port so that we get the same one on each getConfig() call,
+// even after the port has already been used by our own logic
+let resolvedPort;
+async function getPort(desiredPort, silent = false) {
+  if (resolvedPort) {
+    return resolvedPort;
+  }
+
+  const WEBPACK_PORT = await detectPort(desiredPort);
+  if (desiredPort !== WEBPACK_PORT && !silent) {
+    console.warn(
+      `⚠️  The webpack port (${desiredPort}) is not available. Using ${WEBPACK_PORT} instead. To use a custom port, pass --webpackPort={port} to frontend-scripts.`
+    );
+  }
+
+  resolvedPort = WEBPACK_PORT;
+  return resolvedPort;
+}

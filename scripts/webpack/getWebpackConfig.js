@@ -150,8 +150,46 @@ module.exports = async target => {
   output.stats = config.IS_DEBUG ? 'verbose' : 'errors-only';
 
   /**
-   * Module: Mainly for loaders. Some loaders are shared, others are specific to dev/prod
+   * Loaders
    */
+  function getStyleLoaders(additionalLoaders) {
+    const loaders = [
+      {
+        loader: require.resolve('css-loader'),
+        options: {
+          importLoaders: 1,
+          sourceMap:
+            (IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS) || (!IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS),
+        },
+      },
+      {
+        loader: require.resolve('postcss-loader'),
+        options: postCssOpts,
+      },
+      { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
+      ...(additionalLoaders || []),
+    ];
+
+    if (IS_PRODUCTION) {
+      loaders.unshift(ExtractPlugin.loader);
+    } else {
+      loaders.unshift(
+        IS_NODE
+          ? { loader: require.resolve('isomorphic-style-loader') }
+          : {
+              loader: require.resolve('style-loader'),
+              options: {
+                attrs: {
+                  // This id will be used to listen for load event
+                  id: 'ocf-client-styles',
+                },
+              },
+            }
+      );
+    }
+
+    return loaders.filter(Boolean);
+  }
 
   const developmentRules = [
     // JS
@@ -166,34 +204,14 @@ module.exports = async target => {
         { loader: require.resolve('eslint-loader') },
       ],
     },
+    {
+      test: /\.css/,
+      use: getStyleLoaders(),
+    },
     // SCSS
     {
       test: /\.(sass|scss)$/,
-      use: [
-        // Disable style-loader for node (doesn't work)
-        IS_NODE
-          ? { loader: require.resolve('isomorphic-style-loader') }
-          : {
-              loader: require.resolve('style-loader'),
-              options: {
-                attrs: {
-                  // This id will be used to listen for load event
-                  id: 'ocf-client-styles',
-                },
-              },
-            },
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            importLoaders: 1,
-            sourceMap: config.ENABLE_DEV_SOURCEMAPS,
-          },
-        },
-        {
-          loader: require.resolve('postcss-loader'),
-          options: postCssOpts,
-        },
-        { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
+      use: getStyleLoaders([
         {
           loader: require.resolve('sass-loader'),
           options: {
@@ -201,7 +219,7 @@ module.exports = async target => {
             sourceMap: true, // resolve-url-loader always needs a sourcemap
           },
         },
-      ].filter(Boolean),
+      ]),
     },
   ];
 
@@ -219,21 +237,12 @@ module.exports = async target => {
     },
     // SCSS - extract from bundle with ExtractPlugin
     {
+      test: /\.css/,
+      use: getStyleLoaders(),
+    },
+    {
       test: /\.(sass|scss)$/,
-      use: [
-        ExtractPlugin.loader,
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            importLoaders: 1,
-            sourceMap: config.ENABLE_PROD_SOURCEMAPS,
-          },
-        },
-        {
-          loader: require.resolve('postcss-loader'),
-          options: postCssOpts,
-        },
-        { loader: require.resolve('resolve-url-loader') }, // Resolves relative paths in url() statements based on the original source file.
+      use: getStyleLoaders([
         {
           loader: require.resolve('sass-loader'),
           options: {
@@ -241,7 +250,7 @@ module.exports = async target => {
             sourceMap: true, // resolve-url-loader always needs a sourcemap
           },
         },
-      ],
+      ]),
     },
   ];
 

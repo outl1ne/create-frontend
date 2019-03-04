@@ -1,4 +1,4 @@
-/** @flow
+/**
  * This function starts a webpack production builds.
  */
 module.exports = (config, report = true) => {

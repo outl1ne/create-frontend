@@ -39,6 +39,7 @@ module.exports = async function getConfig() {
   const EDIT_DEV_SERVER_CONFIG = getConfigValue('editDevServerConfig', _ => _);
   const BROWSERS_LIST = getConfigValue('browserslist', ['>1%', 'last 3 versions', 'not ie < 11']);
   const SERVER_ENTRY_POINT = getConfigValue('serverEntryPoint', 'server/entry.js');
+  const USE_EMOTION = getConfigValue('useEmotion', false);
 
   const APP_DIRECTORY = fs.realpathSync(process.cwd());
   const SERVER_BUILD_DIRECTORY = resolveApp(getConfigValue('serverBuildPath', 'server/build'));
@@ -74,6 +75,7 @@ module.exports = async function getConfig() {
     WEBPACK_SERVER,
     SERVER_OUTPUT_FILE,
     MANIFEST_PATH,
+    USE_EMOTION,
   };
 };
 

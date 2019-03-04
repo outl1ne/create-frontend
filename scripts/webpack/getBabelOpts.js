@@ -1,5 +1,3 @@
-const getConfig = require('../config');
-
 module.exports = async opts => ({
   presets: [
     require.resolve('@babel/preset-react'),
@@ -9,19 +7,19 @@ module.exports = async opts => ({
       {
         modules: false,
         targets: {
-          browsers: await getConfig(opts.target).BROWSERS_LIST,
+          browsers: opts.config.BROWSERS_LIST,
         },
         useBuiltIns: 'entry',
       },
     ],
-    require.resolve('@emotion/babel-preset-css-prop'),
-  ],
+    opts.config.USE_EMOTION && require.resolve('@emotion/babel-preset-css-prop'),
+  ].filter(Boolean),
   plugins: [
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),
     require.resolve('@babel/plugin-transform-runtime'),
-    require.resolve('babel-plugin-emotion'),
+    opts.config.USE_EMOTION && require.resolve('babel-plugin-emotion'),
     [
       require.resolve('babel-plugin-inline-react-svg'),
       {
@@ -36,7 +34,7 @@ module.exports = async opts => ({
         },
       },
     ],
-  ],
+  ].filter(Boolean),
   env: {
     production: {
       plugins: [require.resolve('babel-plugin-transform-react-remove-prop-types')],

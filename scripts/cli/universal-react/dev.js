@@ -27,14 +27,17 @@ module.exports = async () => {
     }
 
     let watching = false;
+    const styleInjectionFileName = 'ocf-style-injection-hack.js';
     let styleInjectionPlugin;
     startClientServer(userConfig, importedStyles => {
       if (!watching) {
         styleInjectionPlugin = new VirtualModulePlugin({
-          'ocf-style-injection-hack.js': getStyleInjectionHack(importedStyles),
+          [styleInjectionFileName]: getStyleInjectionHack(importedStyles),
         });
         startNodeServer(styleInjectionPlugin);
         watching = true;
+      } else {
+        styleInjectionPlugin.writeModule(styleInjectionFileName, getStyleInjectionHack(importedStyles));
       }
     });
   });

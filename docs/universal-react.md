@@ -19,27 +19,27 @@ This template will set up a React project that renders on both the client and se
 /**
  * Client render - renders your react app to the DOM
  *
- * @param reactComponent - The root component of your React app
+ * @param ReactComponent - The root component of your React app
  * @param domNode - DOM node that the React app should be rendered to.
  *
  * @return {undefined}
  */
 import { render } from '@optimistdigital/create-frontend/universal-react/client';
-render(reactComponent, domNode);
+render(ReactComponent, domNode);
 ```
 
 ```js
 /**
  * Server render - renders your react app to string
  *
- * @param reactComponent - The root component of your React app
+ * @param ReactComponent - The root component of your React app
  * @param request - The request object from the server
- * @param config - App's configuration that will be exposed to the React app
+ * @param config - App configuration that will be exposed to the React app
  *
  * @return {string}
  */
 import { render } from '@optimistdigital/create-frontend/universal-react/server';
-const string = render(reactComponent, request, config);
+const string = render(ReactComponent, request, config);
 ```
 
 ## Configuration

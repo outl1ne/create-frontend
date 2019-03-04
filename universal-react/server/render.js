@@ -6,18 +6,18 @@ import { AppDataContext } from '../index';
 /**
  * Server render - renders your react app to string
  *
- * @param reactComponent - The root component of your React app
+ * @param ReactComponent - The root component of your React app
  * @param request - The request object from the server
- * @param config - App's configuration that will be exposed to the React app
+ * @param config - App configuration that will be exposed to the React app
  *
  * @return {string}
  */
-export default async function renderOnServer(App, req, config) {
+export default async function renderOnServer(ReactComponent, req, config) {
   const appData = { config };
   return wrapInDocument(
     ReactDOMServer.renderToString(
       <AppDataContext.Provider value={appData}>
-        <App />
+        <ReactComponent />
       </AppDataContext.Provider>
     ),
     appData

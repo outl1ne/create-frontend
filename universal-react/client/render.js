@@ -5,12 +5,12 @@ import { AppDataContext } from '../index';
 /**
  * Client render - renders your react app to the DOM
  *
- * @param reactComponent - The root component of your React app
+ * @param ReactComponent - The root component of your React app
  * @param domNode - DOM node that the React app should be rendered to.
  *
  * @return {undefined}
  */
-export default async function renderOnClient(App, domNode) {
+export default async function renderOnClient(ReactComponent, domNode) {
   /**
    * Delete server styles once the client-side version loaded
    */
@@ -24,7 +24,7 @@ export default async function renderOnClient(App, domNode) {
 
   ReactDOM.hydrate(
     <AppDataContext.Provider value={window.__OCF_APP_DATA__}>
-      <App />
+      <ReactComponent />
     </AppDataContext.Provider>,
     domNode
   );

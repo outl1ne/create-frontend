@@ -6,7 +6,7 @@ import http from 'http';
 import detectPort from 'detect-port';
 require('dotenv').load();
 
-const SERVER_PORT = +(process.env.SERVER_PORT || 3000);
+const SERVER_PORT = +(process.env.SERVER_PORT || 8000);
 let app = require('./server').default;
 const server = http.createServer(app);
 let currentApp = app;

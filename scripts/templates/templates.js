@@ -52,7 +52,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
       react: '^16.8.2',
       'react-dom': '^16.8.2',
     },
-    mergeDefaultFiles: true,
+    mergeDefaultFiles: false,
     templatePath: path.resolve(__dirname, 'universal-react'),
     // prettier-ignore
     packageJson: {
@@ -69,6 +69,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
       'dependencies': {
         '@babel/polyfill': '^7.2.5',
         '@babel/runtime': '7.3.4',
+        '@emotion/core': '^10.0.7',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'eslint-plugin-flowtype': '^3.4.2',
         'eslint-plugin-import': '^2.16.0',

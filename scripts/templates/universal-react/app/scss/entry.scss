@@ -1,0 +1,14 @@
+@import 'normalize.css/normalize.css';
+@import 'config';
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    // 320px is the smallest mobile device, so we don't have to support smaller screens than that.
+    min-width: 320px;
+    box-sizing: border-box;
+}

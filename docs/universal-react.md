@@ -2,16 +2,68 @@
 
 This template will set up a React project that renders on both the client and server with Node.js.
 
-It comes with some extra features by default:
-
--   [React Router](https://github.com/ReactTraining/react-router)
--   [inline-react-svg plugin](https://github.com/airbnb/babel-plugin-inline-react-svg) for easily rendering SVGs
-
-There is an additional CLI scripts:
+**Additional CLI scripts:**
 
 -   `npm run start` - Starts the production server
 
-There are some additional configuration options:
+**Additional configuration options:**
 
 -   `serverEntryPoint` (_server/entry.js_) - Entry point for your server.
 -   `serverBuildPath` (_server/build_) - Where the compiled server will be built. Relative to project root.
+
+## Rendering
+
+`create-frontend` exposes render functions that take care of rendering the React app on the server and client:
+
+```js
+/**
+ * Client render - renders your react app to the DOM
+ *
+ * @param reactComponent - The root component of your React app
+ * @param domNode - DOM node that the React app should be rendered to.
+ *
+ * @return {undefined}
+ */
+import { render } from '@optimistdigital/create-frontend/universal-react/client';
+render(reactComponent, domNode);
+```
+
+```js
+/**
+ * Server render - renders your react app to string
+ *
+ * @param reactComponent - The root component of your React app
+ * @param request - The request object from the server
+ * @param config - App's configuration that will be exposed to the React app
+ *
+ * @return {string}
+ */
+import { render } from '@optimistdigital/create-frontend/universal-react/server';
+const string = render(reactComponent, request, config);
+```
+
+## Configuration
+
+The `server/config.js` file contains your app configuration. You can define values here that will be accessed throughout your app.
+The configuration is available in React components (both server and client) through the **AppDataContext**:
+
+```js
+import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+
+// With hooks API
+function Header() {
+    const { config } = React.useContext(AppDataContext);
+    return <div>{config.APP_NAME}</div>;
+}
+
+// With consumer API
+function Header() {
+    return (
+        <AppDataContext.Consumer>
+            {({ config }) => {
+                return <div>{config.APP_NAME}</div>;
+            }}
+        </AppDataContext.Consumer>
+    );
+}
+```

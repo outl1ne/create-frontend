@@ -49,7 +49,7 @@ module.exports = async target => {
    */
   if (IS_NODE) {
     output.externals = nodeExternals({
-      whitelist: ['webpack/hot/poll?300', /^@optimistdigital\/create-frontend\/universal-react\/.*/],
+      whitelist: ['webpack/hot/poll?300', /^@optimistdigital\/create-frontend\/universal-react.*/],
     });
   }
 

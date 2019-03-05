@@ -20,7 +20,7 @@ export default function wrapInDocument(content, appData) {
     ${helmet.meta.toString()}
     ${helmet.link.toString()}
     ${manifest['app.css'] ? `<link rel="stylesheet" href="${manifest['app.css']}">` : ''}
-    ${styles && `<style id="ocf-server-styles">${styles}</style>`}
+    ${styles && `<style id="ocf-server-styles">${styles.join('\n')}</style>`}
   </head>
   <body ${helmet.bodyAttributes.toString()}>
     <div id="react-app">${content}</div>

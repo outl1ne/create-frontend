@@ -3,20 +3,20 @@ import 'app/scss/entry.scss';
 import React from 'react';
 import { Helmet } from 'react-helmet';
 
-export type Props = {};
+export default function App() {
+  const { pageData } = React.useContext(AppDataContext);
 
-export default class App extends React.Component {
-  props: Props;
+  return (
+    <div>
+      <Helmet>
+        <title>Page title</title>
+      </Helmet>
 
-  render() {
-    return (
-      <div>
-        <div>Hello world!</div>
-
-        <Helmet>
-          <title>Page title</title>
-        </Helmet>
-      </div>
-    );
-  }
+      <h1>Hello world!</h1>
+    </div>
+  );
 }
+
+App.getPageData = async ({ req }) => ({
+  url: req.url,
+});

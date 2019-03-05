@@ -4,8 +4,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 export default function App() {
-  const { pageData } = React.useContext(AppDataContext);
-
   return (
     <div>
       <Helmet>
@@ -17,6 +15,4 @@ export default function App() {
   );
 }
 
-App.getPageData = async ({ req }) => ({
-  url: req.url,
-});
+App.getPageData = async () => ({});

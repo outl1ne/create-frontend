@@ -70,6 +70,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         '@babel/polyfill': '^7.2.5',
         '@babel/runtime': '7.3.4',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
+        'detect-port': '^1.3.0',
+        'dotenv': '^6.2.0',
         'eslint-plugin-flowtype': '^3.4.2',
         'eslint-plugin-import': '^2.16.0',
         'eslint-plugin-react': '^7.12.4',
@@ -78,7 +80,12 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'normalize.css': '8.x.x',
         'react-helmet': '^5.2.0',
       },
-    }
+    },
+    postGenerationMessages: [
+      'For development, type `npm run dev`.',
+      'For production, type `npm run build` to build and `npm run start` to serve.',
+      'Documentation: https://github.com/optimistdigital/create-frontend/blob/feature/universal-react/docs/universal-react.md',
+    ],
   };
 
   const templates = {

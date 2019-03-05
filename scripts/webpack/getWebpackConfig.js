@@ -12,7 +12,7 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
-const { resolveApp, resolveOwn } = require('../paths');
+const { resolveApp } = require('../paths');
 
 /**
  * @param {string} target - webpack target (web/node)
@@ -139,8 +139,11 @@ module.exports = async target => {
    */
 
   output.resolve = {
-    modules: [resolveApp('.'), resolveApp('node_modules'), resolveOwn('node_modules')],
+    modules: ['node_modules', resolveApp('node_modules'), resolveApp('.')],
     extensions: ['.mjs', '.json', '.js', '.jsx', '.vue', '.css'],
+    alias: {
+      'webpack/hot/poll': require.resolve('webpack/hot/poll'),
+    },
   };
 
   /**
@@ -330,15 +333,6 @@ module.exports = async target => {
         output: config.MANIFEST_PATH,
         publicPath: true,
         writeToDisk: true,
-      })
-    );
-  }
-
-  /* DEBUG PLUGINS */
-  if (config.IS_DEBUG) {
-    output.plugins.push(
-      new (require('webpack-visualizer-plugin'))({
-        filename: './stats.html',
       })
     );
   }

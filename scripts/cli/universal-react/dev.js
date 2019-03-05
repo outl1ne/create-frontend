@@ -54,9 +54,14 @@ async function startNodeServer(styleInjectionPlugin) {
     config.plugins = [...(config.plugins || []), styleInjectionPlugin];
     const compiler = webpack(config);
 
-    compiler.watch({}, () => null);
+    compiler.watch({}, (err, stats) => {
+      const errors = err ? [err] : stats.compilation.errors;
+      if (errors && errors.length > 0) {
+        console.error('❌  Error during node dev server compilation', errors);
+      }
+    });
   } catch (err) {
-    console.error('Node dev server failed to start:', err);
+    console.error('❌  Node dev server failed to start:', err);
   }
 }
 

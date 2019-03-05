@@ -75,8 +75,7 @@ function init() {
 
   // Get array of template paths
   const templatePaths = [template.templatePath];
-  if (template.mergeDefaultFiles === true)
-    templatePaths.unshift(getTemplate('default', templateOpts).templatePath);
+  if (template.mergeDefaultFiles === true) templatePaths.unshift(getTemplate('default', templateOpts).templatePath);
 
   // Check if cwd has conflicting ciles
   const existingFrontendFiles = findExistingFrontendFiles(templatePaths);
@@ -100,9 +99,7 @@ function init() {
       );
       info(existingFrontendFiles.map(name => `- ${name}`).join('\n'));
       info('');
-      info(
-        `If you wish to overwrite these files, run this command with the --overwrite flag.`
-      );
+      info(`If you wish to overwrite these files, run this command with the --overwrite flag.`);
 
       return;
     }
@@ -119,6 +116,7 @@ function init() {
     fs.copySync(templatePath, CURRENT_DIR);
   });
 
+  info('');
   success('Optimist frontend boilerplate created.');
   info('');
 
@@ -128,9 +126,15 @@ function init() {
     .then(res => {
       log(res.stderr);
       success('Done!');
-      info('For development, type `npm run dev`.');
-      info('For production, type `npm run build`.');
-      info('Documentation: https://github.com/optimistdigital/create-frontend');
+      (
+        template.postGenerationMessages || [
+          'For development, type `npm run dev`.',
+          'For production, type `npm run build`.',
+          'Documentation: https://github.com/optimistdigital/create-frontend',
+        ]
+      ).forEach(msg => {
+        info(msg);
+      });
     })
     .catch(err => {
       error('Installing node modules failed:', err.message);

@@ -2,6 +2,14 @@
 
 This template will set up a React project that renders on both the client and server with Node.js.
 
+## Usage
+
+1. In Bash, navigate into your project directory
+2. Type `npx @optimistdigital/create-frontend --template=universal-react` to install the toolkit
+3. Type `npm run dev` to start developing
+
+The configuration and commands are the same as with the default template, but there are some additional options:
+
 **Additional CLI scripts:**
 
 -   `npm run start` - Starts the production server
@@ -13,7 +21,7 @@ This template will set up a React project that renders on both the client and se
 
 ## Rendering
 
-`create-frontend` exposes render functions that take care of rendering the React app on the server and client:
+Create-Frontend exposes render functions that take care of rendering the React app on the server and client:
 
 ```js
 /**
@@ -50,30 +58,18 @@ The configuration is available in React components (both server and client) thro
 ```js
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
 
-// With hooks API
 function Header() {
     const { config } = React.useContext(AppDataContext);
     return <div>{config.APP_NAME}</div>;
 }
-
-// With consumer API
-function Header() {
-    return (
-        <AppDataContext.Consumer>
-            {({ config }) => {
-                return <div>{config.APP_NAME}</div>;
-            }}
-        </AppDataContext.Consumer>
-    );
-}
 ```
+
+Note that this example uses the hooks API, but other [context API's](https://reactjs.org/docs/context.html#api) work as well.
 
 ## Server-side data fetching
 
 Your top level App component can have a static function called `getPageData` that returns a promise.
 The result of this promise will be available on the client and server through AppDataContext.
-
-PS! This only works on the top level component that you pass to render, not any children.
 
 ```js
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
@@ -88,3 +84,5 @@ App.getPageData = async ({ req }) => ({
     url: req.url,
 });
 ```
+
+PS! This only works on the top level component that you pass to render, not any children.

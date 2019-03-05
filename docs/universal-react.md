@@ -70,20 +70,21 @@ function Header() {
 
 ## Server-side data fetching
 
-You can add a static function called getPageData to your App component that returns a promise.
+Your top level App component can have a static function called `getPageData` that returns a promise.
 The result of this promise will be available on the client and server through AppDataContext.
 
+PS! This only works on the top level component that you pass to render, not any children.
+
 ```js
-export default class App extends React.Component {
-    /**
-     * @param context
-     * @param context.req - The request object from the server
-     */
-    static async getPageData({ req }) {
-        // Make async network requests here
-        return {
-            url: req.url,
-        };
-    }
+import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+import React from 'react';
+
+export default function App() {
+    const { pageData } = React.useContext(AppDataContext);
+    return <div>{pageData.url}</div>;
 }
+
+App.getPageData = async ({ req }) => ({
+    url: req.url,
+});
 ```

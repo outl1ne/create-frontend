@@ -16,7 +16,7 @@ export default async function renderOnServer(ReactComponent, req, config) {
   const appData = { config };
 
   if (typeof ReactComponent.getPageData === 'function') {
-    appData.asyncData = await ReactComponent.getPageData({ req });
+    appData.pageData = await ReactComponent.getPageData({ req });
   }
 
   return wrapInDocument(

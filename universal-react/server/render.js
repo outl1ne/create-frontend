@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import wrapInDocument from './wrapInDocument';
 import { AppDataContext } from '../index';
+import { HelmetProvider } from 'react-helmet-async';
 
 /**
  * Server render - renders your react app to string
@@ -15,16 +16,24 @@ import { AppDataContext } from '../index';
 export default async function renderOnServer(ReactComponent, req, config) {
   const appData = { config };
 
+  /**
+   * Fetch async data
+   */
   if (typeof ReactComponent.getPageData === 'function') {
     appData.pageData = await ReactComponent.getPageData({ req });
   }
 
-  return wrapInDocument(
-    ReactDOMServer.renderToString(
-      <AppDataContext.Provider value={appData}>
+  const helmetContext = {};
+  /**
+   * Render app to string
+   */
+  const appString = ReactDOMServer.renderToString(
+    <AppDataContext.Provider value={appData}>
+      <HelmetProvider context={helmetContext}>
         <ReactComponent />
-      </AppDataContext.Provider>
-    ),
-    appData
+      </HelmetProvider>
+    </AppDataContext.Provider>
   );
+
+  return wrapInDocument(appString, appData, helmetContext);
 }

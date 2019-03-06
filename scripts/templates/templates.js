@@ -78,7 +78,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'eslint': '^5.13.0',
         'express': '^4.16.4',
         'normalize.css': '8.x.x',
-        'react-helmet': '^5.2.0',
+        'react-helmet-async': '^0.2.0',
       },
     },
     postGenerationMessages: [

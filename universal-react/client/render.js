@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppDataContext } from '../index';
+import { HelmetProvider } from 'react-helmet-async';
 
 /**
  * Client render - renders your react app to the DOM
@@ -24,7 +25,9 @@ export default async function renderOnClient(ReactComponent, domNode) {
 
   ReactDOM.hydrate(
     <AppDataContext.Provider value={window.__OCF_APP_DATA__}>
-      <ReactComponent />
+      <HelmetProvider>
+        <ReactComponent />
+      </HelmetProvider>
     </AppDataContext.Provider>,
     domNode
   );

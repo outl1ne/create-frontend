@@ -42,6 +42,8 @@ module.exports = (config, report = true) => {
             children: false,
             chunks: false,
             modules: false,
+            version: false,
+            hash: false,
             assetsSort: 'name',
           })
         );

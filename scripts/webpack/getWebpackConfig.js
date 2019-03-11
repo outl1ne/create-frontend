@@ -165,7 +165,9 @@ module.exports = async target => {
     ];
 
     if (IS_PRODUCTION) {
-      loaders.unshift(ExtractPlugin.loader);
+      if (IS_WEB) {
+        loaders.unshift(ExtractPlugin.loader);
+      }
     } else {
       loaders.unshift(
         IS_NODE

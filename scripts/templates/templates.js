@@ -74,7 +74,6 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
       },
       'dependencies': {
         '@babel/polyfill': '^7.2.5',
-        '@babel/runtime': '7.3.4',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'detect-port': '^1.3.0',
         'dotenv': '^6.2.0',

@@ -38,5 +38,6 @@ module.exports = {
     __PRODUCTION__: true,
     __DEBUG__: true,
     __OCF_MANIFEST_PATH__: true,
+    __TARGET__: true,
   },
 };

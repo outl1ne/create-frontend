@@ -1,19 +1,30 @@
-// SCSS entry. In production, the contents are extracted into a separate file. In dev, JS loads the CSS dynamically.
 import 'app/scss/entry.scss';
-import React from 'react';
+import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+import { Switch, Route } from 'react-router-dom';
 import Helmet from 'react-helmet-async';
+import HomePage from 'app/pages/HomePage';
+import React from 'react';
+import Router from '@optimistdigital/create-frontend/universal-react/Router';
 
 export default function App() {
+  const { pageData } = React.useContext(AppDataContext);
+
   return (
-    <div>
+    <React.Fragment>
       <Helmet>
         <title>Page title</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 
-      <h1>Hello world!</h1>
-    </div>
+      <Router url={pageData.url}>
+        <Switch>
+          <Route path="/" component={HomePage} />
+        </Switch>
+      </Router>
+    </React.Fragment>
   );
 }
 
-App.getPageData = async () => ({});
+App.getPageData = async ({ req }) => ({
+  url: req.url,
+});

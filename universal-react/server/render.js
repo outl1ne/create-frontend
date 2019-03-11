@@ -14,6 +14,7 @@ import { HelmetProvider } from 'react-helmet-async';
  * @return {string}
  */
 export default async function renderOnServer(ReactComponent, req, config) {
+  const serverContext = {};
   const appData = { config };
 
   /**
@@ -28,12 +29,15 @@ export default async function renderOnServer(ReactComponent, req, config) {
    * Render app to string
    */
   const appString = ReactDOMServer.renderToString(
-    <AppDataContext.Provider value={appData}>
+    <AppDataContext.Provider value={{ ...appData, serverContext }}>
       <HelmetProvider context={helmetContext}>
         <ReactComponent />
       </HelmetProvider>
     </AppDataContext.Provider>
   );
 
-  return wrapInDocument(appString, appData, helmetContext);
+  return {
+    content: wrapInDocument(appString, appData, helmetContext),
+    context: serverContext,
+  };
 }

@@ -1,3 +1,3 @@
-import AppDataContext from './shared/AppDataContext';
+import AppDataContext from './AppDataContext';
 
 export { AppDataContext };

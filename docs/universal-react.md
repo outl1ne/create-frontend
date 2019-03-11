@@ -17,7 +17,7 @@ The configuration and commands are the same as with the default template, but th
 **Additional configuration options:**
 
 -   `serverEntryPoint` (_server/entry.js_) - Entry point for your server.
--   `serverBuildPath` (_server/build_) - Where the compiled server will be built. Relative to project root.
+-   `serverBuildPath` (_build/server_) - Where the compiled server will be built. Relative to project root.
 
 ## Rendering
 
@@ -86,3 +86,23 @@ App.getPageData = async ({ req }) => ({
 ```
 
 PS! This only works on the top level component that you pass to render, not any children.
+
+## React-Router
+
+We have a wrapper around [React-Router](https://github.com/ReactTraining/react-router) that handles the
+client/server differences, and passes information about status codes and redirects to the server.
+To use it, wrap your application around the Router and pass the current URL:
+
+```js
+import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+import Router from '@optimistdigital/create-frontend/universal-react/Router';
+
+export default function App() {
+    const { pageData } = React.useContext(AppDataContext);
+    return <Router url={pageData.url}>Your app content goes here</Router>;
+}
+
+App.getPageData = async ({ req }) => ({
+    url: req.url,
+});
+```

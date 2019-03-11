@@ -59,7 +59,13 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
       'name': name,
       'version': '0.1.0',
       'private': true,
-      'create-frontend': {},
+      'create-frontend': {
+        "publicDirectory": "build",
+        "buildPath": "client",
+        "entryPoints": {
+          "app": "client/entry.js",
+        }
+      },
       'scripts': {
         'dev': 'frontend-scripts dev-universal-react',
         'build': 'frontend-scripts build-universal-react',
@@ -79,6 +85,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'express': '^4.16.4',
         'normalize.css': '8.x.x',
         'react-helmet-async': '^0.2.0',
+        'react-router': '^4.3.1',
+        'react-router-dom': '^4.3.1'
       },
     },
     postGenerationMessages: [

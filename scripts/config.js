@@ -42,7 +42,7 @@ module.exports = async function getConfig() {
   const USE_EMOTION = getConfigValue('useEmotion', false);
 
   const APP_DIRECTORY = fs.realpathSync(process.cwd());
-  const SERVER_BUILD_DIRECTORY = resolveApp(getConfigValue('serverBuildPath', 'server/build'));
+  const SERVER_BUILD_DIRECTORY = resolveApp(getConfigValue('serverBuildPath', 'build/server'));
   const BUILD_PATH = getConfigValue('buildPath', 'build');
   const PUBLIC_DIRECTORY = resolveApp(getConfigValue('publicDirectory', 'public'));
   const BUILD_DIRECTORY = resolveApp(PUBLIC_DIRECTORY, BUILD_PATH);

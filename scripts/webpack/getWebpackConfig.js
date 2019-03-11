@@ -319,6 +319,7 @@ module.exports = async target => {
     ),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+      __TARGET__: JSON.stringify(target),
       __DEVELOPMENT__: !IS_PRODUCTION,
       __PRODUCTION__: IS_PRODUCTION,
       __DEBUG__: process.env.APP_DEBUG === 'true',

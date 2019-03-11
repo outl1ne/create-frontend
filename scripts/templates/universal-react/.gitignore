@@ -1,5 +1,4 @@
-/server/build-server
-/asset-manifest.json
+/build
 /node_modules
 .DS_Store
 .vscode

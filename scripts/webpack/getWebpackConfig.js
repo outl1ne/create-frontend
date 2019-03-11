@@ -67,12 +67,7 @@ module.exports = async target => {
   /**
    * Optimization
    */
-  // output.optimization = {
-  //   minimize: false,
-  // };
   if (IS_PRODUCTION && IS_WEB) {
-    console.log('doing minimizer');
-
     output.optimization = {
       minimize: true,
       minimizer: [

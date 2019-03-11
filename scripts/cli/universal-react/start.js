@@ -1,12 +1,10 @@
+process.env.NODE_ENV = 'production';
+require('dotenv').load();
+
 const getConfig = require('../../config');
 
 module.exports = async () => {
   const serverConfig = await getConfig('node');
-  /**
-   * Initialize configuration
-   */
-  require('dotenv').load();
-  process.env.NODE_ENV = 'production';
 
   /**
    * Handle errors

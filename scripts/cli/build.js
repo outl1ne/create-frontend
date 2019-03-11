@@ -1,3 +1,6 @@
+process.env.NODE_ENV = 'production';
+require('dotenv').load();
+
 /**
  * This function starts a webpack production builds.
  */
@@ -5,12 +8,6 @@ module.exports = (config, report = true) => {
   const log = (...args) => (report ? console.log(...args) : null);
 
   return new Promise((resolve, reject) => {
-    /**
-     * Load environment variables from .env
-     */
-    require('dotenv').load();
-    process.env.NODE_ENV = 'production';
-
     const webpack = require('webpack');
 
     log('Building...');

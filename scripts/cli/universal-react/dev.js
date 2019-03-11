@@ -1,3 +1,6 @@
+process.env.NODE_ENV = 'development';
+require('dotenv').load();
+
 const detectPort = require('detect-port');
 const getConfig = require('../../config');
 const webpack = require('webpack');
@@ -7,10 +10,6 @@ const path = require('path');
 const VirtualModulePlugin = require('webpack-virtual-modules');
 const getWebpackClientConfig = require('../../webpack/webpack.config.client');
 const getWebpackServerConfig = require('../../webpack/webpack.config.server');
-
-require('dotenv').load();
-
-process.env.NODE_ENV = 'development';
 
 module.exports = async () => {
   console.log('🚧  Starting dev server...');

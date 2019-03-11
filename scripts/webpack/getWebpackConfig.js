@@ -18,11 +18,6 @@ const { resolveApp } = require('../paths');
  * @param {string} target - webpack target (web/node)
  */
 module.exports = async target => {
-  /**
-   * Set NODE_ENV to production as a fallback, if it hasn't been set by something else
-   */
-  process.env.NODE_ENV = process.env.NODE_ENV || 'production';
-
   const IS_PRODUCTION = process.env.NODE_ENV === 'production';
   const IS_WEB = target === 'web';
   const IS_NODE = target === 'node';
@@ -76,6 +71,8 @@ module.exports = async target => {
   //   minimize: false,
   // };
   if (IS_PRODUCTION && IS_WEB) {
+    console.log('doing minimizer');
+
     output.optimization = {
       minimize: true,
       minimizer: [

@@ -37,7 +37,7 @@ module.exports = async function getConfig() {
   const PREPEND_RULES = getConfigValue('prependRules', () => []);
   const EDIT_CONFIG = getConfigValue('editConfig', _ => _);
   const EDIT_DEV_SERVER_CONFIG = getConfigValue('editDevServerConfig', _ => _);
-  const BROWSERS_LIST = getConfigValue('browserslist', ['>1%', 'last 3 versions', 'not ie < 11']);
+  const BROWSERS_LIST = getConfigValue('browserslist', ['> 0.2%', 'last 1 version', 'not dead']);
   const SERVER_ENTRY_POINT = getConfigValue('serverEntryPoint', 'server/entry.js');
   const USE_EMOTION = getConfigValue('useEmotion', false);
 

@@ -6,15 +6,14 @@ module.exports = async opts => ({
       require.resolve('@babel/preset-env'),
       {
         modules: false,
-        targets: {
-          browsers: opts.config.BROWSERS_LIST,
-        },
+        targets: opts.config.BROWSERS_LIST,
         useBuiltIns: 'entry',
       },
     ],
     opts.config.USE_EMOTION && require.resolve('@emotion/babel-preset-css-prop'),
   ].filter(Boolean),
   plugins: [
+    require.resolve('babel-plugin-dev-expression'),
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),

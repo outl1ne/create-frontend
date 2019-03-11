@@ -44,6 +44,8 @@ function logStats(stats, name) {
         children: false,
         chunks: false,
         modules: false,
+        version: false,
+        hash: false,
         assetsSort: 'name',
       })
     );

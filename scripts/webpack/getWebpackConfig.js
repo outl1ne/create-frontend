@@ -66,6 +66,14 @@ module.exports = async target => {
   }
 
   /**
+   * Performance
+   */
+  output.performance = {
+    maxEntrypointSize: 512 * 1024,
+    maxAssetSize: 1024 * 1024,
+  };
+
+  /**
    * Optimization
    */
   if (IS_PRODUCTION && IS_WEB) {

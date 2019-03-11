@@ -27,7 +27,7 @@ module.exports = async () => {
     }
 
     let watching = false;
-    const styleInjectionFileName = 'ocf-style-injection-hack.js';
+    const styleInjectionFileName = 'ocf-dev-styles.js';
     let styleInjectionPlugin;
     startClientServer(userConfig, importedStyles => {
       if (!watching) {

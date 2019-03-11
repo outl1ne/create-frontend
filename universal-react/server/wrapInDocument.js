@@ -6,7 +6,7 @@ const manifest = JSON.parse(fs.readFileSync(__OCF_MANIFEST_PATH__, 'utf8'));
 
 export default function wrapInDocument(content, appData, helmetContext) {
   /* Get dev-only styles, to prevent FOUC. This is a virtual file injected by the dev server. */
-  const styles = __DEVELOPMENT__ ? require('ocf-style-injection-hack.js') : [];
+  const styles = __DEVELOPMENT__ ? require('ocf-dev-styles.js') : [];
 
   /* Get page meta data from react-helmet */
   const { helmet } = helmetContext;

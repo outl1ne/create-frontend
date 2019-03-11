@@ -82,17 +82,12 @@ module.exports = async function getConfig() {
 // Store resolved port so that we get the same one on each getConfig() call,
 // even after the port has already been used by our own logic
 let resolvedPort;
-async function getPort(desiredPort, silent = false) {
+async function getPort(desiredPort) {
   if (resolvedPort) {
     return resolvedPort;
   }
 
   const WEBPACK_PORT = await detectPort(desiredPort);
-  if (desiredPort !== WEBPACK_PORT && !silent) {
-    console.warn(
-      `⚠️  The webpack port (${desiredPort}) is not available. Using ${WEBPACK_PORT} instead. To use a custom port, pass --webpackPort={port} to frontend-scripts.`
-    );
-  }
 
   resolvedPort = WEBPACK_PORT;
   return resolvedPort;

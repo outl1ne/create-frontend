@@ -12,6 +12,7 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { resolveApp } = require('../paths');
 
 /**
@@ -80,6 +81,7 @@ module.exports = async target => {
             drop_console: IS_WEB && !config.IS_DEBUG,
           },
         }),
+        new OptimizeCssAssetsPlugin({}),
       ],
     };
   } else {

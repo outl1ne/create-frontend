@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'production';
 require('dotenv').load();
 
 /**
- * This function starts a webpack production builds.
+ * This function starts a webpack production build.
  */
 module.exports = (config, report = true) => {
   const log = (...args) => (report ? console.log(...args) : null);

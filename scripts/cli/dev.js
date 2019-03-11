@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'development';
 require('dotenv').load();
 
 /**
- * This function starts a webpack production builds.
+ * This function starts a webpack dev server.
  */
 module.exports = async () => {
   const WebpackDevServer = require('webpack-dev-server');

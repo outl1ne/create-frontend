@@ -3,6 +3,7 @@ module.exports = {
   rules: {
     'flowtype/define-flow-type': 1,
     'react/jsx-indent': 0,
+    'no-param-reassign': 0,
     'new-cap': [
       1,
       {
@@ -19,7 +20,7 @@ module.exports = {
   },
   settings: {
     react: {
-      "version": "detect"
+      version: 'detect',
     },
   },
   plugins: ['import', 'react', 'flowtype'],
@@ -36,5 +37,7 @@ module.exports = {
     __DEVELOPMENT__: true,
     __PRODUCTION__: true,
     __DEBUG__: true,
+    __OCF_MANIFEST_PATH__: true,
+    __TARGET__: true,
   },
 };

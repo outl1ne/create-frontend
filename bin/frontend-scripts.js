@@ -1,21 +1,41 @@
 #!/usr/bin/env node
+require('dotenv').load();
 
 const args = process.argv.slice(2);
-
-const scriptIndex = args.findIndex(
-  x => x === 'build' || x === 'eject' || x === 'start' || x === 'test'
-);
-const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
-const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
+const script = args[0];
+const parsedArgs = require('minimist')(args.slice(1, args.length));
+const getWebpackClientConfig = require('../scripts/webpack/webpack.config.client');
 
 switch (script) {
-  case 'dev':
-    require('../scripts/dev')(nodeArgs);
-    return;
-  case 'build':
-    require('../scripts/build')(nodeArgs);
-    return;
-  default:
+  case 'dev': {
+    process.env.NODE_ENV = 'development';
+    require('../scripts/cli/dev')();
+    break;
+  }
+  case 'build': {
+    process.env.NODE_ENV = 'production';
+    getWebpackClientConfig().then(webpackConfig => {
+      require('../scripts/cli/build')(webpackConfig);
+    });
+    break;
+  }
+  case 'build-universal-react': {
+    process.env.NODE_ENV = 'production';
+    require('../scripts/cli/universal-react/build')();
+    break;
+  }
+  case 'dev-universal-react': {
+    process.env.NODE_ENV = 'development';
+    require('../scripts/cli/universal-react/dev')(parsedArgs);
+    break;
+  }
+  case 'start-universal-react': {
+    process.env.NODE_ENV = 'production';
+    require('../scripts/cli/universal-react/start')(parsedArgs);
+    break;
+  }
+  default: {
     console.error(`Script not found: ${script}`);
     break;
+  }
 }

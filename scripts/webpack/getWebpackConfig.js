@@ -9,7 +9,7 @@ const getPostCssOpts = require('./getPostCssOpts');
 const readFiles = require('fs-readdir-recursive');
 const HtmlPlugin = require('html-webpack-plugin');
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
 const { resolveApp } = require('../paths');
@@ -76,14 +76,13 @@ module.exports = async target => {
     output.optimization = {
       minimize: true,
       minimizer: [
-        new UglifyJsPlugin({
+        new TerserPlugin({
+          cache: true,
+          parallel: true,
           sourceMap: config.ENABLE_PROD_SOURCEMAPS,
-          uglifyOptions: {
-            compress: {
-              warnings: false,
-              drop_console: IS_WEB && !config.IS_DEBUG,
-            },
-            output: { comments: false },
+          terserOptions: {
+            warnings: false,
+            drop_console: IS_WEB && !config.IS_DEBUG,
           },
         }),
       ],

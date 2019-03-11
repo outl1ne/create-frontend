@@ -18,7 +18,7 @@ export default function App() {
 
       <Router url={pageData.url}>
         <Switch>
-          <Route path="/" component={HomePage} />
+          <Route exact path="/" component={HomePage} />
         </Switch>
       </Router>
     </React.Fragment>

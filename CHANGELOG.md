@@ -1,5 +1,13 @@
 # Changelog
 
+## [8.0.0] - Unreleased
+
+-   Adds [Universal React template](docs/universal-react.md).
+-   Adds opt-in [Emotion.js](https://github.com/emotion-js/emotion) support
+-   Adds [babel-plugin-inline-react-svg](https://github.com/airbnb/babel-plugin-inline-react-svg) by default
+-   A free webpack port now gets picked automatically, if the default one is taken by another process
+-   Many minor changes in implementation details - there shouldn't be any breaking changes, but undocumented functionality might change
+
 ## [7.0.0] - 2019-02-18
 
 -   Updated dependencies and internal configuration. No external breaking changes.

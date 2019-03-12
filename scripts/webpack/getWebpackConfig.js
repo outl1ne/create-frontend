@@ -27,6 +27,8 @@ module.exports = async target => {
   const OUTPUT_PATH = IS_NODE ? config.SERVER_BUILD_DIRECTORY : config.BUILD_DIRECTORY;
   const babelOpts = await getBabelOpts(WEBPACK_CONF_PARAMS);
   const postCssOpts = await getPostCssOpts(WEBPACK_CONF_PARAMS);
+  const babelExcludes = /node_modules\/(?!(@optimistdigital\/create-frontend)\/).*/; // Exclude everything except create-frontend code
+  const nodeExternalsWhitelist = ['webpack/hot/poll?300', /^@optimistdigital\/create-frontend\/universal-react.*/]; // Exclude everything except some hot reload logic, and create-frontend code
 
   const output = {};
 
@@ -45,7 +47,7 @@ module.exports = async target => {
    */
   if (IS_NODE) {
     output.externals = nodeExternals({
-      whitelist: ['webpack/hot/poll?300', /^@optimistdigital\/create-frontend\/universal-react.*/],
+      whitelist: nodeExternalsWhitelist,
     });
   }
 
@@ -201,7 +203,7 @@ module.exports = async target => {
     // JS
     {
       test: /\.(js|js|mjs)$/,
-      exclude: /node_modules/,
+      exclude: babelExcludes,
       use: [
         {
           loader: require.resolve('babel-loader'),
@@ -233,7 +235,7 @@ module.exports = async target => {
     // JS
     {
       test: /\.(js|js|mjs)$/,
-      exclude: /node_modules/,
+      exclude: babelExcludes,
       use: [
         {
           loader: require.resolve('babel-loader'),

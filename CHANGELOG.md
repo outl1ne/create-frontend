@@ -1,6 +1,6 @@
 # Changelog
 
-## [8.0.0] - Unreleased
+## [8.0.0] - 2019-03-12
 
 -   Adds [Universal React template](docs/universal-react.md).
 -   Adds opt-in [Emotion.js](https://github.com/emotion-js/emotion) support

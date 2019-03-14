@@ -1,5 +1,9 @@
 # Changelog
 
+## [8.0.1] - 2019-03-14
+
+-   Fixed issue where universal-react template was missing .gitignore
+
 ## [8.0.0] - 2019-03-12
 
 -   Adds [Universal React template](docs/universal-react.md).

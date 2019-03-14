@@ -3,6 +3,7 @@
 /.prettierrc
 /.vscode
 /.gitignore
+!**/templates/**/.gitignore
 /package.json
 /package-lock.json
 /CONTRIBUTING.md

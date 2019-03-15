@@ -6,8 +6,8 @@ import getConfig from 'server/config';
 const server = express();
 const staticOpts = { maxAge: 604800000 };
 
-server.use('/public', express.static('public', staticOpts)); // Serve files from public directory
 server.use('/client', express.static('build/client', staticOpts)); // Serve build assets
+server.use('/', express.static('public', staticOpts)); // Serve files from public directory
 server.use('/', async (req, res) => {
   try {
     const { content, context } = await render(App, req, getConfig());

@@ -1,0 +1,12 @@
+version: "2.4"
+
+services:
+  app:
+    build: .
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/build
+    command: npm start

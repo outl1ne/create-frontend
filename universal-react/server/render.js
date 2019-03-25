@@ -11,7 +11,7 @@ import { HelmetProvider } from 'react-helmet-async';
  * @param request - The request object from the server
  * @param config - App configuration that will be exposed to the React app
  *
- * @return {string}
+ * @return {{ content: String, context: Object }}
  */
 export default async function renderOnServer(ReactComponent, req, config) {
   const serverContext = {};

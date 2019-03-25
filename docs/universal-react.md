@@ -44,10 +44,13 @@ render(ReactComponent, domNode);
  * @param request - The request object from the server
  * @param config - App configuration that will be exposed to the React app
  *
- * @return {string}
+ * @return {{ content: String, context: Object }}
  */
 import { render } from '@optimistdigital/create-frontend/universal-react/server';
-const string = render(ReactComponent, request, config);
+const {
+    content, // App rendered to string
+    context, // Server-side context, for passing data to from the React app to the server
+} = render(ReactComponent, request, config);
 ```
 
 ## Configuration
@@ -106,3 +109,30 @@ App.getPageData = async ({ req }) => ({
     url: req.url,
 });
 ```
+
+## Passing data from React app to server (such as http status code)
+
+If you're using a router, you probably want to let the server know when a 404 page was rendered to set the correct status code. This can be done by mutating the `serverContext` property found in the AppDataContext:
+
+```js
+export default function NotFoundPage() {
+    const appData = React.useContext(AppDataContext);
+    if (appData.serverContext) appData.serverContext.status = 404;
+
+    return <div>Page not found!</div>;
+}
+```
+
+This content is then available in the `context` property after the server render:
+
+```js
+import { render } from '@optimistdigital/create-frontend/universal-react/server';
+
+// Render the app
+const { content, context } = render(ReactComponent, request, config);
+
+// Read status from server context, with 200 as the default
+return res.status(context.status || 200).send(content);
+```
+
+PS! The `serverContext` property is only available during the server render, so make sure you check for that.

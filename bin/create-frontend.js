@@ -44,6 +44,14 @@ function findExistingFrontendFiles(templatePaths) {
   return output;
 }
 
+function getErrorString(str) {
+  // Filter out lockfile notice
+  return str
+    .split('\n')
+    .filter(line => !line.match(/npm notice created a lockfile/i))
+    .join('\n');
+}
+
 function init() {
   const isDev = !!args.dev;
   const templateName = args.template || 'default';
@@ -124,7 +132,10 @@ function init() {
   info('Installing modules (this may take some time)...\n');
   exec(`npm install`)
     .then(res => {
-      log(res.stderr);
+      // Log error string only if it has some content
+      const errorString = getErrorString(res.stderr);
+      if (errorString.match(/[^\s]/)) log(errorString);
+
       success('Done!');
       (
         template.postGenerationMessages || [

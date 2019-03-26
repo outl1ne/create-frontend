@@ -137,6 +137,8 @@ function init() {
       if (errorString.match(/[^\s]/)) log(errorString);
 
       success('Done!');
+      info('');
+
       (
         template.postGenerationMessages || [
           'For development, type `npm run dev`.',

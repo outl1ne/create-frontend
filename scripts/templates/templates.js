@@ -24,7 +24,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'build:debug': 'frontend-scripts build --debug',
       },
       'dependencies': {
-        '@babel/polyfill': '^7.2.5',
+        'core-js': '^3.0.0',
+        '@babel/runtime-corejs3': '^7.4.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'eslint-plugin-flowtype': '^3.4.2',
         'eslint-plugin-import': '^2.16.0',
@@ -73,7 +74,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'start': 'frontend-scripts start-universal-react'
       },
       'dependencies': {
-        '@babel/polyfill': '^7.2.5',
+        'core-js': '^3.0.0',
+        '@babel/runtime-corejs3': '^7.4.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'detect-port': '^1.3.0',
         'dotenv': '^6.2.0',

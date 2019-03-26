@@ -5,7 +5,7 @@ under the hood.
 
 ## Features
 
--   JS (Babel, Eslint, Babel-Polyfill, Flow, JSX). Can import relative to project
+-   JS (Babel, Eslint, Core-JS, Flow, JSX). Can import relative to project
     root: `import x from 'client/js/y'`
 -   SCSS with autoprefixer, normalize.css
 -   Hot reload for development

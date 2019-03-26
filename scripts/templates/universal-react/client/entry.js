@@ -1,4 +1,5 @@
-import '@babel/polyfill';
+// Polyfills
+import 'core-js/stable';
 import App from 'app/App.js';
 import { render } from '@optimistdigital/create-frontend/universal-react/client';
 

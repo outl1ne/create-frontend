@@ -2,6 +2,7 @@ const args = require('minimist')(process.argv.slice(2));
 const fs = require('fs');
 const { resolveApp } = require('./paths');
 const detectPort = require('detect-port');
+const semver = require('semver');
 
 let odWebpackConfig = {};
 if (fs.existsSync(resolveApp('create-frontend.conf.js'))) {
@@ -12,7 +13,8 @@ if (fs.existsSync(resolveApp('create-frontend.conf.js'))) {
   }
 }
 
-const config = Object.assign({}, require(resolveApp('package.json'))['create-frontend'] || {}, odWebpackConfig);
+const pkg = require(resolveApp('package.json'));
+const config = Object.assign({}, pkg['create-frontend'] || {}, odWebpackConfig);
 function getConfigValue(key, fallback) {
   if (config[key] == null) {
     return fallback;
@@ -49,6 +51,7 @@ module.exports = async function getConfig() {
   const HTML_PATH = resolveApp(getConfigValue('htmlPath', 'client/html'));
   const SERVER_OUTPUT_FILE = 'build-server';
   const MANIFEST_PATH = resolveApp(BUILD_DIRECTORY, 'asset-manifest.json');
+  const CORE_JS = pkg.dependencies['core-js'] ? semver.coerce(pkg.dependencies['core-js']).major : false;
 
   return {
     APP_DIRECTORY,
@@ -76,6 +79,7 @@ module.exports = async function getConfig() {
     SERVER_OUTPUT_FILE,
     MANIFEST_PATH,
     USE_EMOTION,
+    CORE_JS,
   };
 };
 

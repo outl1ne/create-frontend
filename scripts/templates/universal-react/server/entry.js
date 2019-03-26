@@ -2,7 +2,7 @@
  * This file starts up the server, and sets up hot reload in development.
  * All application specific code should be added in server/server.js
  */
-import '@babel/polyfill';
+import 'core-js/stable';
 import http from 'http';
 import detectPort from 'detect-port';
 

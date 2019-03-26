@@ -5,6 +5,7 @@ module.exports = async opts => ({
     [
       require.resolve('@babel/preset-env'),
       {
+        corejs: opts.config.CORE_JS,
         modules: false,
         targets: opts.config.BROWSERS_LIST,
         useBuiltIns: 'entry',
@@ -17,6 +18,12 @@ module.exports = async opts => ({
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),
+    [
+      require.resolve('@babel/plugin-transform-runtime'),
+      {
+        corejs: opts.config.CORE_JS,
+      },
+    ],
     opts.config.USE_EMOTION && require.resolve('babel-plugin-emotion'),
     [
       require.resolve('babel-plugin-inline-react-svg'),

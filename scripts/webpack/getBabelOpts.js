@@ -17,12 +17,6 @@ module.exports = async opts => ({
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),
-    [
-      require.resolve('@babel/plugin-transform-runtime'),
-      {
-        absoluteRuntime: require.resolve('@babel/runtime/package.json'),
-      },
-    ],
     opts.config.USE_EMOTION && require.resolve('babel-plugin-emotion'),
     [
       require.resolve('babel-plugin-inline-react-svg'),

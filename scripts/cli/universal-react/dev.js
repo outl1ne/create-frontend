@@ -118,7 +118,8 @@ async function startClientServer(userConfig, onDone) {
     importedStyles = [];
     compilation.chunks.forEach(chunk => {
       const modules = Array.from(chunk.modulesIterable).filter(
-        mod => typeof mod.id === 'string' && /^\.\/[a-zA-Z\/]*\.(?:css|scss|sass)$/.test(mod.id)
+        // This regex allows only real files relative to project root - [^?!] removes weird webpack loader modules
+        mod => typeof mod.id === 'string' && /^\.\/[^?!]*\.(?:css|scss|sass)$/.test(mod.id)
       );
       importedStyles.push(...modules.map(m => resolveApp(m.id)));
     });

@@ -10,6 +10,7 @@ const path = require('path');
 const VirtualModulePlugin = require('webpack-virtual-modules');
 const getWebpackClientConfig = require('../../webpack/webpack.config.client');
 const getWebpackServerConfig = require('../../webpack/webpack.config.server');
+const notifier = require('node-notifier');
 
 module.exports = async () => {
   console.log('🚧  Starting dev server...');
@@ -57,6 +58,11 @@ async function startNodeServer(styleInjectionPlugin) {
       const errors = err ? [err] : stats.compilation.errors;
       if (errors && errors.length > 0) {
         console.error('❌  Error during node dev server compilation', errors);
+
+        notifier.notify({
+          title: 'Build error',
+          message: 'There was an error with the dev server. \nPlease check your terminal.',
+        });
       }
     });
   } catch (err) {

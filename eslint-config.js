@@ -4,6 +4,12 @@ module.exports = {
     'flowtype/define-flow-type': 1,
     'react/jsx-indent': 0,
     'no-param-reassign': 0,
+    'dot-notation': [
+      1,
+      {
+        allowKeywords: true,
+      },
+    ],
     'new-cap': [
       1,
       {

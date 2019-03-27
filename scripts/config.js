@@ -51,7 +51,7 @@ module.exports = async function getConfig() {
   const HTML_PATH = resolveApp(getConfigValue('htmlPath', 'client/html'));
   const SERVER_OUTPUT_FILE = 'build-server';
   const MANIFEST_PATH = resolveApp(BUILD_DIRECTORY, 'asset-manifest.json');
-  const CORE_JS = pkg.dependencies['core-js'] ? semver.coerce(pkg.dependencies['core-js']).major : false;
+  const CORE_JS = pkg.dependencies['core-js'] ? semver.coerce(pkg.dependencies['core-js']).major : undefined;
 
   return {
     APP_DIRECTORY,

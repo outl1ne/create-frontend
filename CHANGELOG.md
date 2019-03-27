@@ -1,6 +1,6 @@
 # Changelog
 
-## [8.1.0] - Unreleased
+## [8.1.0] - 2019-03-27
 
 -   Added Docker files for Universal-React template
 -   Cleaned up initialization logs
@@ -10,11 +10,6 @@
 -   Fixed @babel/preset-env warning that asked for a core-js version to be declared. To apply this fix, you need to replace @babel/polyfill with core-js:
     -   `npm install core-js@3 @babel/runtime-corejs3 && npm uninstall @babel/polyfill`
     -   Replace `import '@babel/polyfill;` with `import 'core-js/stable';`
-
-# Upgrading
-
--   Install core-js: `npm install core-js@^3.0.0 @babel/runtime-corejs3@^7.4.2 && npm uninstall @babel/polyfill`
--   Update polyfill imports: replace `import '@babel/polyfill'` with `import 'core-js/stable';`
 
 ## [8.0.1] - 2019-03-14
 

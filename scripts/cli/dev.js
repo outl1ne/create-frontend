@@ -11,6 +11,7 @@ module.exports = async () => {
   const chalk = require('chalk');
   const detectPort = require('detect-port');
   const getWebpackClientConfig = require('../webpack/webpack.config.client');
+  const notifier = require('node-notifier');
   const config = await getConfig('web');
 
   detectPort(config.WEBPACK_PORT, async (_, freePort) => {
@@ -24,6 +25,18 @@ module.exports = async () => {
     }
 
     const compiler = webpack(await getWebpackClientConfig());
+
+    /**
+     * Report errors
+     */
+    compiler.hooks.done.tap('OCFWebBuildDone', stats => {
+      if (stats.compilation.errors && stats.compilation.errors.length > 0) {
+        notifier.notify({
+          title: 'Build error',
+          message: 'There was an error with the dev server. \nPlease check your terminal.',
+        });
+      }
+    });
 
     const defaultServerConf = {
       clientLogLevel: 'none',

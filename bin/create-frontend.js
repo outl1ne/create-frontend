@@ -92,9 +92,9 @@ function init() {
       if (
         !skipConfirmation &&
         getConfirmation(
-          `The following files will be overwritten. Are you sure? (y/N)\n${existingFrontendFiles
+          `The following files will be overwritten: \n${existingFrontendFiles
             .map(name => `- ${name}`)
-            .join('\n')}\n`
+            .join('\n')}\nAre you sure? (y/N)\n`
         ).toLowerCase() !== 'y'
       ) {
         log('Aborted.');

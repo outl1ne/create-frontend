@@ -1,5 +1,10 @@
 # Changelog
 
+## [8.2.0] - Unreleased
+
+-   Removed babel-plugin-inline-react-svg - this caused problems with absolute imports, and was possibly too opinionated to begin with.
+    It's trivial to add this plugin per-project if necessary.
+
 ## [8.1.0] - 2019-03-27
 
 -   Added Docker files for Universal-React template

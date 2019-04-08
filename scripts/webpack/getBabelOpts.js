@@ -25,20 +25,6 @@ module.exports = async opts => ({
       },
     ],
     opts.config.USE_EMOTION && require.resolve('babel-plugin-emotion'),
-    [
-      require.resolve('babel-plugin-inline-react-svg'),
-      {
-        svgo: {
-          plugins: [
-            {
-              // Removing IDs might break logic if application
-              // depends on paths having certain IDs
-              cleanupIDs: false,
-            },
-          ],
-        },
-      },
-    ],
   ].filter(Boolean),
   env: {
     production: {

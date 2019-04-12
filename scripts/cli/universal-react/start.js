@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'production';
-require('dotenv').load();
+require('dotenv').config();
 
 const getConfig = require('../../config');
 

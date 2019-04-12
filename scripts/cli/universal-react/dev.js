@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'development';
-require('dotenv').load();
+require('dotenv').config();
 
 const detectPort = require('detect-port');
 const getConfig = require('../../config');

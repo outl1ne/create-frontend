@@ -1,9 +1,11 @@
 # Changelog
 
-## [8.2.0] - Unreleased
+## [9.0.0] - 2019-04-12
 
 -   Removed babel-plugin-inline-react-svg - this caused problems with absolute imports, and was possibly too opinionated to begin with.
     It's trivial to add this plugin per-project if necessary.
+-   getBabelOpts is now synchronous so it can be integrated with jest
+-   Removed Emotion.js. This will probably not be used as extensively, and adds unnecessary complexity to the project. To continue using emotion, you will have to add the `@emotion/babel-preset-css-prop` preset, and `babel-plugin-emotion` plugin.
 
 ## [8.1.0] - 2019-03-27
 

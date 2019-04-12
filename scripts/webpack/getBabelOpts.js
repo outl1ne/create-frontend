@@ -1,17 +1,16 @@
-module.exports = async opts => ({
+module.exports = ({ config = {} } = {}) => ({
   presets: [
     require.resolve('@babel/preset-react'),
     require.resolve('@babel/preset-flow'),
     [
       require.resolve('@babel/preset-env'),
       {
-        corejs: opts.config.CORE_JS,
+        corejs: config.CORE_JS,
         modules: false,
-        targets: opts.config.BROWSERS_LIST,
+        targets: config.BROWSERS_LIST,
         useBuiltIns: 'entry',
       },
     ],
-    opts.config.USE_EMOTION && require.resolve('@emotion/babel-preset-css-prop'),
   ].filter(Boolean),
   plugins: [
     require.resolve('babel-plugin-dev-expression'),
@@ -21,10 +20,9 @@ module.exports = async opts => ({
     [
       require.resolve('@babel/plugin-transform-runtime'),
       {
-        corejs: opts.config.CORE_JS,
+        corejs: config.CORE_JS,
       },
     ],
-    opts.config.USE_EMOTION && require.resolve('babel-plugin-emotion'),
   ].filter(Boolean),
   env: {
     production: {

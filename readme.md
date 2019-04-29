@@ -7,7 +7,7 @@ under the hood.
 
 -   JS (Babel, Eslint, Core-JS, Flow, JSX). Can import relative to project
     root: `import x from 'client/js/y'`
--   SCSS with autoprefixer, normalize.css
+-   SCSS with autoprefixer, normalize.css. Images can be imported relative to project root with tilde: `background-image: url('~client/images/logo.svg')`
 -   Hot reload for development
 -   Works with zero configuration, but customization is possible if needed
 -   Usable with any backend.

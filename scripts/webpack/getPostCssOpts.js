@@ -8,6 +8,7 @@ module.exports = async opts => {
     sourceMap:
       (opts.IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS) || (!opts.IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS),
     plugins: [
+      require('postcss-flexbugs-fixes')(),
       require('postcss-import')(),
       require('precss')(),
       require('autoprefixer')({

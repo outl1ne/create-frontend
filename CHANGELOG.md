@@ -1,5 +1,9 @@
 # Changelog
 
+## [9.1.0] - 2019-05-09
+
+-   Added [flexbugs-fixes](https://github.com/luisrudge/postcss-flexbugs-fixes) postcss plugin, which fixes some flex bugs, mainly in IE11
+
 ## [9.0.0] - 2019-04-12
 
 -   Removed babel-plugin-inline-react-svg - this caused problems with absolute imports, and was possibly too opinionated to begin with.

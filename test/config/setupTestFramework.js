@@ -1,1 +1,1 @@
-jest.setTimeout(120000);
+jest.setTimeout(10 * 60 * 1000); // 10 min

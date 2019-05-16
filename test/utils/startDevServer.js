@@ -3,28 +3,30 @@ const execa = require('execa');
 /**
  * Starts create-frontend dev server in the selected path. Resolves once the dev server has started
  */
-module.exports = function startDevServer(cwd) {
+module.exports = function startDevServer(cwd, waitForOutput) {
   return new Promise((resolve, reject) => {
     // Start dev script
     const subprocess = execa('npm', ['run', 'dev'], { cwd });
 
-    // Define variables that will capture stdout
-    let devServerMessage;
-    let buildDoneMessage;
+    const output = {};
+
+    const cleanup = () => {
+      subprocess.stdout.off('data', dataReceived);
+      return subprocess.kill('SIGINT');
+    };
+    global.cleanupFunctions.push(cleanup);
 
     const dataReceived = chunk => {
       const data = chunk.toString();
 
-      if (data.match(/webpack dev server started at/i)) devServerMessage = data;
-      if (data.match(/build for web done/i)) buildDoneMessage = data;
+      Object.entries(waitForOutput).forEach(([name, regex]) => {
+        if (data.match(regex)) output[name] = data;
+      });
 
-      if (devServerMessage && buildDoneMessage) {
+      if (Object.keys(output).length === Object.keys(waitForOutput).length) {
         resolve({
-          url: devServerMessage.match(/https?:\/\/.*:(?:\d)+/)[0],
-          cleanup: () => {
-            subprocess.stdout.off('data', dataReceived);
-            return subprocess.kill();
-          },
+          output,
+          cleanup,
         });
       }
     };

@@ -11,12 +11,19 @@ module.exports = function startDevServer(cwd, waitForOutput) {
     const output = {};
 
     const cleanup = () => {
-      subprocess.stdout.off('data', dataReceived);
-      return subprocess.kill('SIGINT');
+      return new Promise(res => {
+        subprocess.on('close', () => {
+          res();
+        });
+
+        subprocess.stdout.removeAllListeners('data');
+        subprocess.stderr.removeAllListeners('data');
+        subprocess.kill();
+      });
     };
     global.cleanupFunctions.push(cleanup);
 
-    const dataReceived = chunk => {
+    subprocess.stdout.on('data', chunk => {
       const data = chunk.toString();
 
       Object.entries(waitForOutput).forEach(([name, regex]) => {
@@ -29,16 +36,22 @@ module.exports = function startDevServer(cwd, waitForOutput) {
           cleanup,
         });
       }
-    };
-
-    subprocess.stdout.on('data', dataReceived);
+    });
 
     // If the process ended without the correct stdout, it means something went wrong
-    subprocess.then(() => {
-      reject({
-        error: 'Finished npm script without successfully starting dev server',
-        stdout: subprocess.stdout,
+    subprocess
+      .then(() => {
+        if (!subprocess.killed) {
+          reject({
+            error: 'Finished npm script without successfully starting dev server',
+            stdout: subprocess.stdout,
+          });
+        }
+      })
+      .catch(error => {
+        reject({
+          error,
+        });
       });
-    });
   });
 };

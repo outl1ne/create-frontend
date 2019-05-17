@@ -42,6 +42,6 @@ describe('Create Frontend with React template', () => {
     const text = await result.text();
     expect(text).toMatch(/^<!DOCTYPE html>/i);
 
-    cleanup();
+    await cleanup();
   });
 });

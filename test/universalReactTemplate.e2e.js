@@ -43,9 +43,13 @@ describe('Create Frontend with Universal React template', () => {
     console.log('Dev server started');
 
     const url = output.devServerMessage.match(/https?:\/\/.*:(?:\d)+/)[0];
+    console.log('Navigating to URL', url);
     const result = await fetch(url);
+    console.log('Navigated to URL');
     expect(result.status).toBe(200);
+    console.log('Waiting for text content');
     const text = await result.text();
+    console.log('Text content arrived');
     expect(text).toMatch(/^<!DOCTYPE html>/i);
 
     await cleanup();

@@ -45,8 +45,6 @@ describe('Create Frontend with Universal React template', () => {
     const text = await result.text();
     expect(text).toMatch(/^<!DOCTYPE html>/i);
 
-    console.log('Await cleanup...');
     await cleanup();
-    console.log('Cleanup done');
   });
 });

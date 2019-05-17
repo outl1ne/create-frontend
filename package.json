@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "e2e": "jest --testMatch=\"**/?(*.)(e2e).js?(x)\" --runInBand --verbose"
+    "e2e": "jest --testMatch=\"**/?(*.)(e2e).js?(x)\" --runInBand"
   },
   "bin": {
     "create-frontend": "bin/create-frontend.js",

@@ -16,9 +16,9 @@ describe('Create Frontend with Universal React template', () => {
   });
 
   it('should generate a folder structure', async () => {
-    console.info('Generating boilerplate for universal-react template...');
+    console.log('Generating boilerplate for universal-react template...');
     await runGenerator(tempDir.path, ['--template=universal-react']);
-    console.info('Boilerplate generated');
+    console.log('Boilerplate generated');
 
     const files = fs.readdirSync(tempDir.path);
 
@@ -34,13 +34,13 @@ describe('Create Frontend with Universal React template', () => {
   });
 
   it('should start the dev server without errors', async () => {
-    console.info('Starting dev server...');
+    console.log('Starting dev server...');
     const { output, cleanup } = await startDevServer(tempDir.path, {
       devServerMessage: /server started at/i,
       webBuildDoneMessage: /build for web done/i,
       nodeBuildDoneMessage: /build for node done/i,
     });
-    console.info('Dev server started');
+    console.log('Dev server started');
 
     const url = output.devServerMessage.match(/https?:\/\/.*:(?:\d)+/)[0];
     const result = await fetch(url);

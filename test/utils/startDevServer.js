@@ -13,7 +13,6 @@ module.exports = function startDevServer(cwd, waitForOutput) {
     const cleanup = () => {
       return new Promise(res => {
         subprocess.on('close', () => {
-          console.log('Close event fired');
           res();
         });
 
@@ -26,8 +25,6 @@ module.exports = function startDevServer(cwd, waitForOutput) {
 
     subprocess.stdout.on('data', chunk => {
       const data = chunk.toString();
-
-      console.log('Data:', data);
 
       Object.entries(waitForOutput).forEach(([name, regex]) => {
         if (data.match(regex)) output[name] = data;

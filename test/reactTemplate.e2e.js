@@ -16,9 +16,7 @@ describe('Create Frontend with React template', () => {
   });
 
   it('should generate a folder structure', async () => {
-    console.log('Generating boilerplate for react template...');
     await runGenerator(tempDir.path, ['--template=react']);
-    console.log('Boilerplate generated');
 
     const files = fs.readdirSync(tempDir.path);
 
@@ -32,12 +30,10 @@ describe('Create Frontend with React template', () => {
   });
 
   it('should start the dev server without errors', async () => {
-    console.log('Starting dev server...');
     const { output, cleanup } = await startDevServer(tempDir.path, {
       devServerMessage: /webpack dev server started at/i,
       buildDoneMessage: /build for web done/i,
     });
-    console.log('Dev server started');
 
     const url = output.devServerMessage.match(/https?:\/\/.*:(?:\d)+/)[0];
 

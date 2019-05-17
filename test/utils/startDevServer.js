@@ -13,6 +13,7 @@ module.exports = function startDevServer(cwd, waitForOutput) {
     const cleanup = () => {
       return new Promise(res => {
         subprocess.on('close', () => {
+          console.log('Close event fired');
           res();
         });
 

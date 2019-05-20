@@ -1,4 +1,4 @@
-# Create Frontend
+# Create Frontend [![Build Status](https://api.travis-ci.org/optimistdigital/create-frontend.svg?branch=master)](https://travis-ci.org/optimistdigital/create-frontend)
 
 This toolkit generates your project's frontend build system. It uses Webpack
 under the hood.

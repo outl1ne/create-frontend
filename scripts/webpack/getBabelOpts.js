@@ -7,7 +7,6 @@ module.exports = ({ config = {} } = {}) => ({
       {
         corejs: config.CORE_JS,
         modules: false,
-        targets: config.BROWSERS_LIST,
         useBuiltIns: 'entry',
       },
     ],

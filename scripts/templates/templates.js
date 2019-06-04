@@ -18,6 +18,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
       'version': '0.1.0',
       'private': true,
       'create-frontend': {},
+      'browserslist': ['> 0.2%', 'last 1 version', 'not dead'],
       'scripts': {
         'dev': 'frontend-scripts dev',
         'build': 'frontend-scripts build',
@@ -67,6 +68,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
           "app": "client/entry.js",
         }
       },
+      'browserslist': ['> 0.2%', 'last 1 version', 'not dead'],
       'scripts': {
         'dev': 'frontend-scripts dev-universal-react',
         'build': 'frontend-scripts build-universal-react',

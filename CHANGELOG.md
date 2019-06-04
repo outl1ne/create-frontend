@@ -1,5 +1,9 @@
 # Changelog
 
+## [10.0.0] - 2019-06-04
+
+-   Removed `browserslist` from create-frontend config. Instead, it's now in the package.json as a separate field, so it can be detected by automatically by tools. If you're upgrading and had this configured previously, you can move the browserslist value to your package.json as a top level field [as documented here](https://github.com/browserslist/browserslist#queries)
+
 ## [9.1.0] - 2019-05-09
 
 -   Added [flexbugs-fixes](https://github.com/luisrudge/postcss-flexbugs-fixes) postcss plugin, which fixes some flex bugs, mainly in IE11

@@ -11,9 +11,7 @@ module.exports = async opts => {
       require('postcss-flexbugs-fixes')(),
       require('postcss-import')(),
       require('precss')(),
-      require('autoprefixer')({
-        browsers: config.BROWSERS_LIST,
-      }),
+      require('autoprefixer')(),
     ],
   };
 };

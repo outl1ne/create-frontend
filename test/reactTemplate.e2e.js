@@ -1,5 +1,5 @@
 const makeDir = require('./utils/makeTempDir');
-const startDevServer = require('./utils/startDevServer');
+const startServer = require('./utils/startServer');
 const runGenerator = require('./utils/runGenerator');
 const fs = require('fs');
 const fetch = require('node-fetch');
@@ -32,7 +32,7 @@ describe('Create Frontend with React template', () => {
   });
 
   it('should start the dev server without errors', async () => {
-    const { output, cleanup } = await startDevServer(tempDir.path, {
+    const { output, cleanup } = await startServer(tempDir.path, 'dev', {
       devServerMessage: /webpack dev server started at/i,
       buildDoneMessage: /build for web done/i,
     });

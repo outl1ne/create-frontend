@@ -1,12 +1,11 @@
 const execa = require('execa');
 
 /**
- * Starts create-frontend dev server in the selected path. Resolves once the dev server has started
+ * Starts create-frontend server in the selected path. Resolves once the server has started
  */
-module.exports = function startDevServer(cwd, waitForOutput) {
+module.exports = function startServer(cwd, command = 'start', waitForOutput) {
   return new Promise((resolve, reject) => {
-    // Start dev script
-    const subprocess = execa('npm', ['run', 'dev'], { cwd });
+    const subprocess = execa('npm', ['run', command], { cwd });
 
     const output = {};
 
@@ -43,7 +42,7 @@ module.exports = function startDevServer(cwd, waitForOutput) {
       .then(() => {
         if (!subprocess.killed) {
           reject({
-            error: 'Finished npm script without successfully starting dev server',
+            error: 'Finished npm script without successfully starting server',
             stdout: subprocess.stdout,
           });
         }

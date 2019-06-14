@@ -3,6 +3,8 @@ const startDevServer = require('./utils/startDevServer');
 const runGenerator = require('./utils/runGenerator');
 const fs = require('fs');
 const fetch = require('node-fetch');
+const execa = require('execa');
+const path = require('path');
 
 describe('Create Frontend with React template', () => {
   let tempDir;
@@ -43,5 +45,26 @@ describe('Create Frontend with React template', () => {
     expect(text).toMatch(/^<!DOCTYPE html>/i);
 
     await cleanup();
+  });
+
+  it('should create a production build with a manifest', async () => {
+    await execa('npm', ['run', 'build'], { cwd: tempDir.path });
+
+    const files = fs.readdirSync(path.resolve(tempDir.path, 'public/build'));
+
+    expect(files).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/^app-.*\.css/),
+        expect.stringMatching(/^app-.*\.js/),
+        'asset-manifest.json',
+      ])
+    );
+
+    const manifest = JSON.parse(fs.readFileSync(path.resolve(tempDir.path, 'public/build/asset-manifest.json')));
+
+    expect(manifest).toMatchObject({
+      'app.css': expect.stringMatching(/^\/build\/.*\.css/),
+      'app.js': expect.stringMatching(/^\/build\/.*\.js/),
+    });
   });
 });

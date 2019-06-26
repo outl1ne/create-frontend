@@ -1,5 +1,9 @@
 # Changelog
 
+## [11.0.0] - Unreleased
+
+-   Made Babel configurable: `babel.config.js` and `.babelrc` files are now respected, and a babel config has been exposed as public API so it can be extended. If existing projects had either of these two files, you should ensure that they extend `@optimistdigital/create-frontend/babel-config`, otherwise they might break.
+
 ## [10.0.0] - 2019-06-04
 
 -   Removed `browserslist` from create-frontend config. Instead, it's now in the package.json as a separate field, so it can be detected by automatically by tools. If you're upgrading and had this configured previously, you can move the browserslist value to your package.json as a top level field [as documented here](https://github.com/browserslist/browserslist#queries)

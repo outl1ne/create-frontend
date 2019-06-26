@@ -3,6 +3,8 @@ const startServer = require('./utils/startServer');
 const runGenerator = require('./utils/runGenerator');
 const fs = require('fs');
 const fetch = require('node-fetch');
+const path = require('path');
+const execa = require('execa');
 
 describe('Create Frontend with Universal React template', () => {
   let tempDir;
@@ -46,5 +48,36 @@ describe('Create Frontend with Universal React template', () => {
     expect(text).toMatch(/^<!DOCTYPE html>/i);
 
     await cleanup();
+  });
+
+  it('should create a production build with a manifest', async () => {
+    await execa('npm', ['run', 'build'], { cwd: tempDir.path });
+
+    /**
+     * Checking client build
+     */
+    const clientFiles = fs.readdirSync(path.resolve(tempDir.path, 'build/client'));
+
+    expect(clientFiles).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(/^app-.*\.css/),
+        expect.stringMatching(/^app-.*\.js/),
+        'asset-manifest.json',
+      ])
+    );
+
+    const manifest = JSON.parse(fs.readFileSync(path.resolve(tempDir.path, 'build/client/asset-manifest.json')));
+
+    expect(manifest).toMatchObject({
+      'app.css': expect.stringMatching(/^\/client\/.*\.css/),
+      'app.js': expect.stringMatching(/^\/client\/.*\.js/),
+    });
+
+    /**
+     * Checking server build
+     */
+    const serverFiles = fs.readdirSync(path.resolve(tempDir.path, 'build/server'));
+
+    expect(serverFiles).toEqual(expect.arrayContaining(['build-server.js']));
   });
 });

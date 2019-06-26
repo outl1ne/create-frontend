@@ -83,6 +83,26 @@ Here are all the options (default in parens):
 
 The `opts` parameter contains the following object: `{ IS_PRODUCTION: boolean, paths: Object, config: Object }`
 
+### Configuring Babel
+
+If you need to make changes to the babel config, you can extend our babel preset by making a configuration file in your project root:
+
+-   In `babel.config.js`
+
+```js
+const config = require('@optimistdigital/create-frontend/babel-config');
+/* Make adjustments */
+module.exports = config;
+```
+
+-   In `.babelrc`
+
+```json
+{
+    "extends": "@optimistdigital/create-frontend/babel-config.js"
+}
+```
+
 ### Using hot module replacement
 
 [Hot module replacement](https://webpack.js.org/api/hot-module-replacement/) is

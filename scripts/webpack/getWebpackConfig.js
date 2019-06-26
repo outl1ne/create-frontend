@@ -25,7 +25,7 @@ module.exports = async target => {
   const config = await getConfig(target);
   const WEBPACK_CONF_PARAMS = { IS_PRODUCTION, config, target };
   const OUTPUT_PATH = IS_NODE ? config.SERVER_BUILD_DIRECTORY : config.BUILD_DIRECTORY;
-  const babelOpts = getBabelOpts(WEBPACK_CONF_PARAMS);
+  const babelOpts = getBabelOpts();
   const postCssOpts = await getPostCssOpts(WEBPACK_CONF_PARAMS);
   const babelExcludes = /node_modules[\/\\](?!(@optimistdigital[\/\\]create-frontend)[\/\\]).*/; // Exclude everything except create-frontend code
   const nodeExternalsWhitelist = [

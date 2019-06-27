@@ -115,6 +115,8 @@ App.getPageData = async ({ req }) => ({
 If you're using a router, you probably want to let the server know when a 404 page was rendered to set the correct status code. This can be done by mutating the `serverContext` property found in the AppDataContext:
 
 ```js
+import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+
 export default function NotFoundPage() {
     const appData = React.useContext(AppDataContext);
     if (appData.serverContext) appData.serverContext.status = 404;

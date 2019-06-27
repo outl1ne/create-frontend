@@ -3,6 +3,8 @@ module.exports = {
   rules: {
     'flowtype/define-flow-type': 1,
     'react/jsx-indent': 0,
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn',
   },
   parser: 'babel-eslint',
   env: {
@@ -16,7 +18,7 @@ module.exports = {
       version: 'detect',
     },
   },
-  plugins: ['import', 'react', 'flowtype'],
+  plugins: ['import', 'react', 'flowtype', 'react-hooks'],
   parserOptions: {
     ecmaVersion: 7,
     sourceType: 'module',

@@ -1,8 +1,10 @@
 # Changelog
 
-## [11.0.0] - Unreleased
+## [11.0.0] - 2019-06-27
 
 -   Made Babel configurable: `babel.config.js` and `.babelrc` files are now respected, and a babel config has been exposed as public API so it can be extended. If existing projects had either of these two files, you should ensure that they extend `@optimistdigital/create-frontend/babel-config`, otherwise they might break.
+-   Added eslint plugin for hooks
+-   Changed React template's App component to use a function component instead of a class.
 
 ## [10.0.0] - 2019-06-04
 

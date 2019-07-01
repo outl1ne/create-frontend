@@ -91,7 +91,9 @@ module.exports = async target => {
           sourceMap: config.ENABLE_PROD_SOURCEMAPS,
           terserOptions: {
             warnings: false,
-            drop_console: IS_WEB && !config.IS_DEBUG,
+            compress: {
+              drop_console: IS_WEB && !config.IS_DEBUG,
+            },
           },
         }),
         new OptimizeCssAssetsPlugin({}),

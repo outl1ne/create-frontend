@@ -92,7 +92,10 @@ module.exports = async target => {
           terserOptions: {
             warnings: false,
             compress: {
-              drop_console: IS_WEB && !config.IS_DEBUG,
+              drop_console: false,
+              pure_funcs: !config.IS_DEBUG
+                ? ['console.debug', 'console.log', 'console.info', 'console.warn', 'console.table']
+                : null,
             },
           },
         }),

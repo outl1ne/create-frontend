@@ -12,7 +12,7 @@ server.use('/', async (req, res) => {
   try {
     const { content, context } = await render(App, req, getConfig());
 
-    if (context.url) return res.redirect(context.status || 301, context.url);
+    if (context.url) return res.redirect(context.status || 302, context.url);
     return res.status(context.status || 200).send(content);
   } catch (err) {
     console.error('Server encountered error while rendering React app:', err);

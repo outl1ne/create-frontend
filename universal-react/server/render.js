@@ -8,23 +8,22 @@ import { HelmetProvider } from 'react-helmet-async';
  * Server render - renders your react app to string
  *
  * @param ReactComponent - The root component of your React app
- * @param request - The request object from the server
- * @param config - App configuration that will be exposed to the React app
+ * @param backendData - Data that you'd like to be accessible in the app (on both the client and server) through AppDataContext.
  *
  * @return {{ content: String, context: Object }}
  */
-export default async function renderOnServer(ReactComponent, req, config) {
+export default async function renderOnServer(ReactComponent, url, backendData = {}) {
   const serverContext = {};
-  const appData = { config };
+  const helmetContext = {};
+  const appData = { url, ...backendData, pageData: {} };
 
   /**
-   * Fetch async data
+   * Get page data
    */
   if (typeof ReactComponent.getPageData === 'function') {
-    appData.pageData = await ReactComponent.getPageData({ req });
+    appData.pageData = await ReactComponent.getPageData(url);
   }
 
-  const helmetContext = {};
   /**
    * Render app to string
    */

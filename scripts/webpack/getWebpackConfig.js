@@ -191,7 +191,9 @@ module.exports = async target => {
     } else {
       loaders.unshift(
         IS_NODE
-          ? { loader: require.resolve('isomorphic-style-loader') }
+          ? // TODO: Go back to live version of isomorphic-style-loader when they fix React dependency
+            // ? { loader: require.resolve('isomorphic-style-loader') }
+            { loader: require.resolve('./loaders/isomorphic-style-loader') }
           : {
               loader: require.resolve('style-loader'),
               options: {

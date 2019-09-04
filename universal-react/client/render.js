@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { AppDataContext } from '../index';
 import { HelmetProvider } from 'react-helmet-async';
 
+const initialAppData = { ...window.__OCF_APP_DATA__ };
+
 /**
  * Client render - renders your react app to the DOM
  *
@@ -24,13 +26,37 @@ export default async function renderOnClient(ReactComponent, domNode) {
   }
 
   ReactDOM.hydrate(
-    <AppDataContext.Provider value={window.__OCF_APP_DATA__}>
+    <AppDataProvider ReactComponent={ReactComponent}>
       <HelmetProvider>
         <ReactComponent />
       </HelmetProvider>
-    </AppDataContext.Provider>,
+    </AppDataProvider>,
     domNode
   );
+}
+
+function AppDataProvider({ ReactComponent, ...props }) {
+  const ignoredFirstRouteChange = React.useRef();
+  const [appData, setAppData] = React.useState(initialAppData);
+
+  const handleRouteChange = React.useCallback(
+    async location => {
+      if (ignoredFirstRouteChange.current !== true) {
+        ignoredFirstRouteChange.current = true;
+        return;
+      }
+
+      if (typeof ReactComponent.getPageData !== 'function') return;
+
+      setAppData({
+        ...initialAppData,
+        pageData: await ReactComponent.getPageData(`${location.pathname}${location.search}`),
+      });
+    },
+    [setAppData, ReactComponent]
+  );
+
+  return <AppDataContext.Provider {...props} value={{ ...appData, onRouteChange: handleRouteChange }} />;
 }
 
 function waitForLoad(link, cb) {

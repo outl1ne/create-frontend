@@ -10,9 +10,15 @@ server.use('/client', express.static('build/client', staticOpts)); // Serve buil
 server.use('/', express.static('public', staticOpts)); // Serve files from public directory
 server.use('/', async (req, res) => {
   try {
-    const { content, context } = await render(App, req, getConfig());
+    // Render the app
+    const { content, context } = await render(App, req.originalUrl, { config: getConfig() });
 
-    if (context.url) return res.redirect(context.status || 302, context.url);
+    // If there was a redirect in the app, redirect here
+    if (context.url) {
+      return res.redirect(context.status || 302, context.url);
+    }
+
+    // Send HTML response and take status from the app if given
     return res.status(context.status || 200).send(content);
   } catch (err) {
     console.error('Server encountered error while rendering React app:', err);

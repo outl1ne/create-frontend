@@ -41,8 +41,8 @@ render(ReactComponent, domNode);
  * Server render - renders your react app to string
  *
  * @param ReactComponent - The root component of your React app
- * @param request - The request object from the server
- * @param config - App configuration that will be exposed to the React app
+ * @param url - The url for the request. For express, you should pass `req.originalUrl`
+ * @param backendData - Data that you'd like to be accessible in the app (on both the client and server) through AppDataContext. Optional.
  *
  * @return {{ content: String, context: Object }}
  */
@@ -50,7 +50,7 @@ import { render } from '@optimistdigital/create-frontend/universal-react/server'
 const {
     content, // App rendered to string
     context, // Server-side context, for passing data to from the React app to the server
-} = render(ReactComponent, request, config);
+} = render(ReactComponent, url, backendData);
 ```
 
 ## Configuration
@@ -69,10 +69,11 @@ function Header() {
 
 Note that this example uses the hooks API, but other [context API's](https://reactjs.org/docs/context.html#api) work as well.
 
-## Server-side data fetching
+## Page based data fetching
 
-Your top level App component can have a static function called `getPageData` that returns a promise.
-The result of this promise will be available on the client and server through AppDataContext.
+The top level App component can have an async function called `getPageData`.
+This function will be called once in the server, and whenever the page changes on the client. The new URL will be passed as an argument.
+The return value will be available on the client and server in the AppDataContext with the `pageData` property.
 
 ```js
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
@@ -83,9 +84,10 @@ export default function App() {
     return <div>{pageData.url}</div>;
 }
 
-App.getPageData = async ({ req }) => ({
-    url: req.url,
-});
+App.getPageData = async url => {
+    // In reality you'd make some API requests here based on the URL
+    return { url };
+};
 ```
 
 PS! This only works on the top level component that you pass to render, not any children.
@@ -94,20 +96,15 @@ PS! This only works on the top level component that you pass to render, not any 
 
 We have a wrapper around [React-Router](https://github.com/ReactTraining/react-router) that handles the
 client/server differences, and passes information about status codes and redirects to the server.
-To use it, wrap your application around the Router and pass the current URL:
+To use it, wrap your application around the Router.
 
 ```js
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
 import Router from '@optimistdigital/create-frontend/universal-react/Router';
 
 export default function App() {
-    const { pageData } = React.useContext(AppDataContext);
-    return <Router url={pageData.url}>Your app content goes here</Router>;
+    return <Router>Your app content goes here</Router>;
 }
-
-App.getPageData = async ({ req }) => ({
-    url: req.url,
-});
 ```
 
 ## Passing data from React app to server (such as http status code)

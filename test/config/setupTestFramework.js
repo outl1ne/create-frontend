@@ -1,4 +1,4 @@
-jest.setTimeout(10 * 60 * 1000); // 10 min
+jest.setTimeout(9 * 60 * 1000); // 10 min
 global.cleanupFunctions = [];
 
 afterAll(() => {

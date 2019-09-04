@@ -28,5 +28,8 @@ export default function App() {
 }
 
 App.getPageData = async url => {
-  return { url };
+  return prevState => ({
+    ...prevState,
+    url,
+  });
 };

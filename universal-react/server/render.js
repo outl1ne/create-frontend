@@ -21,7 +21,7 @@ export default async function renderOnServer(ReactComponent, url, backendData = 
    * Get page data
    */
   if (typeof ReactComponent.getPageData === 'function') {
-    appData.pageData = await ReactComponent.getPageData(url);
+    appData.pageData = (await ReactComponent.getPageData(url))(appData.pageData);
   }
 
   /**

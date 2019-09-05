@@ -1,28 +1,59 @@
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
 import { BrowserRouter } from 'react-router-dom';
-import { StaticRouter } from 'react-router';
+import { StaticRouter, withRouter, matchPath } from 'react-router';
 import React from 'react';
 
-export default function Router({ children, url, ...passthrough }) {
-  return (
-    <AppDataContext.Consumer>
-      {appData => {
-        /**
-         * Client-side render
-         */
-        if (__TARGET__ === 'web') {
-          return <BrowserRouter {...passthrough}>{children}</BrowserRouter>;
-        }
+function usePrevious(value) {
+  const ref = React.useRef();
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
-        /**
-         * Server-side render
-         */
-        return (
-          <StaticRouter {...passthrough} location={url} context={appData.serverContext}>
-            {children}
-          </StaticRouter>
-        );
-      }}
-    </AppDataContext.Consumer>
+const RouteChangeListener = withRouter(({ children, location, onChange }) => {
+  const prevLocation = usePrevious(location);
+
+  React.useEffect(() => {
+    if (
+      !prevLocation ||
+      `${location.pathname}${location.search}` !== `${prevLocation.pathname}${prevLocation.search}`
+    ) {
+      onChange && onChange(location);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location, onChange]);
+  return children;
+});
+
+export default function Router({ children, ...passthrough }) {
+  const appData = React.useContext(AppDataContext);
+
+  if (__TARGET__ === 'web') {
+    return (
+      <BrowserRouter {...passthrough}>
+        <RouteChangeListener children={children} onChange={appData.onRouteChange} />
+      </BrowserRouter>
+    );
+  }
+
+  /**
+   * Server-side render
+   */
+  return (
+    <StaticRouter {...passthrough} location={appData.url} context={appData.serverContext}>
+      {children}
+    </StaticRouter>
   );
+}
+
+export async function getRouteData(location, routes) {
+  const route = routes.find(x => matchPath(location.pathname, { exact: true, ...x }));
+
+  let updater;
+  if (route && route.component && route.component.getPageData) {
+    updater = await route.component.getPageData(location, matchPath(location.pathname, route).params);
+  }
+
+  return updater || (prevState => prevState);
 }

@@ -1,30 +1,45 @@
 import 'app/scss/entry.scss';
-import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
 import { Switch, Route } from 'react-router-dom';
+import AppDataContext from '@optimistdigital/create-frontend/universal-react/AppDataContext';
 import Helmet from 'react-helmet-async';
-import HomePage from 'app/pages/HomePage';
 import React from 'react';
-import Router from '@optimistdigital/create-frontend/universal-react/Router';
+import Router, { getRouteData } from '@optimistdigital/create-frontend/universal-react/Router';
+import routes from 'app/routes';
 
 export default function App() {
-  const { pageData } = React.useContext(AppDataContext);
+  const { config } = React.useContext(AppDataContext);
 
   return (
     <React.Fragment>
       <Helmet>
-        <title>Page title</title>
+        <title>{config.APP_NAME}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 
-      <Router url={pageData.url}>
+      <Router>
         <Switch>
-          <Route exact path="/" component={HomePage} />
+          {routes.map(route => (
+            <Route key={route.path} exact {...route} />
+          ))}
         </Switch>
       </Router>
     </React.Fragment>
   );
 }
 
-App.getPageData = async ({ req }) => ({
-  url: req.url,
-});
+/**
+ * This function gets called once on the server, and whenever the page changes on the client.
+ * The result ends up in the AppDataContext.
+ */
+App.getPageData = async location => {
+  // Finds the current route component and gets data from that
+  const routeDataSetter = await getRouteData(location, routes);
+
+  return prevState => ({
+    // Merge in the data from the route components
+    ...routeDataSetter({
+      ...prevState,
+      // You can set data here that will be added on every page
+    }),
+  });
+};

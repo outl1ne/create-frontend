@@ -17,9 +17,7 @@ module.exports = async () => {
   detectPort(config.WEBPACK_PORT, async (_, freePort) => {
     if (config.WEBPACK_PORT !== freePort) {
       console.error(
-        `❌  The port (${
-          config.WEBPACK_PORT
-        }) is not available. You can choose another port by running "npm run dev -- --webpackPort=${freePort}"`
+        `❌  The port (${config.WEBPACK_PORT}) is not available. You can choose another port by running "npm run dev -- --webpackPort=${freePort}"`
       );
       return;
     }
@@ -31,6 +29,8 @@ module.exports = async () => {
      */
     compiler.hooks.done.tap('OCFWebBuildDone', stats => {
       if (stats.compilation.errors && stats.compilation.errors.length > 0) {
+        console.error('❌  Error during node dev server compilation', stats.compilation.errors);
+
         notifier.notify({
           title: 'Build error',
           message: 'There was an error with the dev server. \nPlease check your terminal.',
@@ -70,9 +70,7 @@ module.exports = async () => {
 
         console.info(
           chalk.green.bold(
-            `=== Webpack dev server started at ${config.APP_PROTOCOL}://${config.WEBPACK_DOMAIN}:${
-              config.WEBPACK_PORT
-            } ===
+            `=== Webpack dev server started at ${config.APP_PROTOCOL}://${config.WEBPACK_DOMAIN}:${config.WEBPACK_PORT} ===
 === Building... ===`
           )
         );

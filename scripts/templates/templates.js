@@ -25,8 +25,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'build:debug': 'frontend-scripts build --debug',
       },
       'dependencies': {
-        'core-js': '^3.0.0',
-        '@babel/runtime-corejs3': '^7.4.2',
+        'core-js': '^3.2.1',
+        '@babel/runtime-corejs3': '^7.5.5',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'eslint-plugin-flowtype': '~3.9.0',
         'eslint-plugin-import': '^2.16.0',
@@ -40,8 +40,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
   const react = {
     name: 'react',
     install: {
-      react: '^16.8.2',
-      'react-dom': '^16.8.2',
+      react: '^16.9.0',
+      'react-dom': '^16.9.0',
     },
     mergeDefaultFiles: true,
     templatePath: path.resolve(__dirname, 'react'),
@@ -51,8 +51,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
   const universalReact = {
     name: 'universal-react',
     install: {
-      react: '^16.8.2',
-      'react-dom': '^16.8.2',
+      react: '^16.9.0',
+      'react-dom': '^16.9.0',
     },
     mergeDefaultFiles: false,
     templatePath: path.resolve(__dirname, 'universal-react'),
@@ -76,20 +76,20 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'start': 'frontend-scripts start-universal-react'
       },
       'dependencies': {
-        'core-js': '^3.0.0',
-        '@babel/runtime-corejs3': '^7.4.2',
+        'core-js': '^3.2.1',
+        '@babel/runtime-corejs3': '^7.5.5',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'detect-port': '^1.3.0',
-        'dotenv': '^6.2.0',
+        'dotenv': '^8.1.0',
         'eslint-plugin-flowtype': '~3.9.0',
         'eslint-plugin-import': '^2.16.0',
         'eslint-plugin-react': '^7.12.4',
         'eslint': '^5.13.0',
-        'express': '^4.16.4',
+        'express': '^4.17.1',
         'normalize.css': '8.x.x',
         'react-helmet-async': '^0.2.0',
-        'react-router': '^4.3.1',
-        'react-router-dom': '^4.3.1'
+        'react-router': '^5.0.1',
+        'react-router-dom': '^5.0.1'
       },
     },
     postGenerationMessages: [

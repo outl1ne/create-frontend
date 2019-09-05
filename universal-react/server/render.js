@@ -3,28 +3,33 @@ import ReactDOMServer from 'react-dom/server';
 import wrapInDocument from './wrapInDocument';
 import { AppDataContext } from '../index';
 import { HelmetProvider } from 'react-helmet-async';
+import urlParser from 'url';
 
 /**
  * Server render - renders your react app to string
  *
  * @param ReactComponent - The root component of your React app
- * @param request - The request object from the server
- * @param config - App configuration that will be exposed to the React app
+ * @param url - The url for the request. For express, you should pass `req.originalUrl`
+ * @param backendData - Data that you'd like to be accessible in the app (on both the client and server) through AppDataContext.
  *
  * @return {{ content: String, context: Object }}
  */
-export default async function renderOnServer(ReactComponent, req, config) {
+export default async function renderOnServer(ReactComponent, url, backendData = {}) {
   const serverContext = {};
-  const appData = { config };
+  const helmetContext = {};
+  const appData = { url, ...backendData, pageData: {} };
 
   /**
-   * Fetch async data
+   * Get page data
    */
   if (typeof ReactComponent.getPageData === 'function') {
-    appData.pageData = await ReactComponent.getPageData({ req });
+    const parsedUrl = urlParser.parse(url);
+    appData.pageData = (await ReactComponent.getPageData({
+      pathname: parsedUrl.pathname,
+      search: parsedUrl.search,
+    }))(appData.pageData);
   }
 
-  const helmetContext = {};
   /**
    * Render app to string
    */

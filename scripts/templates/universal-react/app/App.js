@@ -1,15 +1,18 @@
 import 'app/scss/entry.scss';
 import { Switch, Route } from 'react-router-dom';
+import AppDataContext from '@optimistdigital/create-frontend/universal-react/AppDataContext';
 import Helmet from 'react-helmet-async';
 import React from 'react';
 import Router, { getRouteData } from '@optimistdigital/create-frontend/universal-react/Router';
 import routes from 'app/routes';
 
 export default function App() {
+  const { config } = React.useContext(AppDataContext);
+
   return (
     <React.Fragment>
       <Helmet>
-        <title>Page title</title>
+        <title>{config.APP_NAME}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 

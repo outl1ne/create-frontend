@@ -1,14 +1,11 @@
 import 'app/scss/entry.scss';
-import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
 import { Switch, Route } from 'react-router-dom';
 import Helmet from 'react-helmet-async';
 import React from 'react';
-import Router, { getCurrentPage } from '@optimistdigital/create-frontend/universal-react/Router';
+import Router, { getRouteData } from '@optimistdigital/create-frontend/universal-react/Router';
 import routes from 'app/routes';
 
 export default function App() {
-  const { pageData } = React.useContext(AppDataContext);
-
   return (
     <React.Fragment>
       <Helmet>
@@ -39,8 +36,7 @@ App.getPageData = async location => {
     // Merge in the data from the route components
     ...routeDataSetter({
       ...prevState,
-      location,
+      // You can set data here that will be added on every page
     }),
-    // You can set data here that will be added on every page
   });
 };

@@ -1,6 +1,6 @@
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
 import { BrowserRouter } from 'react-router-dom';
-import { StaticRouter, withRouter } from 'react-router';
+import { StaticRouter, withRouter, matchPath } from 'react-router';
 import React from 'react';
 
 function usePrevious(value) {
@@ -45,4 +45,15 @@ export default function Router({ children, ...passthrough }) {
       {children}
     </StaticRouter>
   );
+}
+
+export async function getRouteData(location, routes) {
+  const route = routes.find(x => matchPath(location.pathname, { exact: true, ...x }));
+
+  let updater;
+  if (route && route.component && route.component.getPageData) {
+    updater = await route.component.getPageData(location, matchPath(location.pathname, route).params);
+  }
+
+  return updater || (prevState => prevState);
 }

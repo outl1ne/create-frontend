@@ -3,7 +3,7 @@ import { AppDataContext } from '@optimistdigital/create-frontend/universal-react
 import { Switch, Route } from 'react-router-dom';
 import Helmet from 'react-helmet-async';
 import React from 'react';
-import Router from '@optimistdigital/create-frontend/universal-react/Router';
+import Router, { getCurrentPage } from '@optimistdigital/create-frontend/universal-react/Router';
 import routes from 'app/routes';
 
 export default function App() {
@@ -27,9 +27,20 @@ export default function App() {
   );
 }
 
-App.getPageData = async url => {
+/**
+ * This function gets called once on the server, and whenever the page changes on the client.
+ * The result ends up in the AppDataContext.
+ */
+App.getPageData = async location => {
+  // Finds the current route component and gets data from that
+  const routeDataSetter = await getRouteData(location, routes);
+
   return prevState => ({
-    ...prevState,
-    url,
+    // Merge in the data from the route components
+    ...routeDataSetter({
+      ...prevState,
+      location,
+    }),
+    // You can set data here that will be added on every page
   });
 };

@@ -3,6 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import wrapInDocument from './wrapInDocument';
 import { AppDataContext } from '../index';
 import { HelmetProvider } from 'react-helmet-async';
+import urlParser from 'url';
 
 /**
  * Server render - renders your react app to string
@@ -21,7 +22,11 @@ export default async function renderOnServer(ReactComponent, url, backendData = 
    * Get page data
    */
   if (typeof ReactComponent.getPageData === 'function') {
-    appData.pageData = (await ReactComponent.getPageData(url))(appData.pageData);
+    const parsedUrl = urlParser.parse(url);
+    appData.pageData = (await ReactComponent.getPageData({
+      pathname: parsedUrl.pathname,
+      search: parsedUrl.search,
+    }))(appData.pageData);
   }
 
   /**

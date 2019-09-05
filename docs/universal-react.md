@@ -71,9 +71,11 @@ Note that this example uses the hooks API, but other [context API's](https://rea
 
 ## Page based data fetching
 
-The top level App component can have an async function called `getPageData`.
-This function will be called once in the server, and whenever the page changes on the client. The new URL will be passed as an argument.
-The return value will be available on the client and server in the AppDataContext with the `pageData` property.
+The top level App component can have an async function called `getPageData`, which is called once in the server, and on the client whenever the page changes.
+
+This function gets the page's location as an argument, and returns an updater function. The updater function gets the previous state and should return the new state.
+
+The page data will be available on the client and server in the AppDataContext.
 
 ```js
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
@@ -84,13 +86,26 @@ export default function App() {
     return <div>{pageData.url}</div>;
 }
 
-App.getPageData = async url => {
-    // In reality you'd make some API requests here based on the URL
-    return { url };
+App.getPageData = async location => {
+    // Fetch some data asynchronously here
+    return prevState => ({
+        ...prevState,
+        url: location.pathname,
+    });
 };
 ```
 
-PS! This only works on the top level component that you pass to render, not any children.
+The boilerplate comes with additional logic so that this can also be used on route components. In this case the function also receives the route params as a second argument:
+
+```js
+HomePage.getPageData = async (location, params) => {
+    // Fetch some data for the homepage here
+    return prevState => ({
+        ...prevState,
+        homePageData: {},
+    });
+};
+```
 
 ## React-Router
 

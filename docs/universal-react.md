@@ -95,7 +95,7 @@ App.getPageData = async location => {
 };
 ```
 
-The boilerplate comes with additional logic so that this can also be used on route components. In this case the function also receives the route params as a second argument:
+With the default boilerplate, this can also be used on route components. In this case the function also receives the URL params as a second argument:
 
 ```js
 HomePage.getPageData = async (location, params) => {

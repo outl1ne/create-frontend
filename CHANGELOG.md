@@ -1,5 +1,41 @@
 # Changelog
 
+## [12.0.0] - 2019-09-05
+
+-   Changes to universal-react template, mainly to add better universal data fetching capabilities:
+
+    -   `getPageData` will now get called on client-side route changes as well.
+    -   `getPageData` should now return an updater function, instead of a plain object
+    -   Added boilerplate to the template to handle fetching data for specific routes. Each route's component can now have a `getPageData` function (more info in docs)
+    -   Router no longer needs `url` passed to it in App.js
+    -   Changed the arguments passed to `render()` on the server. The second argument is now the `url` (previously request object). The third argument is now a generic data object that will be passed on to the application (previously config)
+
+### Upgrading
+
+-   If you were using App.getPageData, it should be refactored something like this:
+
+```js
+// Old:
+App.getPageData = async ({ req }) => ({
+    foo: 'bar',
+});
+
+// New (note that this will now run on every page change):
+App.getPageData = async (location, params) => prevState => ({
+    foo: 'bar',
+});
+```
+
+-   In the server, `render()` should be called with different arguments:
+
+```js
+// Old:
+const { content, context } = await render(App, req, getConfig());
+
+// New:
+const { content, context } = await render(App, req.originalUrl, { config: getConfig() });
+```
+
 ## [11.1.0] - 2019-08-02
 
 -   Router component from universal router now passes the props through to react-router

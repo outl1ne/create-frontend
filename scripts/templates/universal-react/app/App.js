@@ -28,7 +28,7 @@ export default function App() {
 }
 
 /**
- * This function gets called once on the server, and whenever the page changes on the client.
+ * This function gets called once in the server, and in the client whenever the page changes.
  * The result ends up in the AppDataContext.
  */
 App.getPageData = async location => {

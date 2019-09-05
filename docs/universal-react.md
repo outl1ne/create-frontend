@@ -1,6 +1,6 @@
 # Universal React App
 
-This template will set up a React project that renders on both the client and server with Node.js.
+This template will set up a React project that renders in both the client and server with Node.js.
 
 ## Usage
 
@@ -21,7 +21,7 @@ The configuration and commands are the same as with the default template, but th
 
 ## Rendering
 
-Create-Frontend exposes render functions that take care of rendering the React app on the server and client:
+Create-Frontend exposes functions that take care of rendering the React app in the server and client:
 
 ```js
 /**
@@ -29,8 +29,6 @@ Create-Frontend exposes render functions that take care of rendering the React a
  *
  * @param ReactComponent - The root component of your React app
  * @param domNode - DOM node that the React app should be rendered to.
- *
- * @return {undefined}
  */
 import { render } from '@optimistdigital/create-frontend/universal-react/client';
 render(ReactComponent, domNode);
@@ -42,7 +40,7 @@ render(ReactComponent, domNode);
  *
  * @param ReactComponent - The root component of your React app
  * @param url - The url for the request. For express, you should pass `req.originalUrl`
- * @param backendData - Data that you'd like to be accessible in the app (on both the client and server) through AppDataContext. Optional.
+ * @param backendData - Data that you'd like to be accessible in the app (in both the client and server) through AppDataContext. Optional.
  *
  * @return {{ content: String, context: Object }}
  */
@@ -71,11 +69,11 @@ Note that this example uses the hooks API, but other [context API's](https://rea
 
 ## Page based data fetching
 
-The top level App component can have an async function called `getPageData`, which is called once in the server, and on the client whenever the page changes.
+The top level App component can have an async function called `getPageData`, which is called once in the server, and in the client whenever the page changes.
 
 This function gets the page's location as an argument, and returns an updater function. The updater function gets the previous state and should return the new state.
 
-The page data will be available on the client and server in the AppDataContext.
+The page data will be available in the AppDataContext.
 
 ```js
 import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';

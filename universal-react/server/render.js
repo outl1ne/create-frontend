@@ -10,7 +10,7 @@ import urlParser from 'url';
  *
  * @param ReactComponent - The root component of your React app
  * @param url - The url for the request. For express, you should pass `req.originalUrl`
- * @param backendData - Data that you'd like to be accessible in the app (on both the client and server) through AppDataContext.
+ * @param backendData - Data that you'd like to be accessible in the app (in both the client and server) through AppDataContext.
  *
  * @return {{ content: String, context: Object }}
  */

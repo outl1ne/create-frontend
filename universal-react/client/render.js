@@ -10,8 +10,6 @@ const initialAppData = { ...window.__OCF_APP_DATA__ };
  *
  * @param ReactComponent - The root component of your React app
  * @param domNode - DOM node that the React app should be rendered to.
- *
- * @return {undefined}
  */
 export default async function renderOnClient(ReactComponent, domNode) {
   /**

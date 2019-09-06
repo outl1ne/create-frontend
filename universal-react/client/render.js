@@ -46,10 +46,13 @@ function AppDataProvider({ ReactComponent, ...props }) {
 
       if (typeof ReactComponent.getPageData !== 'function') return;
 
-      const updater = await ReactComponent.getPageData({
-        pathname: location.pathname,
-        search: location.search,
-      });
+      const updater = await ReactComponent.getPageData(
+        {
+          pathname: location.pathname,
+          search: location.search,
+        },
+        initialAppData.backendData
+      );
 
       setAppData(prevState => ({
         ...prevState,

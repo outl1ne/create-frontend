@@ -31,9 +31,9 @@ export default function App() {
  * This function gets called once in the server, and in the client whenever the page changes.
  * The result ends up in the AppDataContext.
  */
-App.getPageData = async location => {
+App.getPageData = async (location, backendData) => {
   // Finds the current route component and gets data from that
-  const routeDataSetter = await getRouteData(location, routes);
+  const routeDataSetter = await getRouteData(location, routes, backendData);
 
   return prevState => ({
     // Merge in the data from the route components

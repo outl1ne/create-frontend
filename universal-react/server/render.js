@@ -24,10 +24,13 @@ export default async function renderOnServer(ReactComponent, url, backendData = 
    */
   if (typeof ReactComponent.getPageData === 'function') {
     const parsedUrl = urlParser.parse(url);
-    appData.pageData = (await ReactComponent.getPageData({
-      pathname: parsedUrl.pathname,
-      search: parsedUrl.search,
-    }))(appData.pageData);
+    appData.pageData = (await ReactComponent.getPageData(
+      {
+        pathname: parsedUrl.pathname,
+        search: parsedUrl.search,
+      },
+      backendData
+    ))(appData.pageData);
   }
 
   /**

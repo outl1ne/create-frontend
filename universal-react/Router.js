@@ -47,12 +47,12 @@ export default function Router({ children, ...passthrough }) {
   );
 }
 
-export async function getRouteData(location, routes) {
+export async function getRouteData(location, routes, backendData) {
   const route = routes.find(x => matchPath(location.pathname, { exact: true, ...x }));
 
   let updater;
   if (route && route.component && route.component.getPageData) {
-    updater = await route.component.getPageData(location, matchPath(location.pathname, route).params);
+    updater = await route.component.getPageData(location, matchPath(location.pathname, route).params, backendData);
   }
 
   return updater || (prevState => prevState);

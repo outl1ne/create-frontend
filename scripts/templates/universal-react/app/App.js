@@ -7,12 +7,12 @@ import Router, { getRouteData } from '@optimistdigital/create-frontend/universal
 import routes from 'app/routes';
 
 export default function App() {
-  const { config } = React.useContext(AppDataContext);
+  const { pageData } = React.useContext(AppDataContext);
 
   return (
     <React.Fragment>
       <Helmet>
-        <title>{config.APP_NAME}</title>
+        <title>{pageData.config.APP_NAME}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 

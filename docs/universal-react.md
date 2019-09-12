@@ -29,9 +29,12 @@ Create-Frontend exposes functions that take care of rendering the React app in t
  *
  * @param ReactComponent - The root component of your React app
  * @param domNode - DOM node that the React app should be rendered to.
+ * @param props (optional) - This will get passed to the App component during render, and as the 2nd argument to getPageData.
+ *              You will have to ensure that passing different props on server/client won't result in a different HTML,
+ *              Otherwise you will get content mismatch errors during hydration.
  */
 import { render } from '@optimistdigital/create-frontend/universal-react/client';
-render(ReactComponent, domNode);
+render(ReactComponent, domNode, props);
 ```
 
 ```js
@@ -40,7 +43,9 @@ render(ReactComponent, domNode);
  *
  * @param ReactComponent - The root component of your React app
  * @param url - The url for the request. For express, you should pass `req.originalUrl`
- * @param backendData - Data that you'd like to be accessible in the app (in both the client and server) through AppDataContext. Optional.
+ * @param props (optional) - This will get passed to the App component during render, and as the 2nd argument to getPageData.
+ *              You will have to ensure that passing different props on server/client won't result in a different HTML,
+ *              Otherwise you will get content mismatch errors during hydration.
  *
  * @return {{ content: String, context: Object }}
  */

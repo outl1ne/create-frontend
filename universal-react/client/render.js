@@ -10,8 +10,9 @@ const initialAppData = { ...window.__OCF_APP_DATA__ };
  *
  * @param ReactComponent - The root component of your React app
  * @param domNode - DOM node that the React app should be rendered to.
+ * @param props - This will get passed to the App component during client render, and as the 2nd argument to getPageData
  */
-export default async function renderOnClient(ReactComponent, domNode) {
+export default async function renderOnClient(ReactComponent, domNode, props = {}) {
   /**
    * Delete server styles once the client-side version loaded
    */
@@ -24,16 +25,16 @@ export default async function renderOnClient(ReactComponent, domNode) {
   }
 
   ReactDOM.hydrate(
-    <AppDataProvider ReactComponent={ReactComponent}>
+    <AppDataProvider ReactComponent={ReactComponent} appProps={props}>
       <HelmetProvider>
-        <ReactComponent />
+        <ReactComponent {...props} />
       </HelmetProvider>
     </AppDataProvider>,
     domNode
   );
 }
 
-function AppDataProvider({ ReactComponent, ...props }) {
+function AppDataProvider({ ReactComponent, appProps, ...rest }) {
   const ignoredFirstRouteChange = React.useRef();
   const [appData, setAppData] = React.useState(initialAppData);
 
@@ -46,14 +47,12 @@ function AppDataProvider({ ReactComponent, ...props }) {
 
       if (typeof ReactComponent.getPageData !== 'function') return;
 
-      const { url, pageData, ...backendData } = initialAppData;
-
       const updater = await ReactComponent.getPageData(
         {
           pathname: location.pathname,
           search: location.search,
         },
-        backendData
+        appProps
       );
 
       setAppData(prevState => ({
@@ -61,10 +60,10 @@ function AppDataProvider({ ReactComponent, ...props }) {
         pageData: updater(prevState.pageData),
       }));
     },
-    [setAppData, ReactComponent]
+    [ReactComponent, appProps]
   );
 
-  return <AppDataContext.Provider {...props} value={{ ...appData, onRouteChange: handleRouteChange }} />;
+  return <AppDataContext.Provider {...rest} value={{ ...appData, onRouteChange: handleRouteChange }} />;
 }
 
 function waitForLoad(link, cb) {

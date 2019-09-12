@@ -31,15 +31,14 @@ export default function App() {
  * This function gets called once in the server, and in the client whenever the page changes.
  * The result ends up in the AppDataContext.
  */
-App.getPageData = async (location, backendData) => {
+App.getPageData = async (location, props) => {
   // Finds the current route component and gets data from that
-  const routeDataSetter = await getRouteData(location, routes, backendData);
+  const routeDataSetter = await getRouteData(location, routes, props);
 
   return prevState => ({
     // Merge in the data from the route components
-    ...routeDataSetter({
-      ...prevState,
-      // You can set data here that will be added on every page
-    }),
+    ...routeDataSetter(prevState),
+    // You can set data here that will be added on every page
+    config: prevState.config || props.config,
   });
 };

@@ -1,5 +1,29 @@
 # Changelog
 
+## [13.0.0] - 2019-09-12
+
+**Breaking**: `getPageData` and `render` function signatures changed. The previous solution didn't give enough flexibility to integrate smoothly with data management libraries like Redux/Mobx.
+
+-   The `render` functions (on both client and server) now accept `props` as the third argument instead of `backendData`. This will be passed as a prop to your top level React component (App.js), and also passed to `App.getPageData` as the 2nd argument. These props don't get automatically added to `appDataContext` - if you want to add them, put them in the return value of `getPageData` explicitly.
+
+### Upgrading
+
+-   If you were reading `backendData` contents in your React app through the `appDataContext`, you now have to pass that explicitly in `getPageData`:
+
+```js
+App.getPageData = async (location, props) => {
+    // Finds the current route component and gets data from that
+    const routeDataSetter = await getRouteData(location, routes, props);
+
+    return prevState => ({
+        // Merge in the data from the route components
+        ...routeDataSetter(prevState),
+        // You can set data here that will be added on every page
+        config: prevState.config || props.config,
+    });
+};
+```
+
 ## [12.0.0] - 2019-09-05
 
 -   Changes to universal-react template, mainly to add better universal data fetching capabilities:

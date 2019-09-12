@@ -10,14 +10,14 @@ import urlParser from 'url';
  *
  * @param ReactComponent - The root component of your React app
  * @param url - The url for the request. For express, you should pass `req.originalUrl`
- * @param backendData - Data that you'd like to be accessible in the app (in both the client and server) through AppDataContext.
+ * @param props - This will get passed to the App component during server render, and as the 2nd argument to getPageData
  *
  * @return {{ content: String, context: Object }}
  */
-export default async function renderOnServer(ReactComponent, url, backendData = {}) {
+export default async function renderOnServer(ReactComponent, url, props = {}) {
   const serverContext = {};
   const helmetContext = {};
-  const appData = { url, ...backendData, pageData: {} };
+  const appData = { url, pageData: {} };
 
   /**
    * Get page data
@@ -29,7 +29,7 @@ export default async function renderOnServer(ReactComponent, url, backendData = 
         pathname: parsedUrl.pathname,
         search: parsedUrl.search,
       },
-      backendData
+      props
     ))(appData.pageData);
   }
 
@@ -39,7 +39,7 @@ export default async function renderOnServer(ReactComponent, url, backendData = 
   const appString = ReactDOMServer.renderToString(
     <AppDataContext.Provider value={{ ...appData, serverContext }}>
       <HelmetProvider context={helmetContext}>
-        <ReactComponent />
+        <ReactComponent {...props} />
       </HelmetProvider>
     </AppDataContext.Provider>
   );

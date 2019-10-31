@@ -1,5 +1,10 @@
 # Changelog
 
+## [13.1.0] - 2019-10-31
+
+-   The universal-react template now also generates a `.gitignore` file.
+-   Updates to dependencies
+
 ## [13.0.0] - 2019-09-12
 
 **Breaking**: `getPageData` and `render` function signatures changed. The previous solution didn't give enough flexibility to integrate smoothly with data management libraries like Redux/Mobx.

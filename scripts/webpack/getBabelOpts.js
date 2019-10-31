@@ -18,7 +18,6 @@ const getConfig = () => {
   }
 
   if (fs.existsSync(resolveApp('.babelrc'))) {
-    console.log('Using baeblrc', JSON5.parse(fs.readFileSync(resolveApp('.babelrc'), 'utf8')));
     return JSON5.parse(fs.readFileSync(resolveApp('.babelrc'), 'utf8'));
   }
 

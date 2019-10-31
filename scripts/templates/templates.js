@@ -56,6 +56,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     },
     mergeDefaultFiles: false,
     templatePath: path.resolve(__dirname, 'universal-react'),
+    gitIgnore: ['/build', '/node_modules', '.DS_Store', '.vscode'],
     // prettier-ignore
     packageJson: {
       'name': name,

@@ -116,6 +116,11 @@ function init() {
   // Generate package.json
   const packageJson = createPackageJson(template);
 
+  // Generate .gitignore (it gets removed from npm for some reason, so this is a workaround to ensure it ends up generated)
+  if (template.gitIgnore) {
+    fs.writeFileSync(path.resolve(CURRENT_DIR, '.gitignore'), template.gitIgnore.join('\n') + '\n');
+  }
+
   // Write package.json into cwd
   fs.writeFileSync(path.resolve(CURRENT_DIR, 'package.json'), packageJson);
 

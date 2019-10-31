@@ -1,7 +1,7 @@
 import 'app/scss/entry.scss';
 import { Switch, Route } from 'react-router-dom';
 import AppDataContext from '@optimistdigital/create-frontend/universal-react/AppDataContext';
-import Helmet from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 import React from 'react';
 import Router, { getRouteData } from '@optimistdigital/create-frontend/universal-react/Router';
 import routes from 'app/routes';

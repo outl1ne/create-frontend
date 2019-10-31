@@ -88,7 +88,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'eslint': '^5.13.0',
         'express': '^4.17.1',
         'normalize.css': '8.x.x',
-        'react-helmet-async': '^0.2.0',
+        'react-helmet-async': '^1.0.4',
         'react-router': '^5.0.1',
         'react-router-dom': '^5.0.1'
       },

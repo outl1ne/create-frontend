@@ -114,4 +114,4 @@ the relevant code.
 
 To update the local version of the toolkit, type `npm install @optimistdigital/create-frontend`. Please look at the changelog to see if there are any breaking changes.
 
-The global version can be updated with `npm install -g @optimistdigital/create-frontend`, and will ensure that newly created projects use the latest version.
+If you're not using npx, remember to update the global version of the library as well.

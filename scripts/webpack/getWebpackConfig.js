@@ -197,7 +197,7 @@ module.exports = async target => {
           : {
               loader: require.resolve('style-loader'),
               options: {
-                attrs: {
+                attributes: {
                   // This id will be used to listen for load event
                   id: 'ocf-client-styles',
                 },
@@ -233,7 +233,9 @@ module.exports = async target => {
         {
           loader: require.resolve('sass-loader'),
           options: {
-            outputStyle: 'expanded',
+            sassOptions: {
+              outputStyle: 'expanded',
+            },
             sourceMap: true, // resolve-url-loader always needs a sourcemap
           },
         },
@@ -264,7 +266,9 @@ module.exports = async target => {
         {
           loader: require.resolve('sass-loader'),
           options: {
-            outputStyle: 'compressed',
+            sassOptions: {
+              outputStyle: 'compressed',
+            },
             sourceMap: true, // resolve-url-loader always needs a sourcemap
           },
         },

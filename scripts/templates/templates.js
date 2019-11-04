@@ -29,7 +29,6 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         '@babel/runtime-corejs3': '^7.5.5',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'eslint-plugin-import': '^2.16.0',
-        'eslint-plugin-react': '^7.12.4',
         'eslint': '^5.13.0',
         'normalize.css': '8.x.x',
       },
@@ -44,7 +43,13 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     },
     mergeDefaultFiles: true,
     templatePath: path.resolve(__dirname, 'react'),
-    packageJson: defaultTemplate.packageJson,
+    packageJson: {
+      ...defaultTemplate.packageJson,
+      dependencies: {
+        ...defaultTemplate.packageJson.dependencies,
+        'eslint-plugin-react': '^7.12.4',
+      },
+    },
   };
 
   const universalReact = {

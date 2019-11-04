@@ -1,0 +1,3 @@
+{
+  "extends": "./node_modules/@optimistdigital/create-frontend/eslint-config.js"
+}

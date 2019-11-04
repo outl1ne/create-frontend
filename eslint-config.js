@@ -1,16 +1,10 @@
 module.exports = {
-  extends: ['@optimistdigital/eslint-config-rules', 'prettier'],
+  ...require('./eslint-config-vanilla'),
+  extends: ['@optimistdigital/eslint-config-rules/react', 'prettier'],
   rules: {
     'react/jsx-indent': 0,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
-  },
-  parser: 'babel-eslint',
-  env: {
-    node: true,
-    browser: true,
-    es6: true,
-    jest: true,
   },
   settings: {
     react: {
@@ -26,12 +20,5 @@ module.exports = {
       objectLiteralDuplicateProperties: false,
       jsx: true,
     },
-  },
-  globals: {
-    __DEVELOPMENT__: true,
-    __PRODUCTION__: true,
-    __DEBUG__: true,
-    __OCF_MANIFEST_PATH__: true,
-    __TARGET__: true,
   },
 };

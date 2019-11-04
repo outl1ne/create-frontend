@@ -1,7 +1,6 @@
 module.exports = {
   extends: ['@optimistdigital/eslint-config-rules', 'prettier'],
   rules: {
-    'flowtype/define-flow-type': 1,
     'react/jsx-indent': 0,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',
@@ -18,7 +17,7 @@ module.exports = {
       version: 'detect',
     },
   },
-  plugins: ['import', 'react', 'flowtype', 'react-hooks'],
+  plugins: ['import', 'react', 'react-hooks'],
   parserOptions: {
     ecmaVersion: 7,
     sourceType: 'module',

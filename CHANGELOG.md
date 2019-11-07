@@ -1,5 +1,10 @@
 # Changelog
 
+## [13.1.1] - 2019-11-07
+
+-   The default template no longer uses an ESLint config that relies on the React plugin. This fixes a warning in the console that says you are using the React plugin but don't have React installed. If updating from an existing project, you may change `eslint-config.js` to `eslint-config-vanilla.js` in your `.eslintrc` file.
+-   The flowtype ESLint plugin has been removed. If you want to continue linting Flow in your project, you can add the plugin manually in your `.eslintrc` file.
+
 ## [13.1.0] - 2019-10-31
 
 -   The universal-react template now also generates a `.gitignore` file.

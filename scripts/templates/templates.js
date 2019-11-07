@@ -48,6 +48,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
       dependencies: {
         ...defaultTemplate.packageJson.dependencies,
         'eslint-plugin-react': '^7.12.4',
+        'eslint-plugin-react-hooks': '^2.2.0',
       },
     },
   };
@@ -88,6 +89,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'dotenv': '^8.1.0',
         'eslint-plugin-import': '^2.16.0',
         'eslint-plugin-react': '^7.12.4',
+        'eslint-plugin-react-hooks': '^2.2.0',
         'eslint': '^5.13.0',
         'express': '^4.17.1',
         'normalize.css': '8.x.x',

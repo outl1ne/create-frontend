@@ -1,5 +1,10 @@
 # Changelog
 
+## [13.1.2] - 2019-12-03
+
+-   Fixed issue in babel configuration that resulted in multiple copies of core-js being shipped.
+-   Dependency updates
+
 ## [13.1.1] - 2019-11-07
 
 -   The default template no longer uses an ESLint config that relies on the React plugin. This fixes a warning in the console that says you are using the React plugin but don't have React installed. If updating from an existing project, you may change `eslint-config.js` to `eslint-config-vanilla.js` in your `.eslintrc` file.

@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const CleanPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-assets-manifest');
 const webpack = require('webpack');
@@ -360,10 +360,7 @@ module.exports = async target => {
   /* PRODUCTION PLUGINS */
   if (IS_PRODUCTION) {
     output.plugins.push(
-      new CleanPlugin([OUTPUT_PATH], {
-        root: config.APP_DIRECTORY,
-        verbose: false,
-      }), // Clean previously built assets before making new bundle
+      new CleanWebpackPlugin(), // Clean previously built assets before making new bundle
       new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
       new ExtractPlugin({
         // Extract css files from bundles
@@ -387,10 +384,7 @@ module.exports = async target => {
     if (IS_NODE) {
       output.plugins.push(
         /* Cleaning build directory in dev to prevent a billion useless hot-update files from piling up */
-        new CleanPlugin([OUTPUT_PATH], {
-          root: config.APP_DIRECTORY,
-          verbose: false,
-        }),
+        new CleanWebpackPlugin(),
         new StartServerPlugin({
           name: `${config.SERVER_OUTPUT_FILE}.js`,
         })

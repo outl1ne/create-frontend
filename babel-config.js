@@ -21,7 +21,7 @@ module.exports = {
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),
-    [require.resolve('@babel/plugin-transform-runtime')],
+    [require.resolve('@babel/plugin-transform-runtime'), { corejs }],
   ].filter(Boolean),
   env: {
     production: {

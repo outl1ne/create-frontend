@@ -3,6 +3,8 @@
  * All application specific code should be added in server/server.js
  */
 import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 import http from 'http';
 import detectPort from 'detect-port';
 

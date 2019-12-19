@@ -1,9 +1,7 @@
 // SCSS entry. In production, the contents are extracted into a separate file. In dev, JS loads the CSS dynamically.
 import '../scss/entry.scss';
-
 // Polyfills
 import 'core-js/stable';
-
 import App from './App';
 import React from 'react';
 import ReactDOM from 'react-dom';

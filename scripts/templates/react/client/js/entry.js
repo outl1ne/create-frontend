@@ -3,7 +3,6 @@ import '../scss/entry.scss';
 
 // Polyfills
 import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 
 import App from './App';
 import React from 'react';

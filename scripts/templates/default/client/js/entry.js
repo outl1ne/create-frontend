@@ -3,7 +3,6 @@ import '../scss/entry.scss';
 
 // Polyfills
 import 'core-js/stable';
-import 'regenerator-runtime/runtime';
 
 console.log('Hello world!');
 

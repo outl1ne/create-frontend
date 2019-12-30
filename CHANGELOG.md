@@ -1,5 +1,9 @@
 # Changelog
 
+## [13.2.0] - 2019-12-30
+
+-   [Optional chaining](https://github.com/tc39/proposal-optional-chaining) is stage 4! Added @babel/plugin-proposal-optional-chaining
+
 ## [13.1.2] - 2019-12-03
 
 -   Fixed issue in babel configuration that resulted in multiple copies of core-js being shipped.

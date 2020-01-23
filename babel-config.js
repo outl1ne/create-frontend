@@ -20,7 +20,6 @@ module.exports = {
     require.resolve('babel-plugin-dev-expression'),
     require.resolve('@babel/plugin-proposal-object-rest-spread'),
     require.resolve('@babel/plugin-proposal-class-properties'),
-    require.resolve('@babel/plugin-proposal-optional-chaining'),
     require.resolve('@babel/plugin-transform-react-display-name'),
     [require.resolve('@babel/plugin-transform-runtime'), { regenerator: true }],
   ].filter(Boolean),

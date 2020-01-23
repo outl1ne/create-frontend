@@ -1,5 +1,9 @@
 # Changelog
 
+## [13.3.0] - 2020-01-23
+
+-   Updated dependencies. We're now using babel 7.8, which gives [the nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator).
+
 ## [13.2.0] - 2019-12-30
 
 -   [Optional chaining](https://github.com/tc39/proposal-optional-chaining) is stage 4! Added @babel/plugin-proposal-optional-chaining

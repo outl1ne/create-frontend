@@ -1,28 +1,32 @@
 import 'app/scss/entry.scss';
-import { Switch, Route } from 'react-router-dom';
-import AppDataContext from '@optimistdigital/create-frontend/universal-react/AppDataContext';
 import { Helmet } from 'react-helmet-async';
+import { Switch, Route } from 'react-router-dom';
+import ErrorBoundary from 'app/components/ErrorBoundary';
+import ErrorPage from 'app/pages/ErrorPage';
 import React from 'react';
 import Router, { getRouteData } from '@optimistdigital/create-frontend/universal-react/Router';
 import routes from 'app/routes';
 
 export default function App() {
-  const { pageData } = React.useContext(AppDataContext);
-
   return (
     <React.Fragment>
       <Helmet>
-        <title>{pageData.config.APP_NAME}</title>
+        <title>New app</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Helmet>
 
-      <Router>
-        <Switch>
-          {routes.map(route => (
-            <Route key={route.path} exact {...route} />
-          ))}
-        </Switch>
-      </Router>
+      <ErrorBoundary renderError={() => <ErrorPage status={500} />}>
+        <Router>
+          <Switch>
+            {routes.map(route => (
+              <Route key={route.path} exact {...route} />
+            ))}
+            <Route>
+              <ErrorPage status={404} />
+            </Route>
+          </Switch>
+        </Router>
+      </ErrorBoundary>
     </React.Fragment>
   );
 }

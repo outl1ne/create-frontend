@@ -21,8 +21,10 @@ server.use('/', async (req, res) => {
     // Send HTML response and take status from the app if given
     return res.status(context.status || 200).send(content);
   } catch (err) {
-    console.error('Server encountered error while rendering React app:', err);
-    return res.status(500).send('Internal server error');
+    console.error('Error while rendering React, skipping SSR:', err);
+
+    // If SSR failed, send an empty page so client can try to render
+    return res.status(500).send((await render(null, req.originalUrl, { config: getConfig() })).content);
   }
 });
 

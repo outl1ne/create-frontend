@@ -3,5 +3,5 @@
  * In React, AppDataContext can be used to access this config in both the client and server.
  */
 module.exports = () => ({
-  APP_NAME: 'New app',
+  //
 });

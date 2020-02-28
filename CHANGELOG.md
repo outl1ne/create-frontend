@@ -1,5 +1,10 @@
 # Changelog
 
+## [13.4.0] - 2020-01-28
+
+-   Added error handling to the universal-react template: if no routes are matched, a 404 page will be shown. If there are errors while rendering the React app, server rendering is skipped and on the client, an error boundary is used to display an error page.
+-   The `render` function in the universal-react template now accepts `null` as the first argument, to skip server rendering.
+
 ## [13.3.0] - 2020-01-23
 
 -   Updated dependencies. We're now using babel 7.8, which gives [the nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator).

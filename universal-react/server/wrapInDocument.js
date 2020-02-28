@@ -29,7 +29,7 @@ export default function wrapInDocument(content, appData, helmetContext) {
     <script>Object.defineProperty(window, '__OCF_APP_DATA__', {
       value: ${serialize(appData)}
     });</script>
-    <script src="${manifest['app.js']}"></script>
+    <script ${__DEVELOPMENT__ ? 'crossorigin ' : ''}src="${manifest['app.js']}"></script>
   </body>
 </html>`;
 }

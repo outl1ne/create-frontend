@@ -24,36 +24,30 @@ export default async function renderOnClient(ReactComponent, domNode, props = {}
     });
   }
 
-  ReactDOM.hydrate(
+  const content = (
     <AppDataProvider ReactComponent={ReactComponent} appProps={props}>
       <HelmetProvider>
         <ReactComponent {...props} />
       </HelmetProvider>
-    </AppDataProvider>,
-    domNode
+    </AppDataProvider>
   );
+
+  if (window.__OCF_APP_DATA__.skippedSSR === true) {
+    ReactDOM.render(content, domNode);
+  } else {
+    ReactDOM.hydrate(content, domNode);
+  }
 }
 
 function AppDataProvider({ ReactComponent, appProps, ...rest }) {
   const ignoredFirstRouteChange = React.useRef();
   const [appData, setAppData] = React.useState(initialAppData);
 
-  const handleRouteChange = React.useCallback(
+  const setPageData = React.useCallback(
     async location => {
-      if (ignoredFirstRouteChange.current !== true) {
-        ignoredFirstRouteChange.current = true;
-        return;
-      }
-
       if (typeof ReactComponent.getPageData !== 'function') return;
 
-      const updater = await ReactComponent.getPageData(
-        {
-          pathname: location.pathname,
-          search: location.search,
-        },
-        appProps
-      );
+      const updater = await ReactComponent.getPageData(location, appProps);
 
       setAppData(prevState => ({
         ...prevState,
@@ -62,6 +56,33 @@ function AppDataProvider({ ReactComponent, appProps, ...rest }) {
     },
     [ReactComponent, appProps]
   );
+
+  const handleRouteChange = React.useCallback(
+    location => {
+      if (ignoredFirstRouteChange.current !== true) {
+        ignoredFirstRouteChange.current = true;
+        return;
+      }
+
+      setPageData({
+        pathname: location.pathname,
+        search: location.search,
+      });
+    },
+    [setPageData]
+  );
+
+  /**
+   * Fetch page data immediately, if SSR was skipped
+   */
+  React.useEffect(() => {
+    if (initialAppData.skippedSSR) {
+      setPageData({
+        pathname: location.pathname,
+        search: location.search,
+      });
+    }
+  }, [setPageData]);
 
   return <AppDataContext.Provider {...rest} value={{ ...appData, onRouteChange: handleRouteChange }} />;
 }

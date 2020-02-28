@@ -22,15 +22,22 @@ export default async function renderOnServer(ReactComponent, url, props = {}) {
   /**
    * Get page data
    */
-  if (typeof ReactComponent.getPageData === 'function') {
+  if (ReactComponent && typeof ReactComponent.getPageData === 'function') {
     const parsedUrl = urlParser.parse(url);
-    appData.pageData = (await ReactComponent.getPageData(
-      {
-        pathname: parsedUrl.pathname,
-        search: parsedUrl.search,
-      },
-      props
-    ))(appData.pageData);
+    appData.pageData = (
+      await ReactComponent.getPageData(
+        {
+          pathname: parsedUrl.pathname,
+          search: parsedUrl.search,
+        },
+        props
+      )
+    )({});
+  }
+
+  if (!ReactComponent) {
+    // Pass info that we skipped SSR to the browser, so we can fetch data immediately and avoid trying to hydrate
+    appData.skippedSSR = true;
   }
 
   /**
@@ -38,9 +45,7 @@ export default async function renderOnServer(ReactComponent, url, props = {}) {
    */
   const appString = ReactDOMServer.renderToString(
     <AppDataContext.Provider value={{ ...appData, serverContext }}>
-      <HelmetProvider context={helmetContext}>
-        <ReactComponent {...props} />
-      </HelmetProvider>
+      <HelmetProvider context={helmetContext}>{ReactComponent ? <ReactComponent {...props} /> : ' '}</HelmetProvider>
     </AppDataContext.Provider>
   );
 

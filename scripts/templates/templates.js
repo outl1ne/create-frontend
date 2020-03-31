@@ -25,8 +25,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'build:debug': 'frontend-scripts build --debug',
       },
       'dependencies': {
-        'core-js': '^3.2.1',
-        '@babel/runtime-corejs3': '^7.5.5',
+        'core-js': '^3.6.4',
+        '@babel/runtime-corejs3': '^7.9.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'eslint-plugin-import': '^2.16.0',
         'eslint': '^6.8.0',
@@ -38,8 +38,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
   const react = {
     name: 'react',
     install: {
-      react: '^16.13.0',
-      'react-dom': '^16.13.0',
+      react: '^16.13.1',
+      'react-dom': '^16.13.1',
     },
     mergeDefaultFiles: true,
     templatePath: path.resolve(__dirname, 'react'),
@@ -56,8 +56,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
   const universalReact = {
     name: 'universal-react',
     install: {
-      react: '^16.13.0',
-      'react-dom': '^16.13.0',
+      react: '^16.13.1',
+      'react-dom': '^16.13.1',
     },
     mergeDefaultFiles: false,
     templatePath: path.resolve(__dirname, 'universal-react'),
@@ -82,20 +82,20 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'start': 'frontend-scripts start-universal-react'
       },
       'dependencies': {
-        'core-js': '^3.2.1',
-        '@babel/runtime-corejs3': '^7.5.5',
+        'core-js': '^3.6.4',
+        '@babel/runtime-corejs3': '^7.9.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'detect-port': '^1.3.0',
-        'dotenv': '^8.1.0',
+        'dotenv': '^8.2.0',
         'eslint-plugin-import': '^2.16.0',
         'eslint-plugin-react': '^7.12.4',
-        'eslint-plugin-react-hooks': '^2.2.0',
+        'eslint-plugin-react-hooks': '^3.0.0',
         'eslint': '^6.8.0',
         'express': '^4.17.1',
         'normalize.css': '8.x.x',
         'react-helmet-async': '^1.0.4',
-        'react-router': '^5.0.1',
-        'react-router-dom': '^5.0.1'
+        'react-router': '^5.1.2',
+        'react-router-dom': '^5.1.2'
       },
     },
     postGenerationMessages: [

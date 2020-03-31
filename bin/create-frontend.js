@@ -118,7 +118,11 @@ function init() {
 
   // Generate .gitignore (it gets removed from npm for some reason, so this is a workaround to ensure it ends up generated)
   if (template.gitIgnore) {
-    fs.writeFileSync(path.resolve(CURRENT_DIR, '.gitignore'), template.gitIgnore.join('\n') + '\n');
+    const gitIgnorePath = path.resolve(CURRENT_DIR, '.gitignore');
+    // .gitignore may have been created by some backend generator like Laravel, so we only make it if it didn't already exist
+    if (!fs.existsSync(gitIgnorePath)) {
+      fs.writeFileSync(gitIgnorePath, template.gitIgnore.join('\n') + '\n');
+    }
   }
 
   // Write package.json into cwd

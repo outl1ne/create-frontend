@@ -12,6 +12,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     name: 'default',
     install: {},
     templatePath: path.resolve(__dirname, 'default'),
+    gitIgnore: ['/public/build', '/node_modules', '.DS_Store', '.vscode', '.idea'],
     // prettier-ignore
     packageJson: {
       'name': name,
@@ -43,6 +44,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     },
     mergeDefaultFiles: true,
     templatePath: path.resolve(__dirname, 'react'),
+    gitIgnore: ['/public/build', '/node_modules', '.DS_Store', '.vscode', '.idea'],
     packageJson: {
       ...defaultTemplate.packageJson,
       dependencies: {
@@ -61,7 +63,7 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     },
     mergeDefaultFiles: false,
     templatePath: path.resolve(__dirname, 'universal-react'),
-    gitIgnore: ['/build', '/node_modules', '.DS_Store', '.vscode'],
+    gitIgnore: ['/build', '/node_modules', '.DS_Store', '.vscode', '.idea'],
     // prettier-ignore
     packageJson: {
       'name': name,

@@ -1,5 +1,11 @@
 # Changelog
 
+## [13.5.0] - 2020-04-01
+
+-   All templates now generate `.gitignore` and `README.md` files. They will not be generated if they already exist in the directory
+-   The default template now includes an `index.html` file
+-   Updated dependencies
+
 ## [13.4.0] - 2020-01-28
 
 -   Added error handling to the universal-react template: if no routes are matched, a 404 page will be shown. If there are errors while rendering the React app, server rendering is skipped and on the client, an error boundary is used to display an error page.

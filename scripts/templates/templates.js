@@ -13,6 +13,22 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     install: {},
     templatePath: path.resolve(__dirname, 'default'),
     gitIgnore: ['/public/build', '/node_modules', '.DS_Store', '.vscode', '.idea'],
+    readme: projectName => `
+# ${projectName}
+
+This app uses [create-frontend](https://github.com/optimistdigital/create-frontend/blob/master/readme.md).
+
+## Development
+
+- \`npm ci\` - install dependencies
+- \`npm run dev\` - start local development server
+
+## Production
+
+- \`npm ci\` - install dependencies
+- \`npm run build\` - build the app
+- \`npm run serve\` - start the node server
+    `,
     // prettier-ignore
     packageJson: {
       'name': name,
@@ -44,7 +60,8 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
     },
     mergeDefaultFiles: true,
     templatePath: path.resolve(__dirname, 'react'),
-    gitIgnore: ['/public/build', '/node_modules', '.DS_Store', '.vscode', '.idea'],
+    gitIgnore: defaultTemplate.gitIgnore,
+    readme: defaultTemplate.readme,
     packageJson: {
       ...defaultTemplate.packageJson,
       dependencies: {
@@ -100,10 +117,26 @@ module.exports = function getTemplate(templateName, { isDev, name }) {
         'react-router-dom': '^5.1.2'
       },
     },
+    readme: projectName => `
+# ${projectName}
+
+This is a server-rendered React app that uses [create-frontend](https://github.com/optimistdigital/create-frontend/blob/master/docs/universal-react.md).
+
+## Development
+
+- \`npm ci\` - install dependencies
+- \`npm run dev\` - start local development server
+
+## Production
+
+- \`npm ci\` - install dependencies
+- \`npm run build\` - build the app
+- \`npm run serve\` - start the node server
+    `,
     postGenerationMessages: [
       'For development, type `npm run dev`.',
       'For production, type `npm run build` to build and `npm run start` to serve.',
-      'Documentation: https://github.com/optimistdigital/create-frontend/blob/feature/universal-react/docs/universal-react.md',
+      'Documentation: https://github.com/optimistdigital/create-frontend/blob/master/docs/universal-react.md',
     ],
   };
 

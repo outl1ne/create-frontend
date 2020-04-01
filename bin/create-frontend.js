@@ -8,6 +8,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const args = require('minimist')(process.argv.slice(2));
 const getTemplate = require('../scripts/templates/templates');
+const prettier = require('prettier');
 
 const CURRENT_DIR = process.cwd();
 
@@ -122,6 +123,14 @@ function init() {
     // .gitignore may have been created by some backend generator like Laravel, so we only make it if it didn't already exist
     if (!fs.existsSync(gitIgnorePath)) {
       fs.writeFileSync(gitIgnorePath, template.gitIgnore.join('\n') + '\n');
+    }
+  }
+
+  if (template.readme) {
+    const readmePath = path.resolve(CURRENT_DIR, 'README.md');
+    // Readme may have been created by some backend generator like Laravel, so we only make it if it didn't already exist
+    if (!fs.existsSync(readmePath)) {
+      fs.writeFileSync(readmePath, prettier.format(template.readme(getProjectNameFromCwd()), { parser: 'markdown' }));
     }
   }
 

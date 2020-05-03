@@ -105,7 +105,6 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         '@babel/runtime-corejs3': '^7.9.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'detect-port': '^1.3.0',
-        'dotenv': '^8.2.0',
         'eslint-plugin-import': '^2.16.0',
         'eslint-plugin-react': '^7.12.4',
         'eslint-plugin-react-hooks': '^3.0.0',

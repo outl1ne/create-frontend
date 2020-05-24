@@ -2,12 +2,20 @@
 
 ## [14.0.0] - Unreleased
 
-**Breaking**: Simplified universal-react template's entry files. Previously, we had two different files for the server (entry.js and server.js) which was confusing. `entry.js` also contained code that was irrelevant to the application and so it has been moved to create-frontend.
+### Added
 
--   The old `server/entry.js` has been removed, and the old `server/server.js` has been renamed to `server/entry.js`.
+-   In the universal-react template, environment variables from `.env` are now automatically updated when that file is changed.
+
+### Breaking
+
+Simplified universal-react template's entry files. Previously, we had two different files for the server (entry.js and server.js) which was confusing. `entry.js` also contained code that was irrelevant to the application and so it has been moved to create-frontend.
+
+-   The old `server/entry.js` has been removed, and `server/server.js` has been renamed to `server/entry.js`.
 -   The port detection, hot reloading and createServer code now lives in create-frontend
 
-**Upgrading**: If you have an existing project with universal-react:
+### Upgrading
+
+If you have an existing project with universal-react:
 
 1. Delete `server/entry.js`. If you wrote some custom code here, it should be moved to `server/server.js`
 2. Rename `server/server.js` to `server/entry.js`

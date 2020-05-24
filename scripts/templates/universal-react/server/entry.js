@@ -1,47 +1,31 @@
-/**
- * This file starts up the server, and sets up hot reload in development.
- * All application specific code should be added in server/server.js
- */
-import 'core-js/stable';
-import http from 'http';
-import detectPort from 'detect-port';
+import { render } from '@optimistdigital/create-frontend/universal-react/server';
+import App from 'app/App';
+import express from 'express';
+import getConfig from 'server/config';
 
-const SERVER_PORT = +(process.env.SERVER_PORT || 8000);
-let app = require('./server').default;
-const server = http.createServer(app);
-let currentApp = app;
+const server = express();
+const staticOpts = { maxAge: 604800000 };
 
-detectPort(SERVER_PORT, (_, freePort) => {
-  if (SERVER_PORT !== freePort) {
-    if (__PRODUCTION__) {
-      console.error(
-        `❌  The port (${SERVER_PORT}) is not available. Please use a different port - such as ${freePort} - by setting the SERVER_PORT environment value.`
-      );
-      return;
-    }
-    console.info(
-      `⚠️  The port (${SERVER_PORT}) is not available. Using ${freePort} instead. To use a custom port, start the server with different SERVER_PORT environment value.`
-    );
-  }
+server.use('/client', express.static('build/client', staticOpts)); // Serve build assets
+server.use('/', express.static('public', staticOpts)); // Serve files from public directory
+server.use('/', async (req, res) => {
+  try {
+    // Render the app
+    const { content, context } = await render(App, req.originalUrl, { config: getConfig() });
 
-  server.listen(freePort, error => {
-    if (error) {
-      console.error(`❌  Failed to start server`, error);
+    // If there was a redirect in the app, redirect here
+    if (context.url) {
+      return res.redirect(context.status || 302, context.url);
     }
 
-    console.info(`✅  Server started at http://localhost:${freePort}`);
-  });
+    // Send HTML response and take status from the app if given
+    return res.status(context.status || 200).send(content);
+  } catch (err) {
+    console.error('Error while rendering React, skipping SSR:', err);
 
-  if (module.hot) {
-    module.hot.accept('./server', () => {
-      try {
-        app = require('./server').default;
-        server.removeListener('request', currentApp);
-        server.on('request', app);
-        currentApp = app;
-      } catch (error) {
-        console.error(`❌  Failed to apply hot reload`.error);
-      }
-    });
+    // If SSR failed, send an empty page so client can try to render
+    return res.status(500).send((await render(null, req.originalUrl, { config: getConfig() })).content);
   }
 });
+
+export default server;

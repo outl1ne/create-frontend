@@ -14,6 +14,8 @@ const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { resolveApp } = require('../paths');
+const VirtualModulePlugin = require('webpack-virtual-modules');
+const createServerEntry = require('../../universal-react/server/createServerEntry');
 
 /**
  * @param {string} target - webpack target (web/node)
@@ -32,6 +34,7 @@ module.exports = async target => {
     'webpack/hot/poll?300',
     /^@optimistdigital[\/\\]create-frontend[\/\\]universal-react.*/,
   ]; // Exclude everything except some hot reload logic, and create-frontend code
+  const INTERNAL_SERVER_ENTRY_FILE = 'ocf-server-entry-point.js';
 
   const output = {};
 
@@ -126,7 +129,7 @@ module.exports = async target => {
 
   const DEV_ENTRY_POINTS = {};
 
-  const entryPoints = IS_NODE ? { [config.SERVER_OUTPUT_FILE]: config.SERVER_ENTRY_POINT } : config.ENTRY_POINTS;
+  const entryPoints = IS_NODE ? { [config.SERVER_OUTPUT_FILE]: INTERNAL_SERVER_ENTRY_FILE } : config.ENTRY_POINTS;
 
   Object.keys(entryPoints).forEach(key => {
     DEV_ENTRY_POINTS[key] = [...DEV_ENTRY_CONF, entryPoints[key]];
@@ -397,6 +400,13 @@ module.exports = async target => {
     output.plugins.push(
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
+      })
+    );
+
+    // Add the virtual module that will add act as the server entry point
+    output.plugins.push(
+      new VirtualModulePlugin({
+        [INTERNAL_SERVER_ENTRY_FILE]: createServerEntry(resolveApp(config.SERVER_ENTRY_POINT)),
       })
     );
   }

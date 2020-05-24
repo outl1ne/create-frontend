@@ -6,6 +6,8 @@
 import 'core-js/stable';
 import http from 'http';
 import detectPort from 'detect-port';
+import envLoader from 'node_modules/@optimistdigital/create-frontend/scripts/envLoader';
+envLoader.config({ reload: true });
 
 const SERVER_PORT = +(process.env.SERVER_PORT || 8000);
 let app = require('{{ USER_ENTRY_POINT }}').default;

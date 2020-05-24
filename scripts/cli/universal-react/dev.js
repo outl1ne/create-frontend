@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'development';
-require('dotenv').config();
+require('../../envLoader').config();
 
 const detectPort = require('detect-port');
 const getConfig = require('../../config');
@@ -19,9 +19,7 @@ module.exports = async () => {
   detectPort(userConfig.WEBPACK_PORT, (_, freePort) => {
     if (userConfig.WEBPACK_PORT !== freePort) {
       console.error(
-        `❌  The port (${
-          userConfig.WEBPACK_PORT
-        }) is not available. You can choose another port by running "npm run dev -- --webpackPort=${freePort}"`
+        `❌  The port (${userConfig.WEBPACK_PORT}) is not available. You can choose another port by running "npm run dev -- --webpackPort=${freePort}"`
       );
       return;
     }

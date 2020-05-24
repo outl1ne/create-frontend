@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'production';
-require('dotenv').config();
+require('../envLoader').config();
 
 /**
  * This function starts a webpack production build.

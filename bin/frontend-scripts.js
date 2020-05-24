@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-require('dotenv').config();
+require('../scripts/envLoader').config();
 
 const args = process.argv.slice(2);
 const script = args[0];

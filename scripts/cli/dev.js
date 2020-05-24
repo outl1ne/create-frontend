@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'development';
-require('dotenv').config();
+require('../envLoader').config();
 
 /**
  * This function starts a webpack dev server.

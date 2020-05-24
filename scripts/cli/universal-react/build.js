@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'production';
-require('dotenv').config();
+require('../../envLoader').config();
 
 const build = require('../build');
 const getWebpackClientConfig = require('../../webpack/webpack.config.client');

@@ -8,7 +8,7 @@ module.exports = {
    * and updates env variables if new ones are added, or old ones are changed.
    */
   config(opts = {}) {
-    let { parsed } = dotenv.config();
+    let parsed = dotenv.config().parsed || {};
 
     // In case config() was called twice, we still want to listen for changes
     // only once, so we keep track of whether we're already doing that.
@@ -24,7 +24,7 @@ module.exports = {
           console.info('ℹ️  Changes to .env detected. Reloading environment variables.');
 
           // Find existing variables loaded from dotenv.config() that were changed, and update them
-          const newContents = dotenv.parse(require('fs').readFileSync(dotEnvPath));
+          const newContents = dotenv.parse(require('fs').readFileSync(dotEnvPath)) || {};
           Object.keys(newContents).forEach(newKey => {
             if (parsed[newKey] !== undefined) {
               process.env[newKey] = newContents[newKey];
@@ -33,11 +33,11 @@ module.exports = {
           // Find variables that were loaded from dotenv.config() but were since removed from .env
           Object.keys(parsed).forEach(oldKey => {
             if (newContents[oldKey] === undefined) {
-              process.env[oldKey] = undefined;
+              delete process.env[oldKey];
             }
           });
           // Load new variables that were added to .env
-          parsed = Object.assign({}, dotenv.config().parsed, parsed);
+          parsed = Object.assign({}, dotenv.config().parsed || {}, parsed);
         });
     }
   },

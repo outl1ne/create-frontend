@@ -1,4 +1,4 @@
-import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+import { useAppData } from '@optimistdigital/create-frontend/universal-react';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticRouter, withRouter, matchPath } from 'react-router';
 import React from 'react';
@@ -27,7 +27,7 @@ const RouteChangeListener = withRouter(({ children, location, onChange }) => {
 });
 
 export default function Router({ children, ...passthrough }) {
-  const appData = React.useContext(AppDataContext);
+  const appData = useAppData();
 
   if (__TARGET__ === 'web') {
     return (

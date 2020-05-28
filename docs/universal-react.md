@@ -59,13 +59,13 @@ const {
 ## Configuration
 
 The `server/config.js` file contains your app configuration. You can define values here that will be accessed throughout your app.
-The configuration is available in React components (both server and client) through the **AppDataContext**:
+The configuration is available in React components (both server and client) with the **AppData** hook:
 
 ```js
-import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+import { useAppData } from '@optimistdigital/create-frontend/universal-react';
 
 function Header() {
-    const { config } = React.useContext(AppDataContext);
+    const { config } = useAppData();
     return <div>{config.APP_NAME}</div>;
 }
 ```
@@ -78,14 +78,14 @@ The top level App component can have an async function called `getPageData`, whi
 
 This function gets the page's location as an argument, and returns an updater function. The updater function gets the previous state and should return the new state.
 
-The page data will be available in the AppDataContext.
+The page data will be available in the AppData hook.
 
 ```js
-import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+import { useAppData } from '@optimistdigital/create-frontend/universal-react';
 import React from 'react';
 
 export default function App() {
-    const { pageData } = React.useContext(AppDataContext);
+    const { pageData } = useAppData();
     return <div>{pageData.url}</div>;
 }
 
@@ -117,7 +117,6 @@ client/server differences, and passes information about status codes and redirec
 To use it, wrap your application around the Router.
 
 ```js
-import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
 import Router from '@optimistdigital/create-frontend/universal-react/Router';
 
 export default function App() {
@@ -127,13 +126,13 @@ export default function App() {
 
 ## Passing data from React app to server (such as http status code)
 
-If you're using a router, you probably want to let the server know when a 404 page was rendered to set the correct status code. This can be done by mutating the `serverContext` property found in the AppDataContext:
+If you're using a router, you probably want to let the server know when a 404 page was rendered to set the correct status code. This can be done by mutating the `serverContext` property found in the AppData hook:
 
 ```js
-import { AppDataContext } from '@optimistdigital/create-frontend/universal-react';
+import { useAppData } from '@optimistdigital/create-frontend/universal-react';
 
 export default function NotFoundPage() {
-    const appData = React.useContext(AppDataContext);
+    const appData = useAppData();
     if (appData.serverContext) appData.serverContext.status = 404;
 
     return <div>Page not found!</div>;

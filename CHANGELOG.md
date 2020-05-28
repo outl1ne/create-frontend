@@ -5,6 +5,7 @@
 ### Added
 
 -   In the universal-react template, environment variables from `.env` are now automatically updated when that file is changed.
+-   Added `useAppData` hook so users don't have to use the context directly when reading app data.
 
 ### Breaking
 

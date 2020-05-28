@@ -1,6 +1,7 @@
 import 'app/scss/entry.scss';
 import { Helmet } from 'react-helmet-async';
 import { Switch, Route } from 'react-router-dom';
+import { useAppData } from '@optimistdigital/create-frontend/universal-react';
 import ErrorBoundary from 'app/components/ErrorBoundary';
 import ErrorPage from 'app/pages/ErrorPage';
 import React from 'react';
@@ -8,6 +9,10 @@ import Router, { getRouteData } from '@optimistdigital/create-frontend/universal
 import routes from 'app/routes';
 
 export default function App() {
+  const appData = useAppData();
+
+  console.log('Hello world!', appData);
+
   return (
     <React.Fragment>
       <Helmet>
@@ -33,7 +38,7 @@ export default function App() {
 
 /**
  * This function gets called once in the server, and in the client whenever the page changes.
- * The result ends up in the AppDataContext.
+ * The result ends up in the AppData.
  */
 App.getPageData = async (location, props) => {
   // Finds the current route component and gets data from that

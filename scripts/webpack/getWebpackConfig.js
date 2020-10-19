@@ -70,7 +70,7 @@ module.exports = async target => {
   if (IS_PRODUCTION) {
     output.devtool = IS_WEB && IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS ? 'source-map' : false;
   } else {
-    output.devtool = IS_WEB && !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS ? 'eval-cheap-module-source-map' : false;
+    output.devtool = IS_WEB && !IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS ? 'cheap-module-source-map' : false;
   }
 
   /**

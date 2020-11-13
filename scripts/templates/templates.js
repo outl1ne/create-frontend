@@ -68,6 +68,7 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         ...defaultTemplate.packageJson.dependencies,
         'eslint-plugin-react': '^7.18.3',
         'eslint-plugin-react-hooks': '^4.0.2',
+        'eslint-plugin-jsx-a11y': '^6.4.1',
       },
     },
   };
@@ -108,6 +109,7 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         'eslint-plugin-import': '^2.16.0',
         'eslint-plugin-react': '^7.12.4',
         'eslint-plugin-react-hooks': '^4.0.2',
+        'eslint-plugin-jsx-a11y': '^6.4.1',
         'eslint': '^6.8.0',
         'express': '^4.17.1',
         'normalize.css': '8.x.x',

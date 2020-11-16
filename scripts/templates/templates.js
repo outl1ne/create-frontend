@@ -41,12 +41,18 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         'build': 'frontend-scripts build',
         'build:debug': 'frontend-scripts build --debug',
       },
+      'eslintConfig': {
+          'extends': './node_modules/@optimistdigital/create-frontend/eslint-config.js'
+      },
+      'prettier': {
+        'printWidth': 120,
+        'singleQuote': true,
+        'trailingComma': 'es5'
+      },
       'dependencies': {
         'core-js': '^3.6.4',
         '@babel/runtime-corejs3': '^7.9.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
-        'eslint-plugin-import': '^2.16.0',
-        'eslint': '^6.8.0',
         'normalize.css': '8.x.x',
       },
     }
@@ -62,15 +68,7 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
     templatePath: path.resolve(__dirname, 'react'),
     gitIgnore: defaultTemplate.gitIgnore,
     readme: defaultTemplate.readme,
-    packageJson: {
-      ...defaultTemplate.packageJson,
-      dependencies: {
-        ...defaultTemplate.packageJson.dependencies,
-        'eslint-plugin-react': '^7.18.3',
-        'eslint-plugin-react-hooks': '^4.0.2',
-        'eslint-plugin-jsx-a11y': '^6.4.1',
-      },
-    },
+    packageJson: defaultTemplate.packageJson,
   };
 
   const universalReact = {
@@ -101,16 +99,13 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         'build:debug': 'frontend-scripts build-universal-react --debug',
         'start': 'frontend-scripts start-universal-react'
       },
+      'eslintConfig': defaultTemplate.packageJson.eslintConfig,
+      'prettier': defaultTemplate.packageJson.prettier,
       'dependencies': {
         'core-js': '^3.6.4',
         '@babel/runtime-corejs3': '^7.9.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'detect-port': '^1.3.0',
-        'eslint-plugin-import': '^2.16.0',
-        'eslint-plugin-react': '^7.12.4',
-        'eslint-plugin-react-hooks': '^4.0.2',
-        'eslint-plugin-jsx-a11y': '^6.4.1',
-        'eslint': '^6.8.0',
         'express': '^4.17.1',
         'normalize.css': '8.x.x',
         'react-helmet-async': '^1.0.4',
@@ -146,6 +141,23 @@ This is a server-rendered React app that uses [create-frontend](https://github.c
     react,
     'universal-react': universalReact,
   };
+
+    // NPM hoists transitive dependencies to the top level when installing a package through the NPM registry.
+  // This is necessary for eslint to find the correct plugins (which are installed in this package).
+  // Eslint is unable to find plugins from this package - it needs them to be in the consumer package.
+  // However, when installing this package locally (for testing, in dev mode), transitive dependencies are not hoisted.
+  // This means that the build won't work when installed locally (through the filesystem).
+  // So we must add these dependencies explicitly.
+  if (isDev) {
+    const ownPackage = require('../../package.json');
+    const eslintPackages = ['eslint', 'eslint-plugin-import', 'eslint-plugin-jsx-a11y', 'eslint-plugin-react', 'eslint-plugin-react-hooks'];
+
+    Object.values(templates).forEach(template => {
+      eslintPackages.forEach(packageName => {
+        template.packageJson.dependencies[packageName] = ownPackage.dependencies[packageName];
+      })
+    });
+  }
 
   return templates[templateName];
 };

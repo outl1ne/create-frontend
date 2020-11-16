@@ -25,17 +25,16 @@ module.exports = async () => {
     }
 
     let watching = false;
-    const styleInjectionFileName = 'ocf-dev-styles.js';
     let styleInjectionPlugin;
     startClientServer(userConfig, importedStyles => {
       if (!watching) {
         styleInjectionPlugin = new VirtualModulePlugin({
-          [styleInjectionFileName]: getStyleInjectionHack(importedStyles),
+          [userConfig.STYLE_INJECTION_FILENAME]: getStyleInjectionHack(importedStyles),
         });
         startNodeServer(styleInjectionPlugin);
         watching = true;
       } else {
-        styleInjectionPlugin.writeModule(styleInjectionFileName, getStyleInjectionHack(importedStyles));
+        styleInjectionPlugin.writeModule(userConfig.STYLE_INJECTION_FILENAME, getStyleInjectionHack(importedStyles));
       }
     });
   });

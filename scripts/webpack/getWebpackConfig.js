@@ -16,6 +16,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const { resolveApp } = require('../paths');
 const VirtualModulePlugin = require('webpack-virtual-modules');
 const createServerEntry = require('../../universal-react/server/createServerEntry');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 /**
  * @param {string} target - webpack target (web/node)
@@ -222,8 +223,7 @@ module.exports = async target => {
           loader: require.resolve('babel-loader'),
           options: babelOpts,
         },
-        { loader: require.resolve('eslint-loader') },
-      ],
+      ]
     },
     {
       test: /\.css/,
@@ -321,6 +321,15 @@ module.exports = async target => {
    */
   const PAGE_FILES = readFiles(config.HTML_PATH);
   output.plugins = [
+    new ESLintPlugin({
+      exclude: [
+        config.STYLE_INJECTION_FILENAME,
+        'node_modules',
+        // This plugin doesn't work well with webpack-virtual-modules, so we will ignore the code from there
+        // (it's not important for these files to be linted anyway)
+        INTERNAL_SERVER_ENTRY_FILE
+      ]
+    }),
     /* SHARED PLUGINS */
     ...PAGE_FILES.map(
       pageFile =>

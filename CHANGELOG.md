@@ -1,10 +1,19 @@
 # Changelog
 
-## [14.1.0] - 2020-11-16
+## [15.0.0] - 2020-11-16
 
-### Added
+### Changes
 
-- `eslint-plugin-jsx-a11y` For accessibility warnings.
+- Simplified the default boilerplate
+    - Eslint and Prettier configs are now in `package.json` instead of separate files
+    - Eslint plugins are no longer listed in `dependencies`, since they are implicit dependencies of create-frontend.
+- Added the`jsx-a11y` Eslint plugin to help detect accessibility problems.
+
+### Upgrading
+
+- Eslint 7 is now required. If you have Eslint 6 in your dependencies, either upgrade it to 7 or remove it entirely (it will be downloaded from create-frontend's dependencies). 
+- You should remove the following eslint plugins from your dependencies if present: `eslint-plugin-import`, `eslint-plugin-jsx-a11y`, `eslint-plugin-react`, `eslint-plugin-react-hooks`. They are now managed by create-frontend.
+- After updating, it might be necessary to reinstall dependencies to clear up issues: `rm -rf node_modules && rm package-lock.json && npm install`
 
 ## [14.0.0] - 2020-05-28
 

@@ -3,7 +3,6 @@ module.exports = {
   extends: [
     '@optimistdigital/eslint-config-rules/react',
     'prettier',
-    'plugin:jsx-a11y/recommended'
   ],
   rules: {
     'react/jsx-indent': 0,
@@ -32,6 +31,13 @@ module.exports = {
     'jsx-a11y/role-has-required-aria-props': 'warn',
     'jsx-a11y/role-supports-aria-props': 'warn',
     'jsx-a11y/scope': 'warn',
+    'jsx-a11y/no-autofocus': 'off',
+    'jsx-a11y/autocomplete-valid': 'warn',
+    'jsx-a11y/label-has-associated-control': 'warn',
+    // Potential jsx-a11y rules we might want to enable to be more strict:
+    // 'jsx-a11y/click-events-have-key-events': 'warn',
+    // 'jsx-a11y/control-has-associated-label': 'warn',
+    // 'jsx-a11y/mouse-events-have-key-events': 'warn',
   },
   settings: {
     react: {

@@ -51,7 +51,15 @@ describe('Create Frontend with Universal React template', () => {
   });
 
   it('should create a production build with a manifest', async () => {
-    await execa('npm', ['run', 'build'], { cwd: tempDir.path });
+    const subprocess = execa('npm', ['run', 'build'], { cwd: tempDir.path });
+
+    subprocess.stderr.on('data', chunk => {
+      const data = chunk.toString();
+
+      console.error('Error during build:', data);
+    });
+
+    await subprocess;
 
     /**
      * Checking client build

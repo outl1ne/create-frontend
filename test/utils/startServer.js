@@ -37,6 +37,12 @@ module.exports = function startServer(cwd, command = 'start', waitForOutput) {
       }
     });
 
+    subprocess.stderr.on('data', chunk => {
+      const data = chunk.toString();
+
+      console.error('Error while starting server:', data);
+    });
+
     // If the process ended without the correct stdout, it means something went wrong
     subprocess
       .then(() => {

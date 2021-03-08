@@ -4,14 +4,15 @@ module.exports = async opts => {
   const config = await getConfig(opts.target);
 
   return {
-    ident: 'postcss',
     sourceMap:
       (opts.IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS) || (!opts.IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS),
-    plugins: [
-      require('postcss-flexbugs-fixes')(),
-      require('postcss-import')(),
-      require('precss')(),
-      require('autoprefixer')(),
-    ],
+    postcssOptions: {
+      plugins: [
+        require('postcss-flexbugs-fixes')(),
+        require('postcss-import')(),
+        require('precss')(),
+        require('autoprefixer')(),
+      ],
+    }
   };
 };

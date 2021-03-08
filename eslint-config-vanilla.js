@@ -7,6 +7,9 @@ module.exports = {
     es6: true,
     jest: true,
   },
+  rules: {
+    "arrow-body-style": 0
+  },
   plugins: ['import'],
   parserOptions: {
     ecmaVersion: 7,

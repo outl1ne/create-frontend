@@ -61,8 +61,8 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
   const react = {
     name: 'react',
     install: {
-      react: '^16.13.1',
-      'react-dom': '^16.13.1',
+      react: '^17.0.1',
+      'react-dom': '^17.0.1',
     },
     mergeDefaultFiles: true,
     templatePath: path.resolve(__dirname, 'react'),
@@ -74,8 +74,8 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
   const universalReact = {
     name: 'universal-react',
     install: {
-      react: '^16.13.1',
-      'react-dom': '^16.13.1',
+      react: '^17.0.1',
+      'react-dom': '^17.0.1',
     },
     mergeDefaultFiles: false,
     templatePath: path.resolve(__dirname, 'universal-react'),
@@ -109,8 +109,8 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         'express': '^4.17.1',
         'normalize.css': '8.x.x',
         'react-helmet-async': '^1.0.4',
-        'react-router': '^5.1.2',
-        'react-router-dom': '^5.1.2'
+        'react-router': '^5.2.0',
+        'react-router-dom': '^5.2.0'
       },
     },
     readme: projectName => `

@@ -9,7 +9,4 @@ const serverEntryTemplate = fs.readFileSync(path.resolve(__dirname, './serverEnt
  * to be a good way to set that up conventionally. This creates the source for a virtual module, that contains the
  * server code, but also fills in the {{ USER_ENTRY_POINT }} placeholder with the entry point that the user chose.
  */
-module.exports = userEntryPoint => {
-  const serverEntryContent = serverEntryTemplate.replace(/{{ USER_ENTRY_POINT }}/g, userEntryPoint);
-  return serverEntryContent;
-};
+module.exports = userEntryPoint => serverEntryTemplate.replace(/{{ USER_ENTRY_POINT }}/g, userEntryPoint);

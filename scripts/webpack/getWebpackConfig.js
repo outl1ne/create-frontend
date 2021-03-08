@@ -11,12 +11,13 @@ const HtmlPlugin = require('html-webpack-plugin');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const StartServerPlugin = require('start-server-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const StartServerPlugin = require('./plugins/StartServerPlugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { resolveApp } = require('../paths');
 const VirtualModulePlugin = require('webpack-virtual-modules');
 const createServerEntry = require('../../universal-react/server/createServerEntry');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const BuildDonePlugin = require('./plugins/BuildDonePlugin');
 
 /**
  * @param {string} target - webpack target (web/node)
@@ -54,13 +55,8 @@ module.exports = async target => {
    */
   if (IS_NODE) {
     output.externals = nodeExternals({
-      whitelist: nodeExternalsWhitelist,
+      allowlist: nodeExternalsWhitelist,
     });
-  }
-
-  /* Enable watch mode in dev node server */
-  if (IS_NODE && !IS_PRODUCTION) {
-    output.watch = true;
   }
 
   /**
@@ -87,12 +83,12 @@ module.exports = async target => {
    */
   if (IS_PRODUCTION && IS_WEB) {
     output.optimization = {
+      emitOnErrors: false,
       minimize: true,
       minimizer: [
+        new CssMinimizerPlugin(),
         new TerserPlugin({
-          cache: true,
           parallel: true,
-          sourceMap: config.ENABLE_PROD_SOURCEMAPS,
           terserOptions: {
             warnings: false,
             compress: {
@@ -103,7 +99,6 @@ module.exports = async target => {
             },
           },
         }),
-        new OptimizeCssAssetsPlugin({}),
       ],
     };
   } else {
@@ -142,7 +137,10 @@ module.exports = async target => {
    * Output
    */
   output.output = {
-    libraryTarget: IS_NODE ? 'commonjs2' : 'var',
+    library: {
+      type: IS_NODE ? 'commonjs2' : 'var',
+      name: 'OCF',
+    },
     path: OUTPUT_PATH,
     filename: IS_PRODUCTION && IS_WEB && config.HASH_FILENAMES ? '[name]-[chunkhash].js' : '[name].js',
     chunkFilename: '[name].js',
@@ -176,6 +174,7 @@ module.exports = async target => {
         loader: require.resolve('css-loader'),
         options: {
           importLoaders: 1,
+          esModule: false,
           sourceMap:
             (IS_PRODUCTION && config.ENABLE_PROD_SOURCEMAPS) || (!IS_PRODUCTION && config.ENABLE_DEV_SOURCEMAPS),
         },
@@ -201,6 +200,7 @@ module.exports = async target => {
           : {
               loader: require.resolve('style-loader'),
               options: {
+                esModule: false,
                 attributes: {
                   // This id will be used to listen for load event
                   id: 'ocf-client-styles',
@@ -223,7 +223,7 @@ module.exports = async target => {
           loader: require.resolve('babel-loader'),
           options: babelOpts,
         },
-      ]
+      ],
     },
     {
       test: /\.css/,
@@ -291,7 +291,7 @@ module.exports = async target => {
             options: {
               emitFile: IS_WEB,
               limit: 10000,
-              name: config.HASH_FILENAMES ? '[name].[hash:8].[ext]' : '[name].[ext]',
+              name: config.HASH_FILENAMES ? '[name].[contenthash:8].[ext]' : '[name].[ext]',
             },
           },
           // Add production / development specific rules
@@ -303,12 +303,14 @@ module.exports = async target => {
           },
           // If nothing matched, use file-loader.
           // Except in the cases of js/json to allow webpack's default loaders to handle those.
+          // This is currently deprecated in favor of asset modules: https://webpack.js.org/guides/asset-modules/
+          // However, asset modules don't support emitFiles: false yet, needed for SSR, so we can't use that
           {
             loader: require.resolve('file-loader'),
             exclude: [/\.js$/, /\.json$/],
             options: {
               emitFile: IS_WEB,
-              name: config.HASH_FILENAMES ? '[name].[hash:8].[ext]' : '[name].[ext]',
+              name: config.HASH_FILENAMES ? '[name].[contenthash:8].[ext]' : '[name].[ext]',
             },
           },
         ],
@@ -327,8 +329,8 @@ module.exports = async target => {
         'node_modules',
         // This plugin doesn't work well with webpack-virtual-modules, so we will ignore the code from there
         // (it's not important for these files to be linted anyway)
-        INTERNAL_SERVER_ENTRY_FILE
-      ]
+        INTERNAL_SERVER_ENTRY_FILE,
+      ],
     }),
     /* SHARED PLUGINS */
     ...PAGE_FILES.map(
@@ -373,7 +375,7 @@ module.exports = async target => {
   if (IS_PRODUCTION) {
     output.plugins.push(
       new CleanWebpackPlugin(), // Clean previously built assets before making new bundle
-      new webpack.IgnorePlugin(/\.\/dev/, /\/config$/), // Ignore dev config
+      new webpack.IgnorePlugin({ resourceRegExp: /\.\/dev/ }), // Ignore dev config
       new ExtractPlugin({
         // Extract css files from bundles
         filename: config.HASH_FILENAMES ? '[name]-[contenthash].css' : '[name].css',
@@ -383,11 +385,22 @@ module.exports = async target => {
 
   /* DEVELOPMENT PLUGINS */
   if (!IS_PRODUCTION) {
+    const skipFirst = fn => {
+      let skip = true;
+
+      return () => {
+        !skip && fn();
+        skip = false;
+      };
+    };
+
+    const logBuildDone = () => console.info(chalk.green.bold('\n=== Build for ' + target + ' done === \n'));
+
     output.plugins.push(
-      new webpack.NamedModulesPlugin(), // Named modules for HMR
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoEmitOnErrorsPlugin(),
-      new (require('./plugins/BuildDonePlugin'))(chalk.green.bold('\n=== Build for ' + target + ' done === \n'))
+      // Skipping the first "build done" event in the node build, because the initial build is triggering the event
+      // twice. There are some issues in github about it, but nothing conclusive.
+      new BuildDonePlugin(IS_NODE ? skipFirst(logBuildDone) : logBuildDone)
     );
 
     /**

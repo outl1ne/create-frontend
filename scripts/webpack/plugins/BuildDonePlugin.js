@@ -1,11 +1,9 @@
-function BuildDonePlugin(msg) {
-  this.msg = msg;
+function BuildDonePlugin(cb) {
+  this.cb = cb;
 }
 
 BuildDonePlugin.prototype.apply = function apply(compiler) {
-  compiler.hooks.done.tap('BuildDonePlugin', () => {
-    console.info(this.msg);
-  });
+  compiler.hooks.done.tap('BuildDonePlugin', () => this.cb());
 };
 
 module.exports = BuildDonePlugin;

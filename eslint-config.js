@@ -5,6 +5,7 @@ module.exports = {
     'prettier',
   ],
   rules: {
+    'arrow-body-style': 0,
     'react/jsx-indent': 0,
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'warn',

@@ -115,21 +115,25 @@ async function startClientServer(userConfig, onDone) {
    * so we can pass them to the node dev server, and inject to document head to prevent FOUC
    * "emit" hook happens before "done", so we can collect these here and pass them to the callback
    */
-  let importedStyles = [];
+  let importedStyles = new Set();
   compiler.hooks.emit.tap('OCFWebBuildEmit', compilation => {
     // Clear the array of stuff from previous emit
-    importedStyles = [];
+    importedStyles = new Set();
     compilation.chunks.forEach(chunk => {
-      const modules = Array.from(chunk.modulesIterable).filter(
-        // This regex allows only real files relative to project root - [^?!] removes weird webpack loader modules
-        mod => typeof mod.id === 'string' && /^\.\/[^?!]*\.(?:css|scss|sass)$/.test(mod.id)
-      );
-      importedStyles.push(...modules.map(m => resolveApp(m.id)));
-    });
+      compilation.chunkGraph
+        .getChunkModules(chunk)
+        .filter(
+          module => {
+            return typeof module.resource === 'string' && /(?:css|scss|sass)$/.test(module.resource);
+          }
+        ).forEach(module => {
+          importedStyles.add(module.resource)
+        })
+      });
   });
 
   compiler.hooks.done.tap('OCFWebBuildDone', () => {
-    onDone(importedStyles);
+    onDone(Array.from(importedStyles));
   });
 
   return devServer;

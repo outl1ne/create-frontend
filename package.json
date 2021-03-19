@@ -1,6 +1,6 @@
 {
   "name": "@optimistdigital/create-frontend",
-  "version": "16.0.0-beta.1",
+  "version": "16.0.0",
   "description": "Creates an encapsulated frontend build solution for js-based projects",
   "repository": {
     "type": "git",

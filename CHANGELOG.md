@@ -5,6 +5,8 @@
 ### Changes
 
 - Updated to webpack 5. No new features/API changes, but the webpack upgrade may break some things.
+- Dropped support for node < 12.
+- Changed from node-sass to dart-sass. This fixes an issue where build didn't work using new Macbooks with the M1 chip.
 
 ### Upgrading
 

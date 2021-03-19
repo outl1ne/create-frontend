@@ -2,6 +2,6 @@ os: osx
 dist: trusty
 language: node_js
 node_js:
-  - '10'
+  - '14'
 script: npm run e2e
 cache: npm

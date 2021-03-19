@@ -375,7 +375,6 @@ module.exports = async target => {
   if (IS_PRODUCTION) {
     output.plugins.push(
       new CleanWebpackPlugin(), // Clean previously built assets before making new bundle
-      new webpack.IgnorePlugin({ resourceRegExp: /\.\/dev/ }), // Ignore dev config
       new ExtractPlugin({
         // Extract css files from bundles
         filename: config.HASH_FILENAMES ? '[name]-[contenthash].css' : '[name].css',

@@ -1,5 +1,26 @@
 # Changelog
 
+## [16.0.0] - 2020-03-19
+
+### Changes
+
+- Updated to webpack 5. No new features/API changes, but the webpack upgrade may break some things.
+
+### Upgrading
+
+- You may see an error if your client-side code depends on node.js core modules:
+    > BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default. This is no longer the case. Verify if you need this module and configure a polyfill for it.
+    
+    The polyfills can be added in create-frontend.conf.js through the `editConfig` property. If the error is caused by a third party library, make sure you're using the latest version.
+- If you were using the require function to link images, it now returns an ES Module, so you need to add `.default` to the end:
+    ```diff
+    - <img src={require('./path-to-image.png')} />
+    + <img src={require('./path-to-image.png').default} />
+    ```
+    Alternatively, import them at the top of the file with ES6 import syntax.
+
+
+
 ## [15.0.0] - 2020-11-16
 
 ### Changes

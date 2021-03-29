@@ -9,7 +9,8 @@ export const defaultOpts = {
     directives: {
       ...helmet.contentSecurityPolicy.getDefaultDirectives(),
       'font-src': ["'self'", __DEVELOPMENT__ && 'localhost:*', 'fonts.gstatic.com'].filter(Boolean),
-      'img-src': ["'self'", __DEVELOPMENT__ && 'localhost:*', 'data:'].filter(Boolean),
+      'img-src': ["'self'", __DEVELOPMENT__ && 'localhost:*', '*', 'data:'].filter(Boolean),
+      'media-src': ["'self'", __DEVELOPMENT__ && 'localhost:*', '*', 'data:'].filter(Boolean),
       'default-src': ["'self'", __DEVELOPMENT__ && 'localhost:*', __DEVELOPMENT__ && 'ws://localhost:*'].filter(
         Boolean
       ),
@@ -19,6 +20,7 @@ export const defaultOpts = {
         (_, res) => `'nonce-${res.locals.cspNonce}'`,
         'www.google-analytics.com',
         'ajax.googleapis.com',
+        'https://www.googletagmanager.com',
       ].filter(Boolean),
       'style-src': ["'self'", "https: 'unsafe-inline'", 'fonts.googleapis.com'],
     },

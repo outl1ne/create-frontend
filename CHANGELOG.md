@@ -1,42 +1,57 @@
 # Changelog
 
+## [16.1.0] - 2020-03-29
+
+### Added
+
+-   Added `helmet.js` integration to the universal-react boilerplate. We export a wrapper around helmet that passes in some defaults. If you want to add it to an existing project, add the middleware to your server/entry.js:
+
+```js
+import helmet from '@optimistdigital/create-frontend/universal-react/helmet';
+
+// After initializing server
+server.use(helmet());
+
+// helmet middleware adds a cspToken to res.locals. Pass it to the render function
+const { content, context } = await render(App, req.originalUrl, { config: getConfig() }, res.locals.cspNonce);
+```
+
+Regular helmet.js may be used as well, but you will have to configure it yourself to make sure that it works in properly: our wrapper allows localhost in development (for CSP), whitelists an inline script with a nonce (CSP), and excludes subdomains for HSTS.
+
 ## [16.0.0] - 2020-03-19
 
 ### Changes
 
-- Updated to webpack 5. No new features/API changes, but the webpack upgrade may break some things.
-- Dropped support for node < 12.
-- Changed from node-sass to dart-sass. This fixes an issue where build didn't work using new Macbooks with the M1 chip.
+-   Updated to webpack 5. No new features/API changes, but the webpack upgrade may break some things.
+-   Dropped support for node < 12.
+-   Changed from node-sass to dart-sass. This fixes an issue where build didn't work using new Macbooks with the M1 chip.
 
 ### Upgrading
 
-- You may see an error if your client-side code depends on node.js core modules:
+-   You may see an error if your client-side code depends on node.js core modules:
     > BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default. This is no longer the case. Verify if you need this module and configure a polyfill for it.
-    
     The polyfills can be added in create-frontend.conf.js through the `editConfig` property. If the error is caused by a third party library, make sure you're using the latest version.
-- If you were using the require function to link images, it now returns an ES Module, so you need to add `.default` to the end:
+-   If you were using the require function to link images, it now returns an ES Module, so you need to add `.default` to the end:
     ```diff
     - <img src={require('./path-to-image.png')} />
     + <img src={require('./path-to-image.png').default} />
     ```
     Alternatively, import them at the top of the file with ES6 import syntax.
 
-
-
 ## [15.0.0] - 2020-11-16
 
 ### Changes
 
-- Simplified the default boilerplate
-    - Eslint and Prettier configs are now in `package.json` instead of separate files
-    - Eslint plugins are no longer listed in `dependencies`, since they are implicit dependencies of create-frontend.
-- Added the`jsx-a11y` Eslint plugin to help detect accessibility problems.
+-   Simplified the default boilerplate
+    -   Eslint and Prettier configs are now in `package.json` instead of separate files
+    -   Eslint plugins are no longer listed in `dependencies`, since they are implicit dependencies of create-frontend.
+-   Added the`jsx-a11y` Eslint plugin to help detect accessibility problems.
 
 ### Upgrading
 
-- Eslint 7 is now required. If you have Eslint 6 in your dependencies, either upgrade it to 7 or remove it entirely (it will be downloaded from create-frontend's dependencies). 
-- You should remove the following eslint plugins from your dependencies if present: `eslint-plugin-import`, `eslint-plugin-jsx-a11y`, `eslint-plugin-react`, `eslint-plugin-react-hooks`. They are now managed by create-frontend.
-- After updating, it might be necessary to reinstall dependencies to clear up issues: `rm -rf node_modules && rm package-lock.json && npm install`
+-   Eslint 7 is now required. If you have Eslint 6 in your dependencies, either upgrade it to 7 or remove it entirely (it will be downloaded from create-frontend's dependencies).
+-   You should remove the following eslint plugins from your dependencies if present: `eslint-plugin-import`, `eslint-plugin-jsx-a11y`, `eslint-plugin-react`, `eslint-plugin-react-hooks`. They are now managed by create-frontend.
+-   After updating, it might be necessary to reinstall dependencies to clear up issues: `rm -rf node_modules && rm package-lock.json && npm install`
 
 ## [14.0.0] - 2020-05-28
 

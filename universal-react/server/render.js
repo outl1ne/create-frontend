@@ -11,10 +11,11 @@ import urlParser from 'url';
  * @param ReactComponent - The root component of your React app
  * @param url - The url for the request. For express, you should pass `req.originalUrl`
  * @param props - This will get passed to the App component during server render, and as the 2nd argument to getPageData
+ * @param cspNonce - (optional) Sets the `nonce` attribute on the <script> element that create-frontend uses. Use it when implementing a content-security-policy.
  *
  * @return {{ content: String, context: Object }}
  */
-export default async function renderOnServer(ReactComponent, url, props = {}) {
+export default async function renderOnServer(ReactComponent, url, props = {}, cspNonce) {
   const serverContext = {};
   const helmetContext = {};
   const appData = { url, pageData: {} };
@@ -50,7 +51,7 @@ export default async function renderOnServer(ReactComponent, url, props = {}) {
   );
 
   return {
-    content: wrapInDocument(appString, appData, helmetContext),
+    content: wrapInDocument(appString, appData, helmetContext, cspNonce),
     context: serverContext,
   };
 }

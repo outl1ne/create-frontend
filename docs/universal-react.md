@@ -46,6 +46,8 @@ render(ReactComponent, domNode, props);
  * @param props (optional) - This will get passed to the App component during render, and as the 2nd argument to getPageData.
  *              You will have to ensure that passing different props on server/client won't result in a different HTML,
  *              Otherwise you will get content mismatch errors during hydration.
+ * @param cspNonce (optional) - Sets the `nonce` attribute on the <script> element that create-frontend uses.
+ *                 Used for the script-src directive when implementing a content-security-policy.
  *
  * @return {{ content: String, context: Object }}
  */
@@ -53,7 +55,7 @@ import { render } from '@optimistdigital/create-frontend/universal-react/server'
 const {
     content, // App rendered to string
     context, // Server-side context, for passing data to from the React app to the server
-} = render(ReactComponent, url, backendData);
+} = render(ReactComponent, url, backendData, res.locals.cspNonce);
 ```
 
 ## Configuration

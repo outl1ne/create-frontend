@@ -2,16 +2,18 @@ import { render } from '@optimistdigital/create-frontend/universal-react/server'
 import App from 'app/App';
 import express from 'express';
 import getConfig from 'server/config';
+import helmet from '@optimistdigital/create-frontend/universal-react/helmet';
 
 const server = express();
 const staticOpts = { maxAge: 604800000 };
 
+server.use(helmet());
 server.use('/client', express.static('build/client', staticOpts)); // Serve build assets
 server.use('/', express.static('public', staticOpts)); // Serve files from public directory
 server.use('/', async (req, res) => {
   try {
     // Render the app
-    const { content, context } = await render(App, req.originalUrl, { config: getConfig() });
+    const { content, context } = await render(App, req.originalUrl, { config: getConfig() }, res.locals.cspNonce);
 
     // If there was a redirect in the app, redirect here
     if (context.url) {

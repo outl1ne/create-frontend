@@ -4,7 +4,6 @@ import wrapInDocument from './wrapInDocument';
 import { AppDataContext } from '../index';
 import { HelmetProvider } from 'react-helmet-async';
 import urlParser from 'url';
-import crypto from 'crypto';
 
 /**
  * Server render - renders your react app to string
@@ -13,7 +12,7 @@ import crypto from 'crypto';
  * @param url - The url for the request. For express, you should pass `req.originalUrl`
  * @param props - This will get passed to the App component during server render, and as the 2nd argument to getPageData
  *
- * @return {{ content: String, context: Object, nonce: String }}
+ * @return {{ content: String, context: Object }}
  */
 export default async function renderOnServer(ReactComponent, url, props = {}) {
   const serverContext = {};
@@ -50,11 +49,8 @@ export default async function renderOnServer(ReactComponent, url, props = {}) {
     </AppDataContext.Provider>
   );
 
-  const nonce = crypto.randomBytes(16).toString('base64');
-
   return {
-    content: wrapInDocument(appString, appData, helmetContext, nonce),
+    content: wrapInDocument(appString, appData, helmetContext),
     context: serverContext,
-    nonce
   };
 }

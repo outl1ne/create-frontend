@@ -4,7 +4,7 @@ import serialize from 'serialize-javascript';
 /* Read manifest using fs, because require() would try to resolve at build-time  */
 const manifest = JSON.parse(fs.readFileSync(__OCF_MANIFEST_PATH__, 'utf8'));
 
-export default function wrapInDocument(content, appData, helmetContext, nonce) {
+export default function wrapInDocument(content, appData, helmetContext) {
   /* Get dev-only styles, to prevent FOUC. This is a virtual file injected by the dev server. */
   const styles = __DEVELOPMENT__ ? require('ocf-dev-styles.js') : [];
 
@@ -29,7 +29,7 @@ export default function wrapInDocument(content, appData, helmetContext, nonce) {
     <script>Object.defineProperty(window, '__OCF_APP_DATA__', {
       value: ${serialize(appData)}
     });</script>
-    <script nonce="${nonce}" ${__DEVELOPMENT__ ? 'crossorigin ' : ''}src="${manifest['app.js']}"></script>
+    <script ${__DEVELOPMENT__ ? 'crossorigin ' : ''}src="${manifest['app.js']}"></script>
   </body>
 </html>`;
 }

@@ -47,13 +47,12 @@ render(ReactComponent, domNode, props);
  *              You will have to ensure that passing different props on server/client won't result in a different HTML,
  *              Otherwise you will get content mismatch errors during hydration.
  *
- * @return {{ content: String, context: Object, nonce: String }}
+ * @return {{ content: String, context: Object }}
  */
 import { render } from '@optimistdigital/create-frontend/universal-react/server';
 const {
     content, // App rendered to string
     context, // Server-side context, for passing data to from the React app to the server
-    nonce, // CSP token used for an inline script in the html response. This can be ignored if not using content-security-policy.
 } = render(ReactComponent, url, backendData);
 ```
 

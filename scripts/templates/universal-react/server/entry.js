@@ -7,7 +7,7 @@ import helmet from '@optimistdigital/create-frontend/universal-react/helmet';
 const server = express();
 const staticOpts = { maxAge: 604800000 };
 
-server.use(helmet());
+server.use(helmet(opts => ({ ...opts, contentSecurityPolicy: false })));
 server.use('/client', express.static('build/client', staticOpts)); // Serve build assets
 server.use('/', express.static('public', staticOpts)); // Serve files from public directory
 server.use('/', async (req, res) => {

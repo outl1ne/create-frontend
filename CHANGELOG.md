@@ -16,7 +16,11 @@ server.use(helmet());
 const { content, context } = await render(App, req.originalUrl, { config: getConfig() }, res.locals.cspNonce);
 ```
 
-Regular helmet.js may be used as well, but you will have to configure it yourself to make sure that it works in properly: our wrapper allows localhost in development (for CSP), whitelists an inline script with a nonce (CSP), and excludes subdomains for HSTS.
+If you don't want to use content-security-policy, you can disable it and skip passing the nonce:
+
+```js
+server.use(helmet(opts => ({ ...opts, contentSecurityPolicy: false })));
+```
 
 ## [16.0.0] - 2020-03-19
 
@@ -30,7 +34,7 @@ Regular helmet.js may be used as well, but you will have to configure it yoursel
 
 -   You may see an error if your client-side code depends on node.js core modules:
     > BREAKING CHANGE: webpack < 5 used to include polyfills for node.js core modules by default. This is no longer the case. Verify if you need this module and configure a polyfill for it.
-    The polyfills can be added in create-frontend.conf.js through the `editConfig` property. If the error is caused by a third party library, make sure you're using the latest version.
+    > The polyfills can be added in create-frontend.conf.js through the `editConfig` property. If the error is caused by a third party library, make sure you're using the latest version.
 -   If you were using the require function to link images, it now returns an ES Module, so you need to add `.default` to the end:
     ```diff
     - <img src={require('./path-to-image.png')} />

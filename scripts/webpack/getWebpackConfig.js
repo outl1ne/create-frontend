@@ -367,6 +367,11 @@ module.exports = async target => {
         output: config.MANIFEST_PATH,
         publicPath: true,
         writeToDisk: true,
+        customize(entry) {
+          if (entry.value.includes('.hot-update')) return false;
+
+          return entry;
+        },
       })
     );
   }

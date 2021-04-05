@@ -27,7 +27,7 @@ export const defaultOpts = {
         "'self'",
         __DEVELOPMENT__ && 'localhost:*',
         __DEVELOPMENT__ && 'ws://localhost:*',
-        'google-analytics.com',
+        'https://www.google-analytics.com',
       ].filter(Boolean),
     },
   },

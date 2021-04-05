@@ -23,6 +23,12 @@ export const defaultOpts = {
         'https://www.googletagmanager.com',
       ].filter(Boolean),
       'style-src': ["'self'", "https: 'unsafe-inline'", 'fonts.googleapis.com'],
+      'connect-src': [
+        "'self'",
+        __DEVELOPMENT__ && 'localhost:*',
+        __DEVELOPMENT__ && 'ws://localhost:*',
+        'google-analytics.com',
+      ].filter(Boolean),
     },
   },
 };

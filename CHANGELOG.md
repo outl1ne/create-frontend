@@ -1,5 +1,11 @@
 # Changelog
 
+## [16.2.0] - 2020-04-13
+
+### Added
+
+-   Added gzip in universal-react template in production.
+
 ## [16.1.0] - 2020-03-29
 
 ### Added

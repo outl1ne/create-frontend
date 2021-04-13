@@ -3,10 +3,12 @@ import App from 'app/App';
 import express from 'express';
 import getConfig from 'server/config';
 import helmet from '@optimistdigital/create-frontend/universal-react/helmet';
+import compression from 'compression';
 
 const server = express();
 const staticOpts = { maxAge: 604800000 };
 
+if (__PRODUCTION__) server.use(compression()); // Enable gzip in production
 server.use(helmet(opts => ({ ...opts, contentSecurityPolicy: false })));
 server.use('/client', express.static('build/client', staticOpts)); // Serve build assets
 server.use('/', express.static('public', staticOpts)); // Serve files from public directory

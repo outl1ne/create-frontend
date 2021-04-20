@@ -1,5 +1,9 @@
 # Changelog
 
+## [16.3.0] - 2020-04-20
+
+-   Added optional styled-jsx integration. To use it, configure `styledJSX: true` and run `npm install styled-jsx`
+
 ## [16.2.0] - 2020-04-13
 
 ### Added

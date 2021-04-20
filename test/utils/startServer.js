@@ -5,7 +5,7 @@ const execa = require('execa');
  */
 module.exports = function startServer(cwd, command = 'start', waitForOutput) {
   return new Promise((resolve, reject) => {
-    const subprocess = execa('npm', ['run', command], { cwd });
+    const subprocess = execa('npm', ['run', command], { cwd, env: { DONT_WATCH_DOTENV: true } });
 
     const output = {};
 

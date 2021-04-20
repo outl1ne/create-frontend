@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const chokidar = require('chokidar');
 
 let watching = false;
 
@@ -18,27 +19,25 @@ module.exports = {
       const { resolveApp } = require('./paths');
       const dotEnvPath = resolveApp('.env');
 
-      require('chokidar')
-        .watch(dotEnvPath)
-        .on('change', () => {
-          console.info('ℹ️  Changes to .env detected. Reloading environment variables.');
+      chokidar.watch(dotEnvPath).on('change', () => {
+        console.info('ℹ️  Changes to .env detected. Reloading environment variables.');
 
-          // Find existing variables loaded from dotenv.config() that were changed, and update them
-          const newContents = dotenv.parse(require('fs').readFileSync(dotEnvPath)) || {};
-          Object.keys(newContents).forEach(newKey => {
-            if (parsed[newKey] !== undefined) {
-              process.env[newKey] = newContents[newKey];
-            }
-          });
-          // Find variables that were loaded from dotenv.config() but were since removed from .env
-          Object.keys(parsed).forEach(oldKey => {
-            if (newContents[oldKey] === undefined) {
-              delete process.env[oldKey];
-            }
-          });
-          // Load new variables that were added to .env
-          parsed = Object.assign({}, dotenv.config().parsed || {}, parsed);
+        // Find existing variables loaded from dotenv.config() that were changed, and update them
+        const newContents = dotenv.parse(require('fs').readFileSync(dotEnvPath)) || {};
+        Object.keys(newContents).forEach(newKey => {
+          if (parsed[newKey] !== undefined) {
+            process.env[newKey] = newContents[newKey];
+          }
         });
+        // Find variables that were loaded from dotenv.config() but were since removed from .env
+        Object.keys(parsed).forEach(oldKey => {
+          if (newContents[oldKey] === undefined) {
+            delete process.env[oldKey];
+          }
+        });
+        // Load new variables that were added to .env
+        parsed = Object.assign({}, dotenv.config().parsed || {}, parsed);
+      });
     }
   },
 };

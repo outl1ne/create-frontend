@@ -14,26 +14,14 @@ describe('Create Frontend with Universal React template', () => {
   });
 
   afterAll(() => {
-    tempDir.cleanup();
+    return new Promise(resolve => {
+      tempDir.cleanup(() => {
+        resolve();
+      });
+    });
   });
 
-  it('should generate a folder structure', async () => {
-    await runGenerator(tempDir.path, ['--template=universal-react']);
-
-    const files = fs.readdirSync(tempDir.path);
-
-    expect(files).toEqual(
-      expect.arrayContaining([
-        'client', // Frontend directory was created
-        'server', // Backend directory was created
-        'app', // React app directory was created
-        'package.json', // NPM boilerplate was added
-        'node_modules', // NPM modules were installed
-      ])
-    );
-  });
-
-  it('should start the dev server without errors', async () => {
+  const assertDevServerWorks = async () => {
     const { output, cleanup } = await startServer(tempDir.path, 'dev', {
       devServerMessage: /server started at/i,
       webBuildDoneMessage: /build for web done/i,
@@ -48,9 +36,9 @@ describe('Create Frontend with Universal React template', () => {
     expect(text).toMatch(/^<!DOCTYPE html>/i);
 
     await cleanup();
-  });
+  };
 
-  it('should create a production build with a manifest', async () => {
+  const assertBuildWorks = async () => {
     const subprocess = execa('npm', ['run', 'build'], { cwd: tempDir.path });
 
     subprocess.stderr.on('data', chunk => {
@@ -87,5 +75,41 @@ describe('Create Frontend with Universal React template', () => {
     const serverFiles = fs.readdirSync(path.resolve(tempDir.path, 'build/server'));
 
     expect(serverFiles).toEqual(expect.arrayContaining(['build-server.js']));
+  };
+
+  const assertProductionServerWorks = async () => {
+    const { output, cleanup } = await startServer(tempDir.path, 'dev', {
+      devServerMessage: /server started at/i,
+    });
+    const url = output.devServerMessage.match(/https?:\/\/.*:(?:\d)+/)[0];
+
+    expect(url).not.toBe(null);
+    const result = await fetch(url);
+    expect(result.status).toBe(200);
+
+    const text = await result.text();
+    expect(text).toMatch(/^<!DOCTYPE html>/i);
+
+    await cleanup();
+  };
+
+  it('should generate a folder structure', async () => {
+    await runGenerator(tempDir.path, ['--template=universal-react']);
+
+    const files = fs.readdirSync(tempDir.path);
+
+    expect(files).toEqual(
+      expect.arrayContaining([
+        'client', // Frontend directory was created
+        'server', // Backend directory was created
+        'app', // React app directory was created
+        'package.json', // NPM boilerplate was added
+        'node_modules', // NPM modules were installed
+      ])
+    );
   });
+
+  it('should start the dev server without errors', assertDevServerWorks);
+  it('should create a production build with a manifest', assertBuildWorks);
+  it('should run the production server', assertProductionServerWorks);
 });

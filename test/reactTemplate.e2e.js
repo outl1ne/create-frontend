@@ -14,7 +14,11 @@ describe('Create Frontend with React template', () => {
   });
 
   afterAll(() => {
-    tempDir.cleanup();
+    return new Promise(resolve => {
+      tempDir.cleanup(() => {
+        resolve();
+      });
+    });
   });
 
   it('should generate a folder structure', async () => {

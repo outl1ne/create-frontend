@@ -7,7 +7,10 @@ import 'core-js/stable';
 import http from 'http';
 import detectPort from 'detect-port';
 import envLoader from 'node_modules/@optimistdigital/create-frontend/scripts/envLoader';
-envLoader.config({ reload: true });
+
+// DONT_WATCH_DOTENV gets set during end-to-end tests.
+// There is a problem with fsevents that has been hard to solve, and this is the workaround
+envLoader.config({ reload: process.env.DONT_WATCH_DOTENV !== 'true' });
 
 const SERVER_PORT = +(process.env.SERVER_PORT || 8000);
 let app = require('{{ USER_ENTRY_POINT }}').default;

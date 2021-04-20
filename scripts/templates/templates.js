@@ -55,7 +55,7 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
         'normalize.css': '8.x.x',
       },
-    }
+    },
   };
 
   const react = {
@@ -105,12 +105,12 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
         'core-js': '^3.6.4',
         '@babel/runtime-corejs3': '^7.9.2',
         '@optimistdigital/create-frontend': isDev ? path.resolve(__dirname, '../../') : getCurrentVersion(),
-        'detect-port': '^1.3.0',
         'express': '^4.17.1',
         'normalize.css': '8.x.x',
         'react-helmet-async': '^1.0.4',
         'react-router': '^5.2.0',
-        'react-router-dom': '^5.2.0'
+        'react-router-dom': '^5.2.0',
+        'compression': '^1.7.4'
       },
     },
     readme: projectName => `
@@ -142,20 +142,29 @@ This is a server-rendered React app that uses [create-frontend](https://github.c
     'universal-react': universalReact,
   };
 
-    // NPM hoists transitive dependencies to the top level when installing a package through the NPM registry.
+  // NPM hoists transitive dependencies to the top level when installing a package through the NPM registry.
   // This is necessary for eslint to find the correct plugins (which are installed in this package).
   // Eslint is unable to find plugins from this package - it needs them to be in the consumer package.
   // However, when installing this package locally (for testing, in dev mode), transitive dependencies are not hoisted.
   // This means that the build won't work when installed locally (through the filesystem).
   // So we must add these dependencies explicitly.
+  // Similar problem for a few other dependencies not related to eslint
   if (isDev) {
     const ownPackage = require('../../package.json');
-    const eslintPackages = ['eslint', 'eslint-plugin-import', 'eslint-plugin-jsx-a11y', 'eslint-plugin-react', 'eslint-plugin-react-hooks'];
+    const eslintPackages = [
+      'eslint',
+      'eslint-plugin-import',
+      'eslint-plugin-jsx-a11y',
+      'eslint-plugin-react',
+      'eslint-plugin-react-hooks',
+      'compression',
+      'detect-port',
+    ];
 
     Object.values(templates).forEach(template => {
       eslintPackages.forEach(packageName => {
         template.packageJson.dependencies[packageName] = ownPackage.dependencies[packageName];
-      })
+      });
     });
   }
 

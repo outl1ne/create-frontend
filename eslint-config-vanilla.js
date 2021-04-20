@@ -8,7 +8,7 @@ module.exports = {
     jest: true,
   },
   rules: {
-    "arrow-body-style": 0
+    'arrow-body-style': 0,
   },
   plugins: ['import'],
   parserOptions: {
@@ -25,5 +25,6 @@ module.exports = {
     __DEBUG__: true,
     __OCF_MANIFEST_PATH__: true,
     __TARGET__: true,
+    __USE_STYLED_JSX__: true,
   },
 };

@@ -40,6 +40,7 @@ module.exports = async function getConfig() {
   const EDIT_CONFIG = getConfigValue('editConfig', _ => _);
   const EDIT_DEV_SERVER_CONFIG = getConfigValue('editDevServerConfig', _ => _);
   const SERVER_ENTRY_POINT = getConfigValue('serverEntryPoint', 'server/entry.js');
+  const USE_STYLED_JSX = getConfigValue('styledJSX', false);
 
   const APP_DIRECTORY = fs.realpathSync(process.cwd());
   const SERVER_BUILD_DIRECTORY = resolveApp(getConfigValue('serverBuildPath', 'build/server'));
@@ -77,9 +78,12 @@ module.exports = async function getConfig() {
     SERVER_OUTPUT_FILE,
     MANIFEST_PATH,
     CORE_JS,
-    STYLE_INJECTION_FILENAME
+    STYLE_INJECTION_FILENAME,
+    USE_STYLED_JSX,
   };
 };
+
+module.exports.getUserConfigValue = getConfigValue;
 
 // Store resolved port so that we get the same one on each getConfig() call,
 // even after the port has already been used by our own logic

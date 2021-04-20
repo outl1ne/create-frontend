@@ -49,9 +49,10 @@ export default async function renderOnServer(ReactComponent, url, props = {}, cs
       <HelmetProvider context={helmetContext}>{ReactComponent ? <ReactComponent {...props} /> : ' '}</HelmetProvider>
     </AppDataContext.Provider>
   );
+  const jsxStyles = __USE_STYLED_JSX__ ? require('styled-jsx/server').flushToHTML({ nonce: cspNonce }) : null;
 
   return {
-    content: wrapInDocument(appString, appData, helmetContext, cspNonce),
+    content: wrapInDocument(appString, appData, helmetContext, cspNonce, [jsxStyles]),
     context: serverContext,
   };
 }

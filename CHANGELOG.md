@@ -1,5 +1,9 @@
 # Changelog
 
+## [16.4.0] - 2020-05-03
+
+-   If styled-jsx is enabled, you can now enable SCSS support by running `npm install @styled-jsx/plugin-sass`
+
 ## [16.3.0] - 2020-04-20
 
 -   Added optional styled-jsx integration. To use it, configure `styledJSX: true` and run `npm install styled-jsx`

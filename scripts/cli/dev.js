@@ -22,27 +22,13 @@ module.exports = async () => {
       return;
     }
 
-    const compiler = webpack(await getWebpackClientConfig());
-
-    /**
-     * Report errors
-     */
-    compiler.hooks.done.tap('OCFWebBuildDone', stats => {
-      if (stats.compilation.errors && stats.compilation.errors.length > 0) {
-        console.error('❌  Error during node dev server compilation', stats.compilation.errors);
-
-        notifier.notify({
-          title: 'Build error',
-          message: 'There was an error with the dev server. \nPlease check your terminal.',
-        });
-      }
-    });
+    const webpackConfig = await getWebpackClientConfig();
 
     const defaultServerConf = {
       clientLogLevel: 'none',
       stats: 'minimal',
       port: config.WEBPACK_PORT,
-      inline: false,
+      inline: true,
       host: config.WEBPACK_DOMAIN,
       publicPath: `${config.WEBPACK_SERVER}/`,
       contentBase: `${config.PUBLIC_DIRECTORY}`,
@@ -58,6 +44,21 @@ module.exports = async () => {
       https: config.APP_PROTOCOL === 'https',
     };
     const serverConf = config.EDIT_DEV_SERVER_CONFIG(defaultServerConf) || defaultServerConf;
+
+    const compiler = webpack(webpackConfig);
+    /**
+     * Report errors
+     */
+    compiler.hooks.done.tap('OCFWebBuildDone', stats => {
+      if (stats.compilation.errors && stats.compilation.errors.length > 0) {
+        console.error('❌  Error during node dev server compilation', stats.compilation.errors);
+
+        notifier.notify({
+          title: 'Build error',
+          message: 'There was an error with the dev server. \nPlease check your terminal.',
+        });
+      }
+    });
 
     const devServer = new WebpackDevServer(compiler, serverConf).listen(
       config.WEBPACK_PORT,

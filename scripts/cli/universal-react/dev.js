@@ -51,17 +51,22 @@ async function startNodeServer(styleInjectionPlugin) {
     config.plugins = [...(config.plugins || []), styleInjectionPlugin];
     const compiler = webpack(config);
 
-    compiler.watch({}, (err, stats) => {
-      const errors = err ? [err] : stats.compilation.errors;
-      if (errors && errors.length > 0) {
-        console.error('❌  Error during node dev server compilation', errors);
+    compiler.watch(
+      {
+        poll: 300,
+      },
+      (err, stats) => {
+        const errors = err ? [err] : stats.compilation.errors;
+        if (errors && errors.length > 0) {
+          console.error('❌  Error during node dev server compilation', errors);
 
-        notifier.notify({
-          title: 'Build error',
-          message: 'There was an error with the dev server. \nPlease check your terminal.',
-        });
+          notifier.notify({
+            title: 'Build error',
+            message: 'There was an error with the dev server. \nPlease check your terminal.',
+          });
+        }
       }
-    });
+    );
   } catch (err) {
     console.error('❌  Node dev server failed to start:', err);
   }
@@ -72,7 +77,7 @@ async function startClientServer(userConfig, onDone) {
     clientLogLevel: 'none',
     stats: 'minimal',
     port: userConfig.WEBPACK_PORT,
-    inline: false,
+    inline: true,
     host: userConfig.WEBPACK_DOMAIN,
     publicPath: `${userConfig.WEBPACK_SERVER}/`,
     contentBase: `${userConfig.PUBLIC_DIRECTORY}`,
@@ -89,7 +94,11 @@ async function startClientServer(userConfig, onDone) {
   };
   const serverConf = userConfig.EDIT_DEV_SERVER_CONFIG(defaultServerConf) || defaultServerConf;
 
-  const compiler = webpack(await getWebpackClientConfig());
+  const webpackConfig = await getWebpackClientConfig();
+
+  // WebpackDevServer.addDevServerEntrypoints(webpackConfig, serverConf);
+
+  const compiler = webpack(webpackConfig);
 
   const devServer = new WebpackDevServer(compiler, serverConf).listen(
     userConfig.WEBPACK_PORT,
@@ -122,14 +131,13 @@ async function startClientServer(userConfig, onDone) {
     compilation.chunks.forEach(chunk => {
       compilation.chunkGraph
         .getChunkModules(chunk)
-        .filter(
-          module => {
-            return typeof module.resource === 'string' && /(?:css|scss|sass)$/.test(module.resource);
-          }
-        ).forEach(module => {
-          importedStyles.add(module.resource)
+        .filter(module => {
+          return typeof module.resource === 'string' && /(?:css|scss|sass)$/.test(module.resource);
         })
-      });
+        .forEach(module => {
+          importedStyles.add(module.resource);
+        });
+    });
   });
 
   compiler.hooks.done.tap('OCFWebBuildDone', () => {

@@ -34,6 +34,7 @@ module.exports = async target => {
   const babelExcludes = /node_modules[\/\\](?!(@optimistdigital[\/\\]create-frontend)[\/\\]).*/; // Exclude everything except create-frontend code
   const nodeExternalsWhitelist = [
     'webpack/hot/poll?300',
+    'webpack/hot/signal',
     /^@optimistdigital[\/\\]create-frontend[\/\\]universal-react.*/,
   ]; // Exclude everything except some hot reload logic, and create-frontend code
   const INTERNAL_SERVER_ENTRY_FILE = 'ocf-server-entry-point.js';
@@ -116,13 +117,7 @@ module.exports = async target => {
    * Entry: Production uses separate entry points for CSS assets, development has only 1 bundle
    */
 
-  const DEV_ENTRY_CONF = IS_NODE
-    ? ['webpack/hot/poll?300']
-    : [
-        `${require.resolve('webpack-dev-server/client')}?${config.WEBPACK_SERVER}`,
-        require.resolve('webpack/hot/only-dev-server'),
-      ];
-
+  const DEV_ENTRY_CONF = IS_NODE ? ['webpack/hot/poll?300'] : [];
   const DEV_ENTRY_POINTS = {};
 
   const entryPoints = IS_NODE ? { [config.SERVER_OUTPUT_FILE]: INTERNAL_SERVER_ENTRY_FILE } : config.ENTRY_POINTS;

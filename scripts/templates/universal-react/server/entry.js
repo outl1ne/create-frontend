@@ -12,6 +12,7 @@ if (__PRODUCTION__) server.use(compression()); // Enable gzip in production
 server.use(helmet(opts => ({ ...opts, contentSecurityPolicy: false })));
 server.use('/client', express.static('build/client', staticOpts)); // Serve build assets
 server.use('/', express.static('public', staticOpts)); // Serve files from public directory
+server.get(/\.(\w+)$/, (req, res) => res.status(404).send('Not found')); // Don't pass file requests to React
 server.use('/', async (req, res) => {
   try {
     // Render the app

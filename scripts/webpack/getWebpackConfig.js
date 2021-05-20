@@ -87,7 +87,11 @@ module.exports = async target => {
       emitOnErrors: false,
       minimize: true,
       minimizer: [
-        new CssMinimizerPlugin(),
+        new CssMinimizerPlugin({
+          minimizerOptions: {
+            preset: ['default', { colormin: false }],
+          },
+        }),
         new TerserPlugin({
           parallel: true,
           terserOptions: {

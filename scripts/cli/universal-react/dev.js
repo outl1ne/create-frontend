@@ -46,7 +46,10 @@ async function startNodeServer(userConfig, styleInjectionPlugin) {
   };
   config.plugins = [...(config.plugins || []), styleInjectionPlugin];
   const compiler = webpack(config);
-  await nodeDevServer.init(compiler, userConfig.SERVER_OUTPUT_FILE + '.js');
+  await nodeDevServer.init(compiler, userConfig.SERVER_OUTPUT_FILE + '.js', {
+    poll: 300,
+    ignored: ['**/node_modules', '**/' + userConfig.STYLE_INJECTION_FILENAME],
+  });
 }
 
 async function startClientServer(userConfig, onDone) {

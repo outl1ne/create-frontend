@@ -56,14 +56,14 @@ function updateServer(server, previousApp, app) {
 /**
  * Initializes a self updating dev server for the given webpack compiler.
  */
-module.exports.init = async (compiler, fileName) => {
+module.exports.init = async (compiler, fileName, watchOptions = {}) => {
   const vol = new Volume();
   const fs = createFsFromVolume(vol);
   compiler.outputFileSystem = fs;
   const server = await createServer();
   let app;
 
-  compiler.watch({ poll: 300 }, (err, stats) => {
+  compiler.watch(watchOptions, (err, stats) => {
     const errors = err ? [err] : stats.compilation.errors;
     if (errors && errors.length > 0) {
       console.error('❌  Error during node dev server compilation', errors);

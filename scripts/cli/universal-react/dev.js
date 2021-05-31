@@ -5,71 +5,48 @@ const detectPort = require('detect-port');
 const getConfig = require('../../config');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const { resolveApp } = require('../../paths');
 const path = require('path');
 const VirtualModulePlugin = require('webpack-virtual-modules');
 const getWebpackClientConfig = require('../../webpack/webpack.config.client');
 const getWebpackServerConfig = require('../../webpack/webpack.config.server');
-const notifier = require('node-notifier');
+const nodeDevServer = require('../../webpack/nodeDevServer');
 
 module.exports = async () => {
   console.log('🚧  Starting dev server...');
   const userConfig = await getConfig('web');
 
-  detectPort(userConfig.WEBPACK_PORT, (_, freePort) => {
-    if (userConfig.WEBPACK_PORT !== freePort) {
-      console.error(
-        `❌  The port (${userConfig.WEBPACK_PORT}) is not available. You can choose another port by running "npm run dev -- --webpackPort=${freePort}"`
-      );
-      return;
-    }
+  const freePort = await detectPort(userConfig.WEBPACK_PORT);
 
-    let watching = false;
-    let styleInjectionPlugin;
-    startClientServer(userConfig, importedStyles => {
-      if (!watching) {
-        styleInjectionPlugin = new VirtualModulePlugin({
-          [userConfig.STYLE_INJECTION_FILENAME]: getStyleInjectionHack(importedStyles),
-        });
-        startNodeServer(styleInjectionPlugin);
-        watching = true;
-      } else {
-        styleInjectionPlugin.writeModule(userConfig.STYLE_INJECTION_FILENAME, getStyleInjectionHack(importedStyles));
-      }
-    });
+  if (userConfig.WEBPACK_PORT !== freePort) {
+    console.error(
+      `❌  The port (${userConfig.WEBPACK_PORT}) is not available. You can choose another port by running "npm run dev -- --webpackPort=${freePort}"`
+    );
+    return;
+  }
+
+  let watching = false;
+  let styleInjectionPlugin;
+
+  startClientServer(userConfig, importedStyles => {
+    if (!watching) {
+      styleInjectionPlugin = new VirtualModulePlugin({
+        [userConfig.STYLE_INJECTION_FILENAME]: getStyleInjectionHack(importedStyles),
+      });
+      startNodeServer(userConfig, styleInjectionPlugin);
+      watching = true;
+    } else {
+      styleInjectionPlugin.writeModule(userConfig.STYLE_INJECTION_FILENAME, getStyleInjectionHack(importedStyles));
+    }
   });
 };
 
-async function startNodeServer(styleInjectionPlugin) {
-  try {
-    /**
-     * Make a copy of the webpack config with extra node dev only plugins for injecting SSR styles
-     */
-    const config = {
-      ...(await getWebpackServerConfig()),
-    };
-    config.plugins = [...(config.plugins || []), styleInjectionPlugin];
-    const compiler = webpack(config);
-
-    compiler.watch(
-      {
-        poll: 300,
-      },
-      (err, stats) => {
-        const errors = err ? [err] : stats.compilation.errors;
-        if (errors && errors.length > 0) {
-          console.error('❌  Error during node dev server compilation', errors);
-
-          notifier.notify({
-            title: 'Build error',
-            message: 'There was an error with the dev server. \nPlease check your terminal.',
-          });
-        }
-      }
-    );
-  } catch (err) {
-    console.error('❌  Node dev server failed to start:', err);
-  }
+async function startNodeServer(userConfig, styleInjectionPlugin) {
+  const config = {
+    ...(await getWebpackServerConfig()),
+  };
+  config.plugins = [...(config.plugins || []), styleInjectionPlugin];
+  const compiler = webpack(config);
+  await nodeDevServer.init(compiler, userConfig.SERVER_OUTPUT_FILE + '.js');
 }
 
 async function startClientServer(userConfig, onDone) {
@@ -95,8 +72,6 @@ async function startClientServer(userConfig, onDone) {
   const serverConf = userConfig.EDIT_DEV_SERVER_CONFIG(defaultServerConf) || defaultServerConf;
 
   const webpackConfig = await getWebpackClientConfig();
-
-  // WebpackDevServer.addDevServerEntrypoints(webpackConfig, serverConf);
 
   const compiler = webpack(webpackConfig);
 

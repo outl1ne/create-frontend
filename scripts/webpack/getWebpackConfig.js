@@ -11,11 +11,8 @@ const HtmlPlugin = require('html-webpack-plugin');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const StartServerPlugin = require('./plugins/StartServerPlugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { resolveApp } = require('../paths');
-const VirtualModulePlugin = require('webpack-virtual-modules');
-const createServerEntry = require('../../universal-react/server/createServerEntry');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const BuildDonePlugin = require('./plugins/BuildDonePlugin');
 
@@ -124,7 +121,7 @@ module.exports = async target => {
   const DEV_ENTRY_CONF = IS_NODE ? ['webpack/hot/poll?300'] : [];
   const DEV_ENTRY_POINTS = {};
 
-  const entryPoints = IS_NODE ? { [config.SERVER_OUTPUT_FILE]: INTERNAL_SERVER_ENTRY_FILE } : config.ENTRY_POINTS;
+  const entryPoints = IS_NODE ? { [config.SERVER_OUTPUT_FILE]: config.SERVER_ENTRY_POINT } : config.ENTRY_POINTS;
 
   Object.keys(entryPoints).forEach(key => {
     DEV_ENTRY_POINTS[key] = [...DEV_ENTRY_CONF, entryPoints[key]];
@@ -138,7 +135,7 @@ module.exports = async target => {
   output.output = {
     library: {
       type: IS_NODE ? 'commonjs2' : 'var',
-      name: 'OCF',
+      name: config.LIBRARY_NAME,
     },
     path: OUTPUT_PATH,
     filename: IS_PRODUCTION && IS_WEB && config.HASH_FILENAMES ? '[name]-[chunkhash].js' : '[name].js',
@@ -391,35 +388,20 @@ module.exports = async target => {
 
   /* DEVELOPMENT PLUGINS */
   if (!IS_PRODUCTION) {
-    const skipFirst = fn => {
-      let skip = true;
-
-      return () => {
-        !skip && fn();
-        skip = false;
-      };
-    };
-
     const logBuildDone = () => console.info(chalk.green.bold('\n=== Build for ' + target + ' done === \n'));
 
     output.plugins.push(
       new webpack.HotModuleReplacementPlugin(),
       // Skipping the first "build done" event in the node build, because the initial build is triggering the event
       // twice. There are some issues in github about it, but nothing conclusive.
-      new BuildDonePlugin(IS_NODE ? skipFirst(logBuildDone) : logBuildDone)
+      new BuildDonePlugin(logBuildDone)
     );
 
     /**
      * NODE DEVELOPMENT PLUGINS
      */
     if (IS_NODE) {
-      output.plugins.push(
-        /* Cleaning build directory in dev to prevent a billion useless hot-update files from piling up */
-        new CleanWebpackPlugin(),
-        new StartServerPlugin({
-          name: `${config.SERVER_OUTPUT_FILE}.js`,
-        })
-      );
+      // Nothing!
     }
   }
 
@@ -428,13 +410,6 @@ module.exports = async target => {
     output.plugins.push(
       new webpack.optimize.LimitChunkCountPlugin({
         maxChunks: 1,
-      })
-    );
-
-    // Add the virtual module that will add act as the server entry point
-    output.plugins.push(
-      new VirtualModulePlugin({
-        [INTERNAL_SERVER_ENTRY_FILE]: createServerEntry(resolveApp(config.SERVER_ENTRY_POINT)),
       })
     );
   }

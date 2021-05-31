@@ -52,6 +52,7 @@ module.exports = async function getConfig() {
   const MANIFEST_PATH = resolveApp(BUILD_DIRECTORY, 'asset-manifest.json');
   const CORE_JS = pkg.dependencies['core-js'] ? semver.coerce(pkg.dependencies['core-js']).major : undefined;
   const STYLE_INJECTION_FILENAME = 'ocf-dev-styles.js';
+  const LIBRARY_NAME = 'OCF';
 
   return {
     APP_DIRECTORY,
@@ -80,6 +81,7 @@ module.exports = async function getConfig() {
     CORE_JS,
     STYLE_INJECTION_FILENAME,
     USE_STYLED_JSX,
+    LIBRARY_NAME,
   };
 };
 

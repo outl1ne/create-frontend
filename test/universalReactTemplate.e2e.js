@@ -78,10 +78,10 @@ describe('Create Frontend with Universal React template', () => {
   };
 
   const assertProductionServerWorks = async () => {
-    const { output, cleanup } = await startServer(tempDir.path, 'dev', {
-      devServerMessage: /server started at/i,
+    const { output, cleanup } = await startServer(tempDir.path, 'start', {
+      serverMessage: /server started at/i,
     });
-    const url = output.devServerMessage.match(/https?:\/\/.*:(?:\d)+/)[0];
+    const url = output.serverMessage.match(/https?:\/\/.*:(?:\d)+/)[0];
 
     expect(url).not.toBe(null);
     const result = await fetch(url);

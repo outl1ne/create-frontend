@@ -1,5 +1,7 @@
 process.env.NODE_ENV = 'production';
 require('../../envLoader').config();
+const http = require('http');
+const detectPort = require('detect-port');
 
 const getConfig = require('../../config');
 
@@ -26,5 +28,23 @@ module.exports = async () => {
   /**
    * Start server
    */
-  require(serverPath);
+  const SERVER_PORT = +(process.env.SERVER_PORT || 8000);
+  const freePort = await detectPort(SERVER_PORT);
+
+  if (SERVER_PORT !== freePort) {
+    throw new Error(
+      `❌  The port (${SERVER_PORT}) is not available. Please use a different port - such as ${freePort} - by setting the SERVER_PORT environment value.`
+    );
+  }
+
+  const libraryName = serverConfig.LIBRARY_NAME;
+  const app = require(serverPath)[libraryName].default;
+  const server = http.createServer(app);
+  server.listen(freePort, error => {
+    if (error) {
+      console.error(`❌  Failed to start server`, error);
+    }
+
+    console.info(`✅  Server started at http://localhost:${freePort}`);
+  });
 };

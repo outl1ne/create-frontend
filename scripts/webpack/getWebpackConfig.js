@@ -332,23 +332,6 @@ module.exports = async target => {
       ],
     }),
     /* SHARED PLUGINS */
-    ...PAGE_FILES.map(
-      pageFile =>
-        new HtmlPlugin(
-          Object.assign({}, config.HTML_OPTIONS, {
-            template: path.resolve(config.HTML_PATH, pageFile),
-            // For production, we want the html to be generated into the public directory.
-            // For development, we are serving the build directory, so we put the html there instead
-            filename: IS_PRODUCTION
-              ? path.join(
-                  config.PUBLIC_DIRECTORY,
-                  path.dirname(pageFile),
-                  `${path.basename(pageFile, path.extname(pageFile))}.html`
-                )
-              : path.join(path.dirname(pageFile), `${path.basename(pageFile, path.extname(pageFile))}.html`),
-          })
-        )
-    ),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       __TARGET__: JSON.stringify(target),
@@ -373,6 +356,25 @@ module.exports = async target => {
           return entry;
         },
       })
+    );
+
+    PAGE_FILES.forEach(pageFile =>
+      output.plugins.push(
+        new HtmlPlugin(
+          Object.assign({}, config.HTML_OPTIONS, {
+            template: path.resolve(config.HTML_PATH, pageFile),
+            // For production, we want the html to be generated into the public directory.
+            // For development, we are serving the build directory, so we put the html there instead
+            filename: IS_PRODUCTION
+              ? path.join(
+                  config.PUBLIC_DIRECTORY,
+                  path.dirname(pageFile),
+                  `${path.basename(pageFile, path.extname(pageFile))}.html`
+                )
+              : path.join(path.dirname(pageFile), `${path.basename(pageFile, path.extname(pageFile))}.html`),
+          })
+        )
+      )
     );
   }
 

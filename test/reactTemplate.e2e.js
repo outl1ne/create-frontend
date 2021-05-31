@@ -72,6 +72,10 @@ describe('Create Frontend with React template', () => {
       ])
     );
 
+    expect(fs.readdirSync(path.resolve(tempDir.path, 'public'))).toEqual(
+      expect.arrayContaining([expect.stringMatching('index.html')])
+    );
+
     const manifest = JSON.parse(fs.readFileSync(path.resolve(tempDir.path, 'public/build/asset-manifest.json')));
 
     expect(manifest).toMatchObject({

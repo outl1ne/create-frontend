@@ -306,7 +306,7 @@ module.exports = async target => {
           // However, asset modules don't support emitFiles: false yet, needed for SSR, so we can't use that
           {
             loader: require.resolve('file-loader'),
-            exclude: [/\.js$/, /\.json$/],
+            exclude: [/\.js$/, /\.json$/, /^$/],
             options: {
               emitFile: IS_WEB,
               name: config.HASH_FILENAMES ? '[name].[contenthash:8].[ext]' : '[name].[ext]',

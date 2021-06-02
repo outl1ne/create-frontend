@@ -1,5 +1,14 @@
 # Changelog
 
+## [17.0.0] - 2021-06-02
+
+Reworked server startup logic, fixing issues with hot reload, which would sometimes cause the server to stop updating during development.
+
+-   **No breaking API changes**
+-   We no longer rely on hacky plugins that weren't fully updated to webpack 5 to start the server during development.
+-   `build-server.js` is no longer written to disk during development
+-   `build-server.js` now exports the express instance, and doesn't start a web server (that is done by the `npm start` script)
+
 ## [16.4.0] - 2021-05-03
 
 -   If styled-jsx is enabled, you can now enable SCSS support by running `npm install @styled-jsx/plugin-sass`

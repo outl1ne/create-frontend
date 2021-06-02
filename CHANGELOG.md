@@ -1,20 +1,20 @@
 # Changelog
 
-## [16.4.0] - 2020-05-03
+## [16.4.0] - 2021-05-03
 
 -   If styled-jsx is enabled, you can now enable SCSS support by running `npm install @styled-jsx/plugin-sass`
 
-## [16.3.0] - 2020-04-20
+## [16.3.0] - 2021-04-20
 
 -   Added optional styled-jsx integration. To use it, configure `styledJSX: true` and run `npm install styled-jsx`
 
-## [16.2.0] - 2020-04-13
+## [16.2.0] - 2021-04-13
 
 ### Added
 
 -   Added gzip in universal-react template in production.
 
-## [16.1.0] - 2020-03-29
+## [16.1.0] - 2021-03-29
 
 ### Added
 
@@ -36,7 +36,7 @@ If you don't want to use content-security-policy, you can disable it and skip pa
 server.use(helmet(opts => ({ ...opts, contentSecurityPolicy: false })));
 ```
 
-## [16.0.0] - 2020-03-19
+## [16.0.0] - 2021-03-19
 
 ### Changes
 

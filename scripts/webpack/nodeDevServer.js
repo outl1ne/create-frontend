@@ -78,7 +78,7 @@ module.exports.init = async (compiler, fileName, watchOptions = {}) => {
         const source = fs.readFileSync(filePath, 'utf-8');
         const libraryName = compiler.options.output.library.name;
         const previousApp = app;
-        app = nodeEval(source, fileName, {}, true)[libraryName].default;
+        app = nodeEval(source, fileName, getScope(), true)[libraryName].default;
         updateServer(server, previousApp, app);
       } catch (startupError) {
         console.error('❌  Error during node dev server startup', startupError);
@@ -90,3 +90,15 @@ module.exports.init = async (compiler, fileName, watchOptions = {}) => {
     }
   });
 };
+
+/**
+ * node-eval uses Object.keys to merge over global variables: https://github.com/pierrec/node-eval/blob/master/eval.js#L8
+ * Object.keys doesn't return non-enumerable properties (such as global.Buffer) so we use getOwnPropertyNames to
+ * copy those over as well, to ensure that all global variables work properly.
+ */
+function getScope() {
+  return Object.getOwnPropertyNames(global).reduce((acc, cur) => {
+    acc[cur] = global[cur];
+    return acc;
+  }, {});
+}

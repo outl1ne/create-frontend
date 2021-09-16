@@ -27,7 +27,6 @@ This app uses [create-frontend](https://github.com/optimistdigital/create-fronte
 
 - \`npm ci\` - install dependencies
 - \`npm run build\` - build the app
-- \`npm run serve\` - start the node server
     `,
     // prettier-ignore
     packageJson: {

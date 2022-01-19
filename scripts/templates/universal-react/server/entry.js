@@ -16,7 +16,12 @@ server.get(/\.(\w+)$/, (req, res) => res.status(404).send('Not found')); // Don'
 server.use('/', async (req, res) => {
   try {
     // Render the app
-    const { content, context } = await render(App, req.originalUrl, { config: getConfig() }, res.locals.cspNonce);
+    const { content, context } = await render(
+      App,
+      req.originalUrl,
+      { config: getConfig() },
+      { cspNonce: res.locals.cspNonce }
+    );
 
     // If there was a redirect in the app, redirect here
     if (context.url) {

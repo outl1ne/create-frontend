@@ -18,7 +18,8 @@ import urlParser from 'url';
 export default async function renderOnServer(ReactComponent, url, props = {}, cspNonce) {
   const serverContext = {};
   const helmetContext = {};
-  const appData = { url, pageData: {} };
+  const appData = { url, pageData: {}, config: props.config };
+  ReactComponent = __SSR_DISABLED__ ? null : ReactComponent;
 
   /**
    * Get page data

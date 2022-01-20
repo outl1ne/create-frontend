@@ -31,11 +31,8 @@ export default function wrapInDocument(
   helmetContext,
   cspNonce,
   inlineStyles = [],
-  overriddenDocument
+  document = defaultDocument
 ) {
-  /* App can override the document, otherwise use a default one */
-  const document = overriddenDocument ? overriddenDocument : defaultDocument;
-
   /* Get dev-only styles, to prevent FOUC. This is a virtual file injected by the dev server. */
   const styles = __DEVELOPMENT__ ? require('ocf-dev-styles.js') : [];
 

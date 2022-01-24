@@ -1,5 +1,21 @@
 # Changelog
 
+## [18.0.0] - 2022-01-xx
+
+- Breaking change in universal-react's `renderOnServer()` arguments.
+
+```js
+// Before
+export default async function renderOnServer(ReactComponent, url, props = {}, cspNonce) {} // Declaration
+const { content, context } = await render(App, req.originalUrl, { config: getConfig() }, res.locals.cspNonce); // Usage
+// After
+export default async function renderOnServer(ReactComponent, url, props = {}, { config, cspNonce, appDecorator, document }) {} // Declaration
+const { content, context } = await render(App, req.originalUrl, {}, { config: getConfig(), cspNonce: res.locals.cspNonce }); // Usage
+```
+
+- Added possibility to override the HTML document template in universal-react.
+- Added `appDecorator` option in universal-react server render method to add a wrapper function around the entire React app before passing it to `ReactDOMServer.renderToString()`
+
 ## [17.0.0] - 2021-06-02
 
 Reworked server startup logic, fixing issues with hot reload, which would sometimes cause the server to stop updating during development.

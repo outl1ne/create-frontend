@@ -19,8 +19,8 @@ server.use('/', async (req, res) => {
     const { content, context } = await render(
       App,
       req.originalUrl,
-      { config: getConfig() },
-      { cspNonce: res.locals.cspNonce }
+      {},
+      { config: getConfig(), cspNonce: res.locals.cspNonce }
     );
 
     // If there was a redirect in the app, redirect here
@@ -34,7 +34,7 @@ server.use('/', async (req, res) => {
     console.error('Error while rendering React, skipping SSR:', err);
 
     // If SSR failed, send an empty page so client can try to render
-    return res.status(500).send((await render(null, req.originalUrl, { config: getConfig() })).content);
+    return res.status(500).send((await render(null, req.originalUrl, {}, { config: getConfig() })).content);
   }
 });
 

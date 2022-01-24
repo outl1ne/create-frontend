@@ -15,10 +15,15 @@ import urlParser from 'url';
  *
  * @return {{ content: String, context: Object }}
  */
-export default async function renderOnServer(ReactComponent, url, props = {}, { cspNonce, appDecorator, document }) {
+export default async function renderOnServer(
+  ReactComponent,
+  url,
+  props = {},
+  { cspNonce, appDecorator, document, config } = {}
+) {
   const serverContext = {};
   const helmetContext = {};
-  const appData = { url, pageData: {}, config: props.config };
+  const appData = { url, pageData: { config } };
   ReactComponent = __SSR_DISABLED__ ? null : ReactComponent;
 
   /**

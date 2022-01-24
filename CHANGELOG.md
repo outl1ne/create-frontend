@@ -5,12 +5,12 @@
 - Breaking change in universal-react's `renderOnServer()` arguments.
 
 ```js
-// After
-export default async function renderOnServer(ReactComponent, url, props = {}, cspNonce) {} // Declaration
-const { content, context } = await render(App, req.originalUrl, {}, { config: getConfig(), cspNonce: res.locals.cspNonce }); // Usage
 // Before
-export default async function renderOnServer(ReactComponent, url, props = {}, { config, cspNonce, appDecorator, document }) {} // Declaration
+export default async function renderOnServer(ReactComponent, url, props = {}, cspNonce) {} // Declaration
 const { content, context } = await render(App, req.originalUrl, { config: getConfig() }, res.locals.cspNonce); // Usage
+// After
+export default async function renderOnServer(ReactComponent, url, props = {}, { config, cspNonce, appDecorator, document }) {} // Declaration
+const { content, context } = await render(App, req.originalUrl, {}, { config: getConfig(), cspNonce: res.locals.cspNonce }); // Usage
 ```
 
 - Added possibility to override the HTML document template in universal-react.

@@ -15,7 +15,7 @@ import urlParser from 'url';
  *
  * @return {{ content: String, context: Object }}
  */
-export default async function renderOnServer(ReactComponent, url, props = {}, cspNonce) {
+export default async function renderOnServer(ReactComponent, url, props = {}, { cspNonce, appDecorator, document }) {
   const serverContext = {};
   const helmetContext = {};
   const appData = { url, pageData: {}, config: props.config };
@@ -42,18 +42,20 @@ export default async function renderOnServer(ReactComponent, url, props = {}, cs
     appData.skippedSSR = true;
   }
 
-  /**
-   * Render app to string
-   */
-  const appString = ReactDOMServer.renderToString(
+  const ReactApp = (
     <AppDataContext.Provider value={{ ...appData, serverContext }}>
       <HelmetProvider context={helmetContext}>{ReactComponent ? <ReactComponent {...props} /> : ' '}</HelmetProvider>
     </AppDataContext.Provider>
   );
+
+  /**
+   * Render app to string
+   */
+  const appString = ReactDOMServer.renderToString(appDecorator ? appDecorator(ReactApp) : ReactApp);
   const jsxStyles = __USE_STYLED_JSX__ ? require('styled-jsx/server').flushToHTML({ nonce: cspNonce }) : null;
 
   return {
-    content: wrapInDocument(appString, appData, helmetContext, cspNonce, [jsxStyles]),
+    content: wrapInDocument(appString, appData, helmetContext, cspNonce, [jsxStyles], document),
     context: serverContext,
   };
 }

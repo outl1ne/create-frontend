@@ -147,7 +147,7 @@ This content is then available in the `context` property after the server render
 import { render } from '@optimistdigital/create-frontend/universal-react/server';
 
 // Render the app
-const { content, context } = render(ReactComponent, request, config);
+const { content, context } = render(ReactComponent, url, props, options);
 
 // Read status from server context, with 200 as the default
 return res.status(context.status || 200).send(content);

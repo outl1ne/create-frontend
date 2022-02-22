@@ -26,5 +26,6 @@ module.exports = {
     __OCF_MANIFEST_PATH__: true,
     __TARGET__: true,
     __USE_STYLED_JSX__: true,
+    __SSR_DISABLED__: true,
   },
 };

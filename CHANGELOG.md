@@ -9,12 +9,14 @@
 export default async function renderOnServer(ReactComponent, url, props = {}, cspNonce) {} // Declaration
 const { content, context } = await render(App, req.originalUrl, { config: getConfig() }, res.locals.cspNonce); // Usage
 // After
-export default async function renderOnServer(ReactComponent, url, props = {}, { config, cspNonce, appDecorator, document }) {} // Declaration
+export default async function renderOnServer(ReactComponent, url, props = {}, { cspNonce, appDecorator, document, config } = {}) {} // Declaration
 const { content, context } = await render(App, req.originalUrl, {}, { config: getConfig(), cspNonce: res.locals.cspNonce }); // Usage
 ```
 
 - Added possibility to override the HTML document template in universal-react.
-- Added `appDecorator` option in universal-react server render method to add a wrapper function around the entire React app before passing it to `ReactDOMServer.renderToString()`
+- Added `appDecorator` option in universal-react server render method to add a wrapper function around the entire React app before passing it to `ReactDOMServer.renderToString()`.
+- Config object is now passed to client also in a case when server-side rendering fails in universal-react.
+- Add optional `DISABLE_SSR` environment variable to disable server-side rendering in universal-react.
 
 ## [17.0.0] - 2021-06-02
 

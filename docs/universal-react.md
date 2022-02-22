@@ -48,6 +48,9 @@ render(ReactComponent, domNode, props);
  *              Otherwise you will get content mismatch errors during hydration.
  * @param cspNonce (optional) - Sets the `nonce` attribute on the <script> element that create-frontend uses.
  *                 Used for the script-src directive when implementing a content-security-policy.
+ * @param appDecorator (optional) - Decorator function to wrap the entire React app before getting passed to renderToString mehtod
+ * @param document (optional) - Overrideable HTML document template
+ * @param config (optional) - Configuration object that get rendered both on the server and client side. Be careful as the values get exposed to the client.
  *
  * @return {{ content: String, context: Object }}
  */
@@ -55,7 +58,7 @@ import { render } from '@optimistdigital/create-frontend/universal-react/server'
 const {
     content, // App rendered to string
     context, // Server-side context, for passing data to from the React app to the server
-} = render(ReactComponent, url, backendData, res.locals.cspNonce);
+} = render(ReactComponent, url, props, { cspNonce, appDecorator, document, config });
 ```
 
 ## Configuration

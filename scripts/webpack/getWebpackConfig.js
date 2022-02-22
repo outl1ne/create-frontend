@@ -337,6 +337,7 @@ module.exports = async target => {
       __DEBUG__: process.env.APP_DEBUG === 'true',
       __OCF_MANIFEST_PATH__: JSON.stringify(config.MANIFEST_PATH),
       __USE_STYLED_JSX__: config.USE_STYLED_JSX,
+      __SSR_DISABLED__: process.env.DISABLE_SSR === 'true',
     }),
   ];
 

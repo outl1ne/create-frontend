@@ -1,6 +1,6 @@
 # Changelog
 
-## [18.0.0] - 2022-01-xx
+## [18.0.0] - 2022-02-22
 
 - Breaking change in universal-react's `renderOnServer()` arguments.
 

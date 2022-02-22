@@ -37,7 +37,10 @@ export default async function renderOnServer(
           pathname: parsedUrl.pathname,
           search: parsedUrl.search,
         },
-        props
+        {
+          config,
+          ...props,
+        }
       )
     )({});
   }

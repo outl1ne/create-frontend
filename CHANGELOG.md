@@ -1,5 +1,10 @@
 # Changelog
 
+
+## [17.0.4] - 2022-05-04
+
+- Remove .cjs extension from being loaded by `file-loader`
+
 ## [17.0.0] - 2021-06-02
 
 Reworked server startup logic, fixing issues with hot reload, which would sometimes cause the server to stop updating during development.

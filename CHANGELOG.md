@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [17.0.4] - 2022-05-04
+## [17.0.5] - 2022-05-04
 
 - Remove .cjs extension from being loaded by `file-loader`
 

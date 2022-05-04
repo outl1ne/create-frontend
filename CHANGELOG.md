@@ -1,5 +1,13 @@
 # Changelog
 
+## [18.0.2] - 2022-05-04
+
+- Fix cjs files not being loaded by `file-loader`
+
+## [18.0.1] - 2022-02-22
+
+- Fix config not passed to `getPageData` function.
+
 ## [18.0.0] - 2022-02-22
 
 - Breaking change in universal-react's `renderOnServer()` arguments.

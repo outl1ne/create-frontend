@@ -91,7 +91,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.52.1",
     "webpack-assets-manifest": "^5.0.6",
-    "webpack-dev-server": "^3.11.2",
+    "webpack-dev-server": "^4.11.1",
     "webpack-node-externals": "^3.0.0",
     "webpack-virtual-modules": "^0.4.3"
   },

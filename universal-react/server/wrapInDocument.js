@@ -25,14 +25,7 @@ function getManifest() {
   return _manifest;
 }
 
-export default function wrapInDocument(
-  content,
-  appData,
-  helmetContext,
-  cspNonce,
-  inlineStyles = [],
-  document = defaultDocument
-) {
+export default function wrapInDocument(content, appData, helmetContext, cspNonce, document = defaultDocument) {
   /* Get dev-only styles, to prevent FOUC. This is a virtual file injected by the dev server. */
   const styles = __DEVELOPMENT__ ? require('ocf-dev-styles.js') : [];
 
@@ -41,5 +34,5 @@ export default function wrapInDocument(
 
   const manifest = getManifest();
 
-  return document({ content, manifest, styles, helmet, appData, cspNonce, inlineStyles });
+  return document({ content, manifest, styles, helmet, appData, cspNonce });
 }

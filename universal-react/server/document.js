@@ -1,6 +1,6 @@
 import serialize from 'serialize-javascript';
 
-export default function document({ content, manifest, styles, helmet, appData, cspNonce, inlineStyles }) {
+export default function document({ content, manifest, styles, helmet, appData, cspNonce }) {
   return `<!doctype html>
     <html ${helmet.htmlAttributes.toString()}>
       <head>
@@ -13,7 +13,6 @@ export default function document({ content, manifest, styles, helmet, appData, c
         ${helmet.script.toString()}
         ${helmet.noscript.toString()}
         ${helmet.style.toString()}
-        ${inlineStyles.join('')}
       </head>
       <body ${helmet.bodyAttributes.toString()}>
         <div id="react-app">${content}</div>

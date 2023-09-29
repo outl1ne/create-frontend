@@ -60,10 +60,9 @@ export default async function renderOnServer(
    * Render app to string
    */
   const appString = ReactDOMServer.renderToString(appDecorator ? appDecorator(ReactApp) : ReactApp);
-  const jsxStyles = __USE_STYLED_JSX__ ? require('styled-jsx/server').flushToHTML({ nonce: cspNonce }) : null;
 
   return {
-    content: wrapInDocument(appString, appData, helmetContext, cspNonce, [jsxStyles], document),
+    content: wrapInDocument(appString, appData, helmetContext, cspNonce, document),
     context: serverContext,
   };
 }

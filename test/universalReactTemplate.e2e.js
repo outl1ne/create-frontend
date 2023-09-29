@@ -112,19 +112,4 @@ describe('Create Frontend with Universal React template', () => {
   it('should start the dev server without errors', assertDevServerWorks);
   it('should create a production build with a manifest', assertBuildWorks);
   it('should run the production server', assertProductionServerWorks);
-
-  describe('with styledJSX', () => {
-    beforeAll(async () => {
-      const configPath = path.resolve(tempDir.path, 'package.json');
-      const packageJson = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-      packageJson['create-frontend'].styledJSX = true;
-      fs.writeFileSync(configPath, JSON.stringify(packageJson, null, 2));
-
-      await execa('npm', ['install', 'styled-jsx'], { cwd: tempDir.path });
-    });
-
-    it('should start the dev server without errors', assertDevServerWorks);
-    it('should create a production build with a manifest', assertBuildWorks);
-    it('should run the production server', assertProductionServerWorks);
-  });
 });

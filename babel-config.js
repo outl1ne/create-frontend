@@ -11,10 +11,6 @@ const allDependencies = {
   ...(pkg.devDependencies || {}),
 };
 
-if (useStyledJSX && !allDependencies['styled-jsx']) {
-  console.warn('⚠️ Missing styled-jsx dependency, but styledJSX is enabled. Please run `npm install styled-jsx`');
-}
-
 module.exports = {
   presets: [
     require.resolve('@babel/preset-react'),
@@ -34,10 +30,6 @@ module.exports = {
     require.resolve('@babel/plugin-proposal-class-properties'),
     require.resolve('@babel/plugin-transform-react-display-name'),
     [require.resolve('@babel/plugin-transform-runtime'), { regenerator: true }],
-    useStyledJSX && [
-      'styled-jsx/babel',
-      { plugins: allDependencies['@styled-jsx/plugin-sass'] ? ['@styled-jsx/plugin-sass'] : [] },
-    ],
   ].filter(Boolean),
   env: {
     production: {

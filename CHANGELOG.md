@@ -1,5 +1,10 @@
 # Changelog
 
+## [18.0.3] - 2023-09-29
+
+- Update packages
+- Drop styled-jsx support
+
 ## [18.0.2] - 2022-05-04
 
 - Fix cjs files not being loaded by `file-loader`
